@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rewrite>
+	<joins>
+		<join path="/cadastrar/" view="/cadastrar.xhtml"/>
+		<join path="/trocar-senha/" view="/trocar-senha.xhtml"/>
+		<join path="/trocar-senha/{key}" view="/trocar-senha.xhtml"/>
+
+		<join path="/cadastros/usuarios/" view="/cadastros/usuarios/usuario-list.xhtml"/>
+		<join path="/cadastros/usuarios/edit/" view="/cadastros/usuarios/usuario-edit.xhtml"/>
+		<join path="/cadastros/usuarios/edit/{id}" view="/cadastros/usuarios/usuario-edit.xhtml"/>
+
+		<join path="/admin/customizacoes/" view="/admin/customizacoes.xhtml"/>
+	</joins>
+</rewrite>

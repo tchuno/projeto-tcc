@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+	<arvoreMenuItens>
+
+		<menu-item labelKey="menu-cadastros.label">
+			<menuItens>
+				<menu-item id="USUARIOS" url="/cadastros/usuarios/" labelKey="menu-usuarios.label">
+					<subItens>
+						<sub-item id="USUARIOS_EDIT" url="/cadastros/usuarios/edit/" labelKey="menu-editar.label"></sub-item>
+					</subItens>
+				</menu-item>
+			</menuItens>
+		</menu-item>
+
+		<menu-item url="" labelKey="menu-administracao.label">
+			<menuItens>
+				<menu-item id="CUSTOMIZACAO" url="/admin/customizacoes/" labelKey="menu-customizacaoSistema.label"></menu-item>
+			</menuItens>
+		</menu-item>
+
+	</arvoreMenuItens>
+</menu>

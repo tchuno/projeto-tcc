@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:b="http://bootsfaces.net/ui">
+<f:metadata>
+	<f:viewAction action="#{customizacaoEditBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
+</f:metadata>
+<ui:composition template="/templates/navegacao.xhtml">
+	<ui:define name="tituloPagina">#{msg['customizacoes.titulo']}</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="form">
+			<div class="row">
+				<div class="col-sm-12">
+					<h4 class="tituloForm"><h:outputText value="#{msg['cores.label']}"/></h4>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label>#{msg['corBarra.label']}</label><br/>
+							<p:colorPicker value="#{customizacaoEditBean.map['COR_BARRA']}"
+										   styleClass="colorPicker"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<label>#{msg['corFonteTituloBarra.label']}</label><br/>
+							<p:colorPicker value="#{customizacaoEditBean.map['COR_FONTE_TITULO_BARRA']}"
+										   styleClass="colorPicker"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<label>#{msg['corMenuSelecionado.label']}</label><br/>
+							<p:colorPicker value="#{customizacaoEditBean.map['COR_MENU']}"
+										   styleClass="colorPicker"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<label>#{msg['corFonteMenu.label']}</label><br/>
+							<p:colorPicker value="#{customizacaoEditBean.map['COR_FONTE_MENU']}"
+										   styleClass="colorPicker"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<label>#{msg['corFonteMenuSelecionado.label']}</label><br/>
+							<p:colorPicker value="#{customizacaoEditBean.map['COR_FONTE_MENU_SELECIONADO']}"
+										   styleClass="colorPicker"/>
+							<b:message/>
+						</div>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-6">
+					<div class="form-group" style="float: right; margin-left: 6px">
+						<p:commandButton value="#{msg['salvar.label']}" ajax="true" process="form" styleClass="btn" action="#{customizacaoEditBean.salvar}" />
+					</div>
+					<div class="form-group" style="float: right;">
+						<p:commandButton value="#{msg['restaurarPadrao.label']}" styleClass="btn" action="#{customizacaoEditBean.restaurarPadrao}" />
+					</div>
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

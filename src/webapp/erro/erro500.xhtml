@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title></title>
+	<link href="#{request.contextPath}/resources/images/favicon-gnfe.png" rel="shortcut icon"/>
+	<link href="#{request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/animate.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/main.css" rel="stylesheet"/>
+	<script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.js"></script>
+</h:head>
+<h:body>
+
+	<section id="error" class="container">
+		<h1>500, Erro interno</h1>
+		<p>Tivemos um problema. Por favor, aguarde alguns instantes e tente novamente.</p>
+		<a class="btn btn-success" href="#{request.contextPath}">VOLTAR A HOME</a>
+
+		<div id="exception1" style="margin-top: 10px; text-align: left; border: 1px #ccc solid; padding: 10px;">
+			#{utilBean.dataHoraAtual} - #{utilBean.threadName} - #{requestScope['javax.servlet.error.exception']}
+		</div>
+	</section>
+
+</h:body>
+</html>

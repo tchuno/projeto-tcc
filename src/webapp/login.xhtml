@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:gnfe="http://java.sun.com/jsf/composite/gnfe">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>#{msg['appName.label']}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="#{request.contextPath}/resources/images/favicon-gnfe.png" rel="shortcut icon"/>
+	<link href="#{request.contextPath}/resources/css/main.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/animate.css" rel="stylesheet"/>
+	<script src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script src="#{request.contextPath}/resources/js/jquery.mask.min.js"></script>
+ 	<script src="#{request.contextPath}/resources/js/main.js"></script>
+	<ui:insert name="head" />
+	<gnfe:customizacao/>
+</h:head>
+<h:body>
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{loginBean.init}" />
+	</f:metadata>
+	<p:ajaxStatus onstart="$('#ajaxLoaderImg').show()" onsuccess="$('#ajaxLoaderImg').hide()" />
+
+	<div id="wrapper" class="content-login">
+		<div id='ajaxLoaderImg' style="position: absolute; display: none; z-index: 9999;">
+			<img height="50" src="#{request.contextPath}/resources/images/loader.gif"/>
+		</div>
+		<h:panelGroup id="content-pg-id">
+			<div id="content">
+				<section class="container">
+					<b:messages globalOnly="true" showSummary="false"/>
+					<div class="logo-login">
+						<img src="#{request.contextPath}/resources/images/logo-gnfe-transparent.png" style="max-height:120px; max-width: 240px;"/>
+					</div>
+					<section id="login-page">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="status alert alert-success" style="display: none"></div>
+							 	<h:form>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<b:inputText value="#{loginBean.login}" placeholder="#{msg['login.label']}"
+													label="#{msg['login.label']}" renderLabel="true" maxlength="100" required="true"/>
+												<b:message/>
+											</div>
+											<div class="form-group">
+												<b:inputSecret value="#{loginBean.senha}" placeholder="#{msg['senha.label']}"
+													label="#{msg['senha.label']}" renderLabel="true" maxlength="100" required="true"/>
+												<b:message/>
+											</div>
+											<div style="float: left;">
+												<a href="#{request.contextPath}/cadastrar/" class="esqueci-senha">Cadastrar</a>
+											</div>
+											<div style="text-align: center; padding: 30px 0px 20px 0px;">
+												<b:commandButton value="#{msg['entrar.label']}" actionListener="#{loginBean.login()}" styleClass="btn btn-primary" style="width:130px" ajax="true" update="content-pg-id"/>
+											</div>
+										</div>
+									</div>
+							 	</h:form>
+							</div>
+						</div>
+					</section>
+				</section>
+			</div>
+		</h:panelGroup>
+	</div>
+	<script type="text/javascript">
+		$('input:visible,select:visible,textarea:visible').eq(0).focus();
+	</script>
+</h:body>
+</html>

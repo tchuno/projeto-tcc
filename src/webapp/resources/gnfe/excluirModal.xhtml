@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="update"/>
+		<composite:attribute name="metodoExcluir" method-signature="void action()" required="true"/>
+	</composite:interface>
+	<composite:implementation>
+		<c:set var="update" value="#{not empty cc.attrs.update ? cc.attrs.update : 'content-pg-id'}" />
+		<h:form id="form-exclusao">
+			<b:modal title="#{msg['confirmarExclusaoTitulo.label']}" styleClass="confirmar-modal excluir-modal" rendered="#{menuBean.podeExcluir()}">
+				<p><h4 class="msg-confirm"><h:outputText value="#{msg['registroExcluir.confirm']}"/> </h4></p>
+				<f:facet name="footer">
+					<b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+					<p:commandButton id="excluir-btn" value="#{msg['excluir.label']}" actionListener="#{cc.attrs.metodoExcluir}" update="#{update}" styleClass="btn btn-danger" oncomplete="closeModal('excluir-modal')"/>
+				</f:facet>
+			</b:modal>
+		</h:form>
+	</composite:implementation>
+</html>

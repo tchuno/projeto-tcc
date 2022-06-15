@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+		<property name="hibernate.use_sql_comments">false</property>
+
+		<mapping class="net.gnfe.bin.domain.entity.Usuario" />
+		<mapping class="net.gnfe.bin.domain.entity.Role" />
+		<mapping class="net.gnfe.bin.domain.entity.Parametro" />
+
+	</session-factory>
+</hibernate-configuration>

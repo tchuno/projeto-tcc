@@ -1,0 +1,71 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<header class="navbar navbar-inverse navbar-fixed-top headerTop" role="banner">
+			
+		<div class="container">
+			<div class="navbar-header" style="width: 100%; position: absolute;">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only"><h:outputText value="#{msg['menu.label']}"/> </span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+
+<!-- 		Logo -->
+			<div class="logo">
+				<a href="/">
+					<img src="#{request.contextPath}/resources/images/logo-gnfe-transparent.png" style="max-height: 90px; max-width: 190px;"/>
+			 	</a>
+			</div>
+<!-- 		Usuario logado-->
+			<div class="status-login-menu collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right" style="margin-top: 0; background-color: #fff;">
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span>#{utilBean.usuarioLogado.nome} (#{msg['RoleGNFE.'.concat(utilBean.usuarioLogado.roleGNFE).concat('.label')]})</span>
+							<i class="fa fa-user-circle size38"></i>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{utilBean.usuarioLogado.id}" rendered="#{menuBean.podeEditar()}">
+									<h:outputText value="#{msg['editar.label']}"/>
+								</h:link>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="menu-itens">
+			<div class="container">
+				<h:form>
+					<div class="collapse navbar-collapse">
+						<ul class="nav navbar-nav navbar-right">
+							<ui:repeat value="#{menuBean.arvoreMenuItens}" var="item">
+								<li class="#{menuBean.menuClass(item)}">
+									<h:panelGroup rendered="#{empty item.menuItens}">
+										<a href="#{request.contextPath}#{item.url}"><h:outputText value="#{msg[item.labelKey]}"/></a>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{not empty item.menuItens}">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown"><h:outputText value="#{msg[item.labelKey]}"/> <i class="icon-angle-down"></i></a>
+										<ul class="dropdown-menu dropdown-menu-left">
+											<ui:repeat value="#{item.menuItens}" var="subItem" >
+												<li class="#{menuBean.menuClass(subItem)}">
+													<a href="#{request.contextPath}#{subItem.url}"><h:outputText value="#{msg[subItem.labelKey]}"/></a>
+												</li>
+											</ui:repeat>
+										</ul>
+									</h:panelGroup>
+								</li>
+							</ui:repeat>
+							<li><h:commandLink actionListener="#{logoffBean.logoff()}" value="#{msg['menu-sair.label']}"/></li>
+						</ul>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</header>
+</ui:composition>

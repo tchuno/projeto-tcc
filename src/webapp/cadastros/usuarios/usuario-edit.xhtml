@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui"
+	>
+	<f:metadata>
+		<f:viewParam name="id" value="#{usuarioEditBean.id}" />
+		<f:viewAction action="#{usuarioEditBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
+	</f:metadata>
+	<ui:composition template="/templates/navegacao.xhtml">
+		<ui:define name="tituloPagina">#{msg['Edit.titulo']}</ui:define>
+		<ui:define name="head">
+			<style>
+				.col-right label {
+					font-weight: 600 !important;
+				}
+			</style>
+		</ui:define>
+		<ui:define name="conteudo">
+			<h:form id="form-modal1">
+				<b:modal title="#{msg['confirmarReiniciarSenhaTitulo.label']}" styleClass="confirmar-modal reiniciar-senha-modal">
+					<p><h4 class="msg-confirm"><h:outputText value="#{msg['reiniciarSenha.confirm']}"/> </h4></p>
+					<f:facet name="footer">
+						<p:commandButton id="confirmar-reiniciar-btn" value="#{msg['reinicializar.label']}" action="#{usuarioEditBean.reiniciarSenha()}" styleClass="btn btn-primary"/>	
+						<b:button value="#{msg['cancelar.label']}" dismiss="modal" onclick="return false;"/>
+					</f:facet>
+				</b:modal>
+			</h:form>
+			<h:form id="form-modal2">
+				<b:modal title="#{msg['confirmarDesativacaoUsuarioTitulo.label']}" styleClass="confirmar-modal desativar-usuario-modal">
+					<b:selectOneMenu id="statusId" value="#{usuarioEditBean.usuario.motivoDesativacao}" label="#{msg['motivoDesativacao.label']}" required="true">
+						<f:selectItem itemValue="" itemLabel=""/>
+						<f:selectItems value="#{usuarioEditBean.motivoDesativacaoUsuarios}" var="mdu" itemValue="#{mdu}" itemLabel="#{msg['MotivoDesativacaoUsuario.'.concat(mdu).concat('.label')]}"/>
+					</b:selectOneMenu>
+					<b:message/>
+					<f:facet name="footer">
+						<p:commandButton id="confirmar-desativar-btn" value="#{msg['desativar.label']}" actionListener="#{usuarioEditBean.desativarUsuario()}" update="content-pg-id" styleClass="btn btn-primary"/>	
+						<b:button value="#{msg['cancelar.label']}" dismiss="modal" onclick="return false;"/>
+					</f:facet>
+				</b:modal>
+			</h:form>
+			<h:form id="form-modal3">
+				<b:modal title="#{msg['confirmarAtivacaoUsuarioTitulo.label']}" styleClass="confirmar-modal ativar-usuario-modal">
+					<p><h4 class="msg-confirm"><h:outputText value="#{msg['ativarUsario.confirm']}"/> </h4></p>
+					<f:facet name="footer">
+						<p:commandButton id="confirmar-ativar-btn" value="#{msg['reativar.label']}" actionListener="#{usuarioEditBean.ativarUsuario()}" update="content-pg-id" styleClass="btn btn-primary"/>	
+						<b:button value="#{msg['cancelar.label']}" dismiss="modal" onclick="return false;"/>
+					</f:facet>
+				</b:modal>
+			</h:form>
+			<h:form id="form-usuario">
+				<section id="usuario-page" class="container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h4 class="tituloForm"><h:outputText value="#{msg['usuarioForm.label']}"/></h4>
+							<div class="row">
+								<div class="col-sm-8">
+									<div class="form-group">
+										<b:inputText value="#{usuarioEditBean.usuario.nome}" 
+												label="#{msg['nome.label']}" renderLabel="true" required="true"
+												maxlength="40"  />
+										<b:message/>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<b:inputText id="loginId" value="#{usuarioEditBean.usuario.login}" required="true"
+														label="#{msg['login.label']}" renderLabel="true" maxlength="100" style="text-transform: lowercase;" >
+												</b:inputText>
+												<b:message/>
+											</div>
+											<div class="col-md-8">
+												<b:inputText id="emailId" value="#{usuarioEditBean.usuario.email}" 
+														label="#{msg['email.label']}" renderLabel="true"
+														maxlength="100" required="true"
+														validatorMessage="#{msg['emailInvalido.error']}" >
+													<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+												</b:inputText>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-6" style="margin-top: 3px;">
+												<h:outputLabel value="#{msg['roleGNFE.label']}" styleClass="bf-no-message"/>
+												<h:selectOneMenu styleClass="form-control bf-no-message" id="roleBf-id" value="#{usuarioEditBean.usuario.roleGNFE}" label="#{msg['roleGNFE.label']}"
+																 converter="enumConverter" required="true">
+													<f:selectItem itemValue="" itemLabel=""/>
+													<f:selectItems value="#{utilBean.getValues('RoleGNFE')}" var="role" itemValue="#{role}" itemLabel="#{msg['RoleGNFE.'.concat(role).concat('.label')]}"/>
+												</h:selectOneMenu>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.cpf}"
+															 label="#{msg['cpf.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
+															 styleClass="mask-cpf" />
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.telefone}" 
+													label="#{msg['telefone.label']}" renderLabel="true"
+													maxlength="15"
+													styleClass="mask-phone" />
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.cep}"
+															 label="#{msg['cep.label']}" renderLabel="true"
+															 maxlength="15" id="cep"
+															 styleClass="mask-cep" />
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.endereco}" id="rua"
+															 label="#{msg['endereco.label']}" renderLabel="true"/>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.numero}"
+															 label="#{msg['numero.label']}" renderLabel="true" styleClass="mask-number"/>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.bairro}" id="bairro"
+															 label="#{msg['bairro.label']}" renderLabel="true"/>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.cidade}" id="cidade"
+															 label="#{msg['cidade.label']}" renderLabel="true"/>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.estado}" id="estado"
+															 label="#{msg['estado.label']}" renderLabel="true"/>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<b:commandButton value="#{msg['salvar.label']}" styleClass="btn btn-primary btn-lg" actionListener="#{usuarioEditBean.salvar()}" ajax="true" update="content-pg-id" rendered="#{menuBean.podeEditar()}"/>
+									</div>
+								</div>
+								<b:column col-sm="4" rendered="#{not empty usuarioEditBean.usuario.id}" class="col-right">
+									<div class="form-group" >
+										<h:outputLabel value="#{msg['status.label']}"/>
+										<div class="form-group label-form-goup">
+											#{msg['StatusUsuario.'.concat(usuarioEditBean.usuario.status).concat('.label')]}
+										</div>
+									</div>
+									<div class="form-group">
+										<h:outputLabel value="#{msg['dataCadastro.label']}"/>
+										<div class="form-group label-form-goup">
+											#{utilBean.getDateTimeStr(usuarioEditBean.usuario.dataCadastro)}&nbsp;
+										</div>
+									</div>
+									<div class="form-group">
+										<h:outputLabel value="#{msg['dataUltimoAcesso.label']}"/>
+										<div class="form-group label-form-goup">
+											#{utilBean.getDateTimeStr(usuarioEditBean.usuario.dataUltimoAcesso)}&nbsp;
+										</div>
+									</div>
+									<h:panelGroup rendered="#{not empty usuarioEditBean.usuario.motivoBloqueio}">
+										<div class="form-group">
+											<h:outputLabel value="#{msg['motivoBloqueio.label']}"/>
+											<div class="form-group label-form-goup">
+												#{msg['MotivoBloqueioUsuario.'.concat(usuarioEditBean.usuario.motivoBloqueio).concat('.label')]}
+											</div>
+										</div>
+										<div class="form-group">
+											<h:outputLabel value="#{msg['dataBloqueio.label']}"/>
+											<div class="form-group label-form-goup">
+												#{utilBean.getDateTimeStr(usuarioEditBean.usuario.dataBloqueio)}
+											</div>
+										</div>
+										<div class="form-group">
+											<h:outputLabel value="#{msg['dataExpiracaoBloqueio.label']}"/>
+											<div class="form-group label-form-goup">
+												#{utilBean.getDateTimeStr(usuarioEditBean.usuario.dataExpiracaoBloqueio)}
+											</div>
+										</div>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{not empty usuarioEditBean.usuario.motivoDesativacao}">
+										<div class="form-group">
+											<h:outputLabel value="#{msg['motivoDesativacao.label']}"/>
+											<div class="form-group label-form-goup">
+												#{msg['MotivoDesativacaoUsuario.'.concat(usuarioEditBean.usuario.motivoDesativacao).concat('.label')]}
+											</div>
+										</div>
+										<div class="form-group">
+											<h:outputLabel value="#{msg['dataBloqueio.label']}"/>
+											<div class="form-group label-form-goup">
+												#{utilBean.getDateTimeStr(usuarioEditBean.usuario.dataBloqueio)}
+											</div>
+										</div>
+									</h:panelGroup>
+									<div class="form-group">
+										<p:commandLink value="#{msg['reiniciarSenha.label']}" onclick="openModal('reiniciar-senha-modal', 'form-modal1:confirmar-reiniciar-btn')" class="btn btn-default btn-sm" rendered="#{menuBean.podeEditar() and usuarioEditBean.usuarioLogado.isAdminRole()}"/>
+										<p:commandLink value="#{msg['desativarUsuario.label']}" onclick="openModal('desativar-usuario-modal', 'form-modal2:motivoDesativacaoId')" class="btn btn-default btn-sm" style="margin-left: 10px;" rendered="#{usuarioEditBean.renderDesativarBtn and menuBean.podeEditar() and usuarioEditBean.usuarioLogado.isAdminRole()}"/>
+										<p:commandLink value="#{msg['ativarUsuario.label']}" onclick="openModal('ativar-usuario-modal', 'form-modal3:confirmar-ativar-btn')" class="btn btn-default btn-sm" style="margin-left: 10px;" rendered="#{usuarioEditBean.renderAtivarBtn and menuBean.podeEditar() and usuarioEditBean.usuarioLogado.isAdminRole()}"/>
+										<h:panelGroup rendered="#{usuarioEditBean.autorizacao.podeAlterarSenha()}">
+											<a href="#{request.contextPath}/trocar-senha.xhtml" class="btn btn-default btn-sm" style="margin-left: 10px;">#{msg['alterarSenha.label']}</a>
+										</h:panelGroup>
+									</div>
+								</b:column>
+							</div>
+						</div>
+					</div>
+				</section>
+			</h:form>
+			<script type="text/javascript">
+
+				$(document).ready(function() {
+
+					function limpa_formulário_cep() {
+						// Limpa valores do formulário de cep.
+						$("#input_form-usuario\\:rua").val("");
+						$("#input_form-usuario\\:bairro").val("");
+						$("#input_form-usuario\\:cidade").val("");
+						$("#input_form-usuario\\:estado").val("");
+					}
+
+					//Quando o campo cep perde o foco.
+					$("#input_form-usuario\\:cep").blur(function() {
+
+						//Nova variável "cep" somente com dígitos.
+						var cep = $(this).val().replace(/\D/g, '');
+
+						//Verifica se campo cep possui valor informado.
+						if (cep != "") {
+
+							//Expressão regular para validar o CEP.
+							var validacep = /^[0-9]{8}$/;
+
+							//Valida o formato do CEP.
+							if(validacep.test(cep)) {
+
+								//Preenche os campos com "..." enquanto consulta webservice.
+								$("#input_form-usuario\\:rua").val("...");
+								$("#input_form-usuario\\:bairro").val("...");
+								$("#input_form-usuario\\:cidade").val("...");
+								$("#input_form-usuario\\:estado").val("...");
+
+								//Consulta o webservice viacep.com.br/
+								$.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+									if (!("erro" in dados)) {
+										//Atualiza os campos com os valores da consulta.
+										$("#input_form-usuario\\:rua").val(dados.logradouro);
+										$("#input_form-usuario\\:bairro").val(dados.bairro);
+										$("#input_form-usuario\\:cidade").val(dados.localidade);
+										$("#input_form-usuario\\:estado").val(dados.uf);
+									} //end if.
+									else {
+										//CEP pesquisado não foi encontrado.
+										limpa_formulário_cep();
+										alert("CEP não encontrado.");
+									}
+								});
+							} //end if.
+							else {
+								//cep é inválido.
+								limpa_formulário_cep();
+								alert("Formato de CEP inválido.");
+							}
+						} //end if.
+						else {
+							//cep sem valor, limpa formulário.
+							limpa_formulário_cep();
+						}
+					});
+				});
+			</script>
+		</ui:define>
+	</ui:composition>
+</html>

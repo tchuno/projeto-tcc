@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:gnfe="http://java.sun.com/jsf/composite/gnfe">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>#{msg['appName.label']}</title>
+	<link href="#{request.contextPath}/resources/images/favicon-gnfe.png" rel="shortcut icon"/>
+	<link href="#{request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/prettyPhoto.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/animate.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/main.css" rel="stylesheet"/>
+	<script src="#{request.contextPath}/resources/js/jquery.js" ></script>
+	<script src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script src="#{request.contextPath}/resources/js/jquery.mask.min.js"></script>
+	<script src="#{request.contextPath}/resources/js/main.js"></script>
+	<ui:insert name="head" />
+	<gnfe:customizacao/>
+</h:head>
+<h:body>
+	<f:metadata>
+		<f:viewParam name="key" value="#{trocaSenhaBean.key}" />
+		<f:event type="preRenderView" listener="#{trocaSenhaBean.init}" />
+	</f:metadata>
+	<p:ajaxStatus onstart="$('#ajaxLoaderImg').show()" onsuccess="$('#ajaxLoaderImg').hide()" />
+	<div id='ajaxLoaderImg' style="position: absolute; right: 0; bottom: 80px; display: none; z-index: 9999;">
+		<img src="#{request.contextPath}/resources/images/loader.gif"/>
+	</div>
+	<div id="wrapper">
+		<div id="header">
+			<header class="navbar navbar-inverse navbar-fixed-top wet-asphalt" role="banner">
+				<div class="container containerLogo">
+					<div class="navbar-header">
+						<a class="navbar-brand logo2" href="#{request.contextPath}">
+							<IMG src="#{request.contextPath}/resources/images/logo-gnfe-transparent.png" style="opacity: 0.7;"/>
+						</a>
+					</div>
+				</div>
+			</header>
+			<section id="title" class="emerald">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h1><h:outputText value="#{msg['trocarSenha.label']}"/></h1>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<h:panelGroup id="content-pg-id">
+			<div id="content">
+				<section class="container">
+					<b:messages globalOnly="true" showSummary="false"/>
+					<section id="trocar-senha-page" class="container">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="status alert alert-success" style="display: none"></div>
+							 	<h:form>
+									<div class="row">
+										<div class="col-sm-12" style="max-width: 350px;">
+											<div class="form-group">
+												<h:outputLabel value="#{msg['login.label']}"/>
+												<div style="font-size: 18px;">
+													#{trocaSenhaBean.login}
+												</div>
+												<div class="form-group">
+                                                	<b:alert severity="info">
+                                                  	  Sua senha deve ser composta por no mínimo 8 caracteres e conter ao menos 3 dos 4 itens abaixo:
+                                                    	<ul>
+                                                        	<li>letras maiúsculas</li>
+                                                        	<li>letras minúsculas</li>
+                                                        	<li>números</li>
+                                                        	<li>símbolos</li>
+                                                    	</ul>
+                                                	</b:alert>
+                                            	</div>
+											</div>
+											<div class="form-group">
+												<b:inputSecret value="#{trocaSenhaBean.novaSenha}" placeholder="#{msg['novaSenha.label']}"
+													label="#{msg['novaSenha.label']}" renderLabel="true"
+													maxlength="20"
+													required="true"/>
+												<b:message/>
+											</div>
+											<div class="form-group">
+												<b:inputSecret value="#{trocaSenhaBean.senhaConfirm}" placeholder="#{msg['senhaConfirm.label']}"
+													label="#{msg['senhaConfirm.label']}" renderLabel="true"
+													maxlength="20"
+													required="true"
+													binding="#{trocaSenhaBean.senhaConfirmComponent}"/>
+												<b:message/>
+											</div>
+											<div class="form-group" style="vertical-align: bottom;">
+												<h:commandLink value="#{msg['cancelar.label']}" actionListener="#{trocaSenhaBean.cancelar()}" styleClass="btn btn-default btn-lg" style="width: 110px" immediate="true"/>
+												<b:commandButton value="#{msg['salvar.label']}" actionListener="#{trocaSenhaBean.salvarNovaSenha()}" styleClass="btn btn-primary btn-lg" ajax="true" update="content-pg-id" style="margin-left: 10px;"/>
+											</div>
+										</div>
+									</div>
+							 	</h:form>
+							</div>
+						</div>
+					</section>
+				</section>
+			</div>
+		</h:panelGroup>
+	</div>
+</h:body>
+</html>

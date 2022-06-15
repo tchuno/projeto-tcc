@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute name="metodoExecutar" method-signature="void action()" required="true"/>
+		<composite:attribute name="nomeModal" required="true"/>
+		<composite:attribute name="mensagem" required="true"/>
+		<composite:attribute name="atualizar"/>
+	</composite:interface>
+
+	<composite:implementation>
+
+		<h:form id="form-confirm">
+			<b:modal title="#{msg['confirmarTitulo.label']}" styleClass="#{cc.attrs.nomeModal} confirm-modal">
+				<b:messages globalOnly="true" showSummary="true" id="messages-form-confirm"/>
+				<p><h4 class="msg-confirm"><h:outputText value="#{cc.attrs.mensagem}"/> </h4></p>
+				<f:facet name="footer">
+					<b:button value="#{msg['nao.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+					<p:commandButton value="#{msg['sim.label']}" actionListener="#{cc.attrs.metodoExecutar}" styleClass="btn btn-danger"
+							update="messages-form-confirm fecharModal-panel mensagensGlobaisGroup #{cc.attrs.atualizar}">
+					</p:commandButton>
+				</f:facet>
+			</b:modal>
+			<h:panelGroup id="fecharModal-panel">
+				<h:panelGroup rendered="#{fecharModal}">
+					<script type="text/javascript">
+						$('.#{cc.attrs.nomeModal}').modal('hide');
+					</script>
+				</h:panelGroup>
+			</h:panelGroup>
+			<script type="text/javascript">
+				setTimeout(function(){
+					$('.alert-info', '.confirm-modal').slideUp(200);
+				}, 3000);
+			</script>
+		</h:form>
+
+	</composite:implementation>
+</html>

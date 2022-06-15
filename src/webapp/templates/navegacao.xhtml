@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core"
+	  xmlns:b="http://bootsfaces.net/ui"
+	  xmlns:gnfe="http://java.sun.com/jsf/composite/gnfe">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>#{msg['appName.label']}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="#{request.contextPath}/resources/images/favicon-gnfe.png" rel="shortcut icon"/>
+	<link href="#{request.contextPath}/resources/css/main.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/css/animate.css" rel="stylesheet"/>
+	<link href="#{request.contextPath}/resources/datepicker/css/datepicker.css" rel="stylesheet"/>
+	<script src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script src="#{request.contextPath}/resources/js/jquery.mask.min.js"></script>
+	<script src="#{request.contextPath}/resources/js/moment/moment.js"></script>
+	<script src="#{request.contextPath}/resources/datepicker/js/bootstrap-datepicker.js"></script>
+	<script src="#{request.contextPath}/resources/datepicker/js/bootstrap-datepicker.pt-BR.js"></script>
+	<script src="#{request.contextPath}/resources/js/main.js"></script>
+	<script type="text/javascript">
+		var contextPath = '#{request.contextPath}';
+	</script>
+	<ui:insert name="head" />
+	<gnfe:customizacao/>
+</h:head>
+<h:body>
+	<p:ajaxStatus onstart="$('#ajaxLoaderImg').show()" onsuccess="$('#ajaxLoaderImg').hide()" />
+	<div id='ajaxLoaderImg' style="position: fixed; display: block; bottom: 0; right: 0; z-index: 99999; display: none;">
+		<img src="#{request.contextPath}/resources/images/loader.gif"/>
+	</div>
+	<div id="wrapper">
+		<div id="header">
+			<ui:include src="/WEB-INF/include/header.xhtml"/>
+			<section id="title" class="emerald">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12" style="margin-bottom: 10px;">
+							<h1><ui:insert name="tituloPagina"/></h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12" style="margin-bottom: 5px;">
+							<ul class="breadcrumb">
+								<ui:repeat value="#{menuBean.caminhoDoPao}" var="mi" varStatus="status">
+									<h:panelGroup rendered="#{menuBean.caminhoDoPao.size() > status.index + 1}">
+										<li>
+											<a href="#{request.contextPath}#{mi.url}">
+												<h:outputText value="#{msg[mi.labelKey]}"/>
+											</a>
+										</li>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{menuBean.caminhoDoPao.size() == status.index + 1}">
+										<li class="active breadcrumbColor">
+											<ui:insert name="tituloPagina"/>
+										</li>
+									</h:panelGroup>
+								</ui:repeat>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<h:panelGroup id="content-pg-id" rendered="#{utilBean.securityOk}">
+			<div id="content">
+				<section class="container">
+					<h:panelGroup id="mensagensGlobaisGroup">
+						<b:messages globalOnly="true" showSummary="true" id="mensagensGlobais"/>
+						<script type="text/javascript">
+							jQuery(function($) {
+								hideMessage(4000);
+								var mensagensGlobais = $('#mensagensGlobais');
+								if(mensagensGlobais.html()) {
+									$('html,body').animate({
+										scrollTop: mensagensGlobais.offset().top - 80
+									}, 500);
+								}
+							});
+						</script>
+					</h:panelGroup>
+					<ui:insert name="conteudo"/>
+				</section>
+			</div>
+			<script type="text/javascript">
+				jQuery(function($) {
+					configurarMascaras();
+					configurarDatePicker();
+					//remove o bloqueio de tela do modal ao atualizar content-pg-id
+					if($('.modal').is(':hidden')) {
+						$('.modal-backdrop').remove();
+					}
+					bloquearCampos(#{menuBean.podeEditar()});
+				});
+			</script>
+		</h:panelGroup>
+		<div id="footer">
+			<ui:include src="/WEB-INF/include/footer.xhtml"/>
+		</div>
+	</div>
+</h:body>
+</html>

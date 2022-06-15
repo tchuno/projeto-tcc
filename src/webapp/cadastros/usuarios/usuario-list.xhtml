@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui">
+	<f:metadata>
+		<f:viewAction action="#{usuarioListBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
+	</f:metadata>
+	<ui:composition template="/templates/navegacao.xhtml">
+		<ui:define name="tituloPagina">#{msg['usuarioList.titulo']}</ui:define>
+		<ui:define name="conteudo">
+			<h:form id="form-usuario">
+				<div class="row default-form">
+					<div class="col-sm-10 col-sm-offset-1">
+						<h4 class="tituloForm"><h:outputText value="#{msg['filtroForm.label']}"/></h4>
+						<div class="row">
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<b:inputText value="#{usuarioListBean.filtro.nome}" label="#{msg['nome.label']}"/>
+								</div>
+						 	</div>							
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<b:inputText value="#{usuarioListBean.filtro.login}" label="#{msg['login.label']}"/>
+								</div>
+						 	</div>
+					   	</div>
+						<div class="row row-filtro">
+							<div class="col-sm-6 col-sm-offset-6 noMarginBottom">
+								<div style="float: right;">
+									<div class="form-group" style="float: left;">
+										<b:commandButton value="#{msg['buscar.label']}" actionListener="#{usuarioListBean.buscar}" styleClass="btn btn-primary btn-md" ajax="true" update="table-id bloqueados_id inativos_id"/>
+									</div>
+								</div>
+							</div>
+					   	</div>
+					 </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml" style="float: right;" styleClass="btn btn-primary btn-lg" rendered="#{menuBean.podeCadastrar()}">
+							<h:outputText value="#{msg['adicionarUsuario.label']}"/>
+						</h:link>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h4 style="margin-top: 0;">
+							<h:outputText value="#{msg['ativos.label']}"/>
+						</h4>
+						<p:dataTable id="table-id" var="usuario" value="#{usuarioListBean.ativosDataModel}" rows="50" paginator="true" lazy="true"
+								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
+								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
+								paginatorPosition="bottom" >
+							<p:column headerText="#{msg['login.label']}" style="text-align: center; width: 100px;">
+								<h:outputText value="#{usuario.login}" />
+							</p:column>
+							<p:column headerText="#{msg['nome.label']}" style="text-align: center;">
+								<h:outputText value="#{usuario.nome}" />
+							</p:column>
+							<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center; width: 120px;">
+								<h:outputText value="#{msg['RoleGNFE.'.concat(usuario.roleGNFE).concat('.label')]}" />
+							</p:column>
+							<p:column style="width: 128px;" sortable="false">
+								<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeVisualizar() and !menuBean.podeEditar()}">
+									<h:outputText value="#{msg['visualizar.label.label']}"/>
+								</h:link>
+								<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
+									<h:outputText value="#{msg['editar.label']}"/>
+								</h:link>
+								<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-usuario-modal', 'form-usuario:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}" disabled="#{usuarioListBean.usuarioLogado.id.equals(usuario.id)}">
+									<f:setPropertyActionListener target="#{usuarioListBean.usuarioId}" value="#{usuario.id}" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<b:row id="bloqueados_id">
+					<div class="col-sm-12">
+
+						<script type="text/javascript">
+							$(function() { slide('lista-bloqueados', 'show-more-id'); });
+						</script>
+
+						<p:commandLink update="bloqueados_id" action="#{usuarioListBean.carregarBloqueados()}" onclick="prepareToSlideUp()">
+							<h4>
+								<h:outputText value="#{msg['bloqueados.label']}"/>
+								<span class="badge"><h:outputText value="#{usuarioListBean.countBloqueados}"/></span>
+								<img id="show-more-id" src="#{request.contextPath}/resources/images/show-more.png" class="showmore"/>
+							</h4>
+						</p:commandLink>
+
+						<h:panelGroup rendered="#{not usuarioListBean.bloqueadosHide}">
+
+							<script type="text/javascript">
+								$(function() { showSlideDown('lista-bloqueados', 'show-more-id'); });
+							</script>
+							<p:dataTable var="usuario" value="#{usuarioListBean.bloqueadosDataModel}" rows="10" paginator="true" lazy="true"
+									paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
+									currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
+									paginatorPosition="bottom">
+								<p:column headerText="#{msg['login.label']}" style="text-align: center; width: 120px;">
+									<h:outputText value="#{usuario.login}" />
+								</p:column>
+								<p:column headerText="#{msg['nome.label']}" style="text-align: center;">
+									<h:outputText value="#{usuario.nome}" />
+								</p:column>
+								<p:column headerText="#{msg['motivoBloqueio.label']}" style="text-align: center;">
+									<h:outputText value="#{msg['MotivoBloqueioUsuario.'.concat(usuario.motivoBloqueio).concat('.label')]}" />
+								</p:column>
+								<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center; width: 120px;">
+									<h:outputText value="#{msg['RoleGNFE.'.concat(usuario.roleGNFE).concat('.label')]}" />
+								</p:column>
+								<p:column style="width: 128px;" sortable="false" rendered="#{menuBean.podeEditar()}">
+									<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
+										<h:outputText value="#{msg['editar.label']}"/>
+									</h:link>
+									<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-usuario-modal', 'form-usuario:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
+										<f:setPropertyActionListener target="#{usuarioListBean.usuarioId}" value="#{usuario.id}" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</div>
+				</b:row>
+				<b:row id="inativos_id">
+					<div class="col-sm-12">
+
+						<script type="text/javascript">
+							$(function() { slide('lista-inativos', 'show-more-in-id'); });
+						</script>
+
+						<p:commandLink update="inativos_id" action="#{usuarioListBean.carregarInativos()}" onclick="prepareToSlideUp()">
+							<h4>
+								<h:outputText value="#{msg['inativos.label']}"/>
+								<span class="badge"><h:outputText value="#{usuarioListBean.countInativos}"/></span>
+								<img id="show-more-in-id" src="#{request.contextPath}/resources/images/show-more.png" class="showmore"/>
+							</h4>
+						</p:commandLink>
+
+						<h:panelGroup rendered="#{not usuarioListBean.inativosHide}">
+
+							<script type="text/javascript">
+								$(function() { showSlideDown('lista-inativos', 'show-more-in-id'); });
+							</script>
+							<p:dataTable var="usuario" value="#{usuarioListBean.inativosDataModel}" rows="10" paginator="true" lazy="true"
+									paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
+									currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
+									paginatorPosition="bottom">
+								<p:column headerText="#{msg['login.label']}" style="text-align: center; width: 120px;">
+									<h:outputText value="#{usuario.login}" />
+								</p:column>
+								<p:column headerText="#{msg['nome.label']}" style="text-align: center;">
+									<h:outputText value="#{usuario.nome}" />
+								</p:column>
+								<p:column headerText="#{msg['motivoDesativacao.label']}" style="text-align: center;">
+									<h:outputText value="#{msg['MotivoDesativacaoUsuario.'.concat(usuario.motivoDesativacao).concat('.label')]}" />
+								</p:column>
+								<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center; width: 120px;">
+									<h:outputText value="#{msg['RoleGNFE.'.concat(usuario.roleGNFE).concat('.label')]}" />
+								</p:column>
+								<p:column style="width: 128px;" sortable="false" rendered="#{menuBean.podeEditar()}">
+									<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
+										<h:outputText value="#{msg['editar.label']}"/>
+									</h:link>
+									<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-usuario-modal', 'form-usuario:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
+										<f:setPropertyActionListener target="#{usuarioListBean.usuarioId}" value="#{usuario.id}" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</div>
+				</b:row>
+				<b:modal title="#{msg['confirmarExclusaoTitulo.label']}" styleClass="confirmar-modal excluir-usuario-modal" rendered="#{menuBean.podeExcluir()}">
+				    <p><h4 class="msg-confirm"><h:outputText value="#{msg['registroExcluir.confirm']}"/> </h4></p>
+				    <f:facet name="footer">
+				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+				        <p:commandButton id="excluir-btn" value="#{msg['excluir.label']}" actionListener="#{usuarioListBean.excluir()}" update="content-pg-id" styleClass="btn btn-danger" oncomplete="closeModal('excluir-usuario-modal')"/>	
+				    </f:facet>
+				</b:modal>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>
