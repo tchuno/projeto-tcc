@@ -235,8 +235,10 @@
 										<p:commandLink value="#{msg['reiniciarSenha.label']}" onclick="openModal('reiniciar-senha-modal', 'form-modal1:confirmar-reiniciar-btn')" class="btn btn-default btn-sm" rendered="#{menuBean.podeEditar() and usuarioEditBean.usuarioLogado.isAdminRole()}"/>
 										<p:commandLink value="#{msg['desativarUsuario.label']}" onclick="openModal('desativar-usuario-modal', 'form-modal2:motivoDesativacaoId')" class="btn btn-default btn-sm" style="margin-left: 10px;" rendered="#{usuarioEditBean.renderDesativarBtn and menuBean.podeEditar() and usuarioEditBean.usuarioLogado.isAdminRole()}"/>
 										<p:commandLink value="#{msg['ativarUsuario.label']}" onclick="openModal('ativar-usuario-modal', 'form-modal3:confirmar-ativar-btn')" class="btn btn-default btn-sm" style="margin-left: 10px;" rendered="#{usuarioEditBean.renderAtivarBtn and menuBean.podeEditar() and usuarioEditBean.usuarioLogado.isAdminRole()}"/>
+									</div>
+									<div class="form-group">
 										<h:panelGroup rendered="#{usuarioEditBean.autorizacao.podeAlterarSenha()}">
-											<a href="#{request.contextPath}/trocar-senha.xhtml" class="btn btn-default btn-sm" style="margin-left: 10px;">#{msg['alterarSenha.label']}</a>
+											<a href="#{request.contextPath}/trocar-senha.xhtml" class="ui-commandlink ui-widget btn btn-default btn-sm">#{msg['alterarSenha.label']}</a>
 										</h:panelGroup>
 									</div>
 								</b:column>
