@@ -6,8 +6,8 @@
 		userTable="usuario" userNameCol="login" userCredCol="senha" 
 		userRoleTable="role" roleNameCol="nome" 
 
-		connectionURL="jdbc:postgresql://127.0.0.1:5432/tadstran"
-		connectionName="tadstran" connectionPassword="tadstran"
+		connectionURL="jdbc:postgresql://127.0.0.1:5432/gnfe"
+		connectionName="gnfe" connectionPassword="gnfe"
 		/>
 		
 	<Resource
@@ -16,8 +16,8 @@
 		type="javax.sql.DataSource"
 		driverClassName="org.postgresql.Driver"
 
-		url="jdbc:postgresql://127.0.0.1:5432/tadstran"
-		username="tadstran" password="tadstran"
+		url="jdbc:postgresql://127.0.0.1:5432/gnfe"
+		username="gnfe" password="gnfe"
 		
 	/>
 

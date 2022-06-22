@@ -7,11 +7,10 @@ public enum MotivoDesativacaoUsuario {
 
 	DESLIGAMENTO,
 	TRANSFERENCIA,
-	INATIVIDADE_ACESSO,
-	SOLICITACAO_GESTOR;
+	INATIVIDADE_ACESSO;
 
-	private static List<MotivoDesativacaoUsuario> allMotivoDesativacaoUsuario = Arrays.asList(DESLIGAMENTO, TRANSFERENCIA, INATIVIDADE_ACESSO, SOLICITACAO_GESTOR);
-	private static List<MotivoDesativacaoUsuario> notAllMotivoDesativacaoUsuario = Arrays.asList(DESLIGAMENTO, TRANSFERENCIA, INATIVIDADE_ACESSO, SOLICITACAO_GESTOR);
+	private static List<MotivoDesativacaoUsuario> allMotivoDesativacaoUsuario = Arrays.asList(DESLIGAMENTO, TRANSFERENCIA, INATIVIDADE_ACESSO);
+	private static List<MotivoDesativacaoUsuario> notAllMotivoDesativacaoUsuario = Arrays.asList(DESLIGAMENTO, TRANSFERENCIA, INATIVIDADE_ACESSO);
 
 	public static List<MotivoDesativacaoUsuario> getAllMotivoDesativacaoUsuario() {
 		return allMotivoDesativacaoUsuario;

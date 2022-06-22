@@ -73,7 +73,7 @@ public class UsuarioEditBean extends AbstractBean {
 				throw new MessageKeyException("cpfInvalido.error");
 			}
 
-			usuario.setRoleGNFE(RoleGNFE.PESSOA);
+			usuario.setRoleGNFE(RoleGNFE.CLIENTE);
 			usuarioService.saveOrUpdate(usuario, null);
 			addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
 

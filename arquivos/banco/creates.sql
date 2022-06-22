@@ -60,3 +60,66 @@ create table parametro
     chave varchar(50)   not null,
     valor varchar(6000) not null
 );
+
+create table produto
+(
+    id    serial        not null
+        constraint produto_pk
+            primary key,
+    cod varchar(100)   not null,
+    descricao varchar(500),
+    gtin varchar(100),
+    cnm varchar(100),
+    cst varchar(100),
+    cest varchar(100),
+    fornecedor_id integer
+        constraint produto_fk1
+        references usuario
+        on delete set null,
+    unidade_medica varchar(50),
+    estoque_minomo integer
+);
+
+create table orcamento
+(
+    id    serial        not null
+        constraint orcamento_pk
+            primary key,
+    autor_id integer
+        constraint orcamento_fk1
+            references usuario
+            on delete set null,
+    cliente_id integer
+        constraint orcamento_fk2
+            references usuario
+            on delete set null,
+    forma_pagamento varchar(50)
+);
+
+create table orcamento_produto
+(
+    id    serial        not null
+        constraint orcamento_produto_pk
+            primary key,
+    orcamento_id integer
+        constraint orcamento_produto_fk1
+            references orcamento
+            on delete set null,
+    produto_id integer
+        constraint orcamento_produto_fk2
+            references produto
+            on delete set null
+);
+
+create table nota_fiscal
+(
+    id    serial        not null
+        constraint nota_fiscal_pk
+            primary key,
+    orcamento_id integer
+        constraint nota_fiscal_fk1
+            references orcamento
+            on delete set null,
+    data_criacao timestamp,
+    chave_acesso varchar(1000)
+);

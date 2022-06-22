@@ -196,7 +196,7 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 
 		params.put("login", login);
 		params.put("senha", senha);
-		params.put("roleGNFE",  RoleGNFE.PESSOA.name());
+		params.put("roleGNFE",  RoleGNFE.CLIENTE.name());
 
 		Query query = createQuery(hql.toString(), params);
 

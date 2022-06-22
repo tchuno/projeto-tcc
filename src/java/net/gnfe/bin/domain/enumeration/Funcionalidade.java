@@ -9,16 +9,16 @@ public enum Funcionalidade {
 
 	USUARIOS(
 			new P(RoleGNFE.ADMIN, true, true, true, true),
-			new P(RoleGNFE.FUNCIONARIO, true, true, true, true),
-			new P(RoleGNFE.PESSOA, false, false, false, false)),
+			new P(RoleGNFE.FORNCEDOR, true, true, true, true),
+			new P(RoleGNFE.CLIENTE, false, false, false, false)),
 	USUARIOS_EDIT(
 			new P(RoleGNFE.ADMIN, true, true, true, true),
-			new P(RoleGNFE.FUNCIONARIO, true, true, true, true),
-			new P(RoleGNFE.PESSOA, true, true, true, true)),
+			new P(RoleGNFE.FORNCEDOR, true, true, true, true),
+			new P(RoleGNFE.CLIENTE, true, true, true, true)),
 	CUSTOMIZACAO(
 			new P(RoleGNFE.ADMIN, true, true, true, true),
-			new P(RoleGNFE.FUNCIONARIO, false, false, false, false),
-			new P(RoleGNFE.PESSOA, false, false, false, false)),
+			new P(RoleGNFE.FORNCEDOR, false, false, false, false),
+			new P(RoleGNFE.CLIENTE, false, false, false, false)),
 	;
 
 	private Map<RoleGNFE, P> permissoesMap = new HashMap<>();
