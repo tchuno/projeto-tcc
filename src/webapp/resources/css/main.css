@@ -1805,7 +1805,7 @@ th.ui-state-default{
 }
 
 .headerTop .menu-itens ul.nav{
-	height: 50px;
+	height: auto;
 	margin: 0px;
 }
 .headerTop .menu-itens ul.nav>li{

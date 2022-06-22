@@ -15,14 +15,14 @@
 			</div>
 
 <!-- 		Logo -->
-			<div class="logo">
+			<div class="logo collapse">
 				<a href="/">
 					<img src="#{request.contextPath}/resources/images/logo-gnfe-transparent.png" style="max-height: 90px; max-width: 190px;"/>
 			 	</a>
 			</div>
 <!-- 		Usuario logado-->
 			<div class="status-login-menu collapse navbar-collapse">
-				<ul class="nav navbar-nav navbar-right" style="margin-top: 0; background-color: #fff;">
+				<ul class="nav navbar-nav navbar-right" style="margin-top: 0; max-width: 150px; background-color: #fff;">
 					<li>
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span>#{utilBean.usuarioLogado.nome} (#{msg['RoleGNFE.'.concat(utilBean.usuarioLogado.roleGNFE).concat('.label')]})</span>
