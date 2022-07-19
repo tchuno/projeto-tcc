@@ -6,7 +6,10 @@ import net.gnfe.util.menu.Item;
 import java.util.*;
 
 public enum Funcionalidade {
-
+	PRODUTOS(
+			new P(RoleGNFE.ADMIN, true, true, true, true),
+			new P(RoleGNFE.FORNCEDOR, true, true, true, true),
+			new P(RoleGNFE.CLIENTE, false, false, false, false)),
 	USUARIOS(
 			new P(RoleGNFE.ADMIN, true, true, true, true),
 			new P(RoleGNFE.FORNCEDOR, true, true, true, true),

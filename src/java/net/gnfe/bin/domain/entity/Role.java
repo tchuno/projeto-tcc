@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-@Entity
+@Entity(name = "ROLE")
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"USUARIO_ID", "NOME"}))
 public class Role extends net.gnfe.util.ddd.Entity {
 

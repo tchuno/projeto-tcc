@@ -6,8 +6,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"LOGIN"}))
+@Entity(name = "ORCAMENTO")
 public class Orcamento extends net.gnfe.util.ddd.Entity {
 
 	private Long id;
@@ -15,10 +14,9 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 	private Usuario cliente;
 	private FormaPagamento formaPagamento;
 
-	private Set<Produto> produtos = new HashSet<Produto>(0);
+	private Set<OrcamentoProduto> produtos = new HashSet<OrcamentoProduto>(0);
 
 	@Id
-	@Override
 	@Column(name="ID", unique=true, nullable=false)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Long getId() {
@@ -59,12 +57,12 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 		this.formaPagamento = formaPagamento;
 	}
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="ORCAMENTO", cascade=CascadeType.ALL, orphanRemoval=true)
-	public Set<Produto> getProdutos() {
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="orcamento", cascade=CascadeType.ALL, orphanRemoval=true)
+	public Set<OrcamentoProduto> getProdutos() {
 		return produtos;
 	}
 
-	public void setProdutos(Set<Produto> produtos) {
+	public void setProdutos(Set<OrcamentoProduto> produtos) {
 		this.produtos = produtos;
 	}
 }

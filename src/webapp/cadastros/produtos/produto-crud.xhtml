@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:gnfe="http://java.sun.com/jsf/composite/gnfe">
+	<f:metadata>
+		<f:viewAction action="#{produtoCrudBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
+	</f:metadata>
+	<ui:composition template="/templates/navegacao.xhtml">
+		<ui:define name="tituloPagina">#{msg['produtoCrud.titulo']}</ui:define>
+		<ui:define name="conteudo">
+			<gnfe:excluirModal id="excluirModal" metodoExcluir="#{produtoCrudBean.excluir()}"/>
+			<h:form id="form-produto">
+				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
+					<b:row id="adicionar-modal-content-id">
+                        <div class="col-sm-12">
+							<b:messages globalOnly="true" showSummary="true"/>
+                            <div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.descricao}" placeholder="#{msg['descricao.label']}"
+									label="#{msg['descricao.label']}" renderLabel="true" maxlength="100" required="false" />
+								<b:message/>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+							jQuery(function($) {
+								configurarMascaras();
+							});
+						</script>
+					</b:row>
+
+				    <f:facet name="footer">
+				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="adicionar-modal-content-id form-produto-list" styleClass="btn"/>
+				    </f:facet>
+				</b:modal>
+			</h:form>
+			<h:form id="form-produto-list">
+				<div class="row">
+					<div class="col-sm-12">
+ 						<p:commandLink value="#{msg['adicionarProduto.label']}" onclick="openModal('adicionar-modal')" class="btn btn-primary btn-lg" style="float: right;" update="form-produto:adicionar-modal-content-id" rendered="#{menuBean.podeEditar()}">
+							<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{null}" />
+						</p:commandLink>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<p:dataTable var="produto" value="#{produtoCrudBean.dataModel}" rows="20" paginator="true" lazy="true"
+								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
+								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
+								paginatorPosition="bottom">
+							<p:column headerText="#{msg['nome.label']}" style="width: 130px; text-align: center;">
+								<h:outputText value="#{produto.nome}" />
+							</p:column>
+							<p:column headerText="#{msg['descricao.label']}" style="text-align: center;">
+								<h:outputText value="#{produto.descricao}" />
+							</p:column>
+							<p:column style="width: 240px;" sortable="false" rendered="#{menuBean.podeEditar()}">
+								<p:commandLink value="#{msg['editar.label']}" onclick="openModal('adicionar-modal')" class="btn btn-warning btn-editar" update="form-produto:adicionar-modal-content-id">
+									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" />
+								</p:commandLink>
+								<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
+									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

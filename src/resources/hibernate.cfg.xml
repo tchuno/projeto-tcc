@@ -13,6 +13,10 @@
 		<mapping class="net.gnfe.bin.domain.entity.Usuario" />
 		<mapping class="net.gnfe.bin.domain.entity.Role" />
 		<mapping class="net.gnfe.bin.domain.entity.Parametro" />
+		<mapping class="net.gnfe.bin.domain.entity.Produto" />
+		<mapping class="net.gnfe.bin.domain.entity.Orcamento" />
+		<mapping class="net.gnfe.bin.domain.entity.OrcamentoProduto" />
+		<mapping class="net.gnfe.bin.domain.entity.NotaFiscal" />
 
 	</session-factory>
 </hibernate-configuration>

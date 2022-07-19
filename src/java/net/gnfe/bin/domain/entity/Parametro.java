@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-@Entity
+@Entity(name = "PARAMETRO")
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"CHAVE"}))
 public class Parametro extends net.gnfe.util.ddd.Entity {
 

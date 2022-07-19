@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "PRODUTO")
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"ID"}))
+@Table
 public class Produto extends net.gnfe.util.ddd.Entity {
 
 	private Long id;

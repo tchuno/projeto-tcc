@@ -10,5 +10,6 @@
 		<join path="/cadastros/usuarios/edit/{id}" view="/cadastros/usuarios/usuario-edit.xhtml"/>
 
 		<join path="/admin/customizacoes/" view="/admin/customizacoes.xhtml"/>
+		<join path="/cadastros/produtos/" view="/cadastros/produtos/produto-crud.xhtml"/>
 	</joins>
 </rewrite>

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import java.util.*;
 
-@Entity
+@Entity(name = "USUARIO")
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"LOGIN"}))
 public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBindingListener {
 
