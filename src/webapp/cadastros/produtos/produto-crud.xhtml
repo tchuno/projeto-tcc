@@ -17,14 +17,78 @@
 			<h:form id="form-produto">
 				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
 					<b:row id="adicionar-modal-content-id">
-                        <div class="col-sm-12">
+						<div class="col-sm-12">
 							<b:messages globalOnly="true" showSummary="true"/>
-                            <div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.descricao}" placeholder="#{msg['descricao.label']}"
-									label="#{msg['descricao.label']}" renderLabel="true" maxlength="100" required="false" />
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.cod}" placeholder="#{msg['codigo.label']}"
+											 label="#{msg['codigo.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="true" />
 								<b:message/>
-                            </div>
-                        </div>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.nome}" placeholder="#{msg['nome.label']}"
+											 label="#{msg['nome.label']}" renderLabel="true" maxlength="300" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.descricao}" placeholder="#{msg['descricao.label']}"
+											 label="#{msg['descricao.label']}" renderLabel="true" maxlength="500" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.gtin}" placeholder="#{msg['gtin.label']}"
+											 label="#{msg['gtin.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.cnm}" placeholder="#{msg['cnm.label']}"
+											 label="#{msg['cnm.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.cst}" placeholder="#{msg['cst.label']}"
+											 label="#{msg['cst.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<h:outputLabel value="#{msg['fornecedores.label']}" styleClass="bf-no-message"/>
+								<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{produtoCrudBean.produto.fornecedor}" label="#{msg['fornecedores.label']}"
+												 converter="entity" required="true">
+									<f:selectItem itemValue="" itemLabel=""/>
+									<f:selectItems value="#{produtoCrudBean.fornecedores}" var="usu" itemValue="#{usu}" itemLabel="#{usu.nome}"/>
+								</h:selectOneMenu>
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<h:outputLabel value="#{msg['unidadeMedida.label']}" styleClass="bf-no-message"/>
+								<h:selectOneMenu styleClass="form-control bf-no-message" id="unidade-medida-id" value="#{produtoCrudBean.produto.unidadeMedida}" label="#{msg['unidadeMedida.label']}"
+												 converter="enumConverter" required="true">
+									<f:selectItem itemValue="" itemLabel=""/>
+									<f:selectItems value="#{utilBean.getValues('UnidadeMedida')}" var="und" itemValue="#{und}" itemLabel="#{msg['UnidadeMedida.'.concat(und).concat('.label')]}"/>
+								</h:selectOneMenu>
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.valorUnidade}" placeholder="#{msg['valorUnidade.label']}"
+											 label="#{msg['valorUnidade.label']}" renderLabel="true" styleClass="mask-money" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.cst}" placeholder="#{msg['estoqueAtual.label']}"
+											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.estoqueMinimo}" placeholder="#{msg['estoqueMinimo.label']}"
+											 label="#{msg['estoqueMinimo.label']}" renderLabel="true" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.tempoReposicao}" placeholder="#{msg['tempoReposicao.label']}"
+											 label="#{msg['tempoReposicao.label']}" renderLabel="true" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+
+						</div>
                         <script type="text/javascript">
 							jQuery(function($) {
 								configurarMascaras();

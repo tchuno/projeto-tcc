@@ -2,28 +2,39 @@ package net.gnfe.bin.bean;
 
 import net.gnfe.bin.bean.datamodel.ProdutoDataModel;
 import net.gnfe.bin.domain.entity.Produto;
+import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.service.ProdutoService;
+import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
+import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
 import net.gnfe.util.faces.AbstractBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.List;
 
 @ManagedBean
 @ViewScoped
 public class ProdutoCrudBean extends AbstractBean {
 
     @Autowired private ProdutoService service;
+    @Autowired private UsuarioService usuarioService;
 
     private ProdutoDataModel dataModel;
     private ProdutoFiltro produtoFiltro;
     private Produto produto;
+    private List<Usuario> fornecedores;
 
     public void initBean() {
         dataModel = new ProdutoDataModel();
         dataModel.setService(service);
         dataModel.setFiltro(new ProdutoFiltro());
+
+        UsuarioFiltro filtro = new UsuarioFiltro();
+        filtro.setRoleGNFE(RoleGNFE.FORNCEDOR);
+        fornecedores = usuarioService.findByFiltro(filtro);
     }
 
     public void salvar() {
@@ -77,5 +88,13 @@ public class ProdutoCrudBean extends AbstractBean {
 
     public void setProdutoFiltro(ProdutoFiltro produtoFiltro) {
         this.produtoFiltro = produtoFiltro;
+    }
+
+    public List<Usuario> getFornecedores() {
+        return fornecedores;
+    }
+
+    public void setFornecedores(List<Usuario> fornecedores) {
+        this.fornecedores = fornecedores;
     }
 }

@@ -1,5 +1,6 @@
 package net.gnfe.bin.domain.repository;
 
+import net.gnfe.bin.domain.entity.Role;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.MotivoDesativacaoUsuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
@@ -89,7 +90,7 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 		hql.append(" where 1=1 ");
 
 		if (roleGNFE != null) {
-			hql.append(" and (select count(*) from Role r where r.usuario.id = u.id and r.nome = :roleGNFE) > 0 ");
+			hql.append(" and (select count(*) from ").append(Role.class.getName()).append(" r where r.usuario.id = u.id and r.nome = :roleGNFE) > 0 ");
 			params.put("roleGNFE", roleGNFE.name());
 		}
 		
