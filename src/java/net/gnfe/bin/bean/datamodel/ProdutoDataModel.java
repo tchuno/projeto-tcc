@@ -25,6 +25,8 @@ public class ProdutoDataModel extends LazyDataModel<Produto> {
 			return null;
 		}
 
+		filtro.setOrdenar(sortField, sortOrder);
+
 		list = produtoService.findByFiltro(filtro, first, pageSize);
 
 		return list;

@@ -24,7 +24,7 @@ public class ProdutoCrudBean extends AbstractBean {
 
     private ProdutoDataModel dataModel;
     private ProdutoFiltro produtoFiltro;
-    private Produto produto;
+    private Produto produto = new Produto();
     private List<Usuario> fornecedores;
 
     public void initBean() {

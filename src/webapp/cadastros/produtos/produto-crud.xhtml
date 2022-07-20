@@ -20,17 +20,17 @@
 						<div class="col-sm-12">
 							<b:messages globalOnly="true" showSummary="true"/>
 							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.cod}" placeholder="#{msg['codigo.label']}"
+								<b:inputText value="#{produtoCrudBean.produto.cod}" placeholder="#{msg['codigo.label']}" id="teste1"
 											 label="#{msg['codigo.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.nome}" placeholder="#{msg['nome.label']}"
+								<b:inputText value="#{produtoCrudBean.produto.nome}" placeholder="#{msg['nome.label']}" id="teste2"
 											 label="#{msg['nome.label']}" renderLabel="true" maxlength="300" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.descricao}" placeholder="#{msg['descricao.label']}"
+								<b:inputText value="#{produtoCrudBean.produto.descricao}" placeholder="#{msg['descricao.label']}" id="teste3"
 											 label="#{msg['descricao.label']}" renderLabel="true" maxlength="500" required="false" />
 								<b:message/>
 							</div>
@@ -52,7 +52,7 @@
 							<div class="form-group">
 								<h:outputLabel value="#{msg['fornecedores.label']}" styleClass="bf-no-message"/>
 								<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{produtoCrudBean.produto.fornecedor}" label="#{msg['fornecedores.label']}"
-												 converter="entity" required="true">
+												 converter="entity" required="false">
 									<f:selectItem itemValue="" itemLabel=""/>
 									<f:selectItems value="#{produtoCrudBean.fornecedores}" var="usu" itemValue="#{usu}" itemLabel="#{usu.nome}"/>
 								</h:selectOneMenu>
@@ -116,18 +116,24 @@
 								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 								paginatorPosition="bottom">
-							<p:column headerText="#{msg['nome.label']}" style="width: 130px; text-align: center;">
+							<p:column headerText="#{msg['codigo.label']}" style="width: 130px; text-align: center;" sortBy="#{produto.cod}">
+								<h:outputText value="#{produto.cod}" />
+							</p:column>
+							<p:column headerText="#{msg['nome.label']}" style="text-align: center;" sortBy="#{produto.nome}">
 								<h:outputText value="#{produto.nome}" />
 							</p:column>
-							<p:column headerText="#{msg['descricao.label']}" style="text-align: center;">
+							<p:column headerText="#{msg['descricao.label']}" style="text-align: center;" sortBy="#{produto.descricao}">
 								<h:outputText value="#{produto.descricao}" />
 							</p:column>
+							<p:column headerText="#{msg['valorUnidade.label']}" style="text-align: center;" sortBy="#{produto.valorUnidade}">
+								<h:outputText value="#{produto.valorUnidade}" />
+							</p:column>
 							<p:column style="width: 240px;" sortable="false" rendered="#{menuBean.podeEditar()}">
-								<p:commandLink value="#{msg['editar.label']}" onclick="openModal('adicionar-modal')" class="btn btn-warning btn-editar" update="form-produto:adicionar-modal-content-id">
-									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" />
+								<p:commandLink id="adicionar-id" value="#{msg['editar.label']}" onclick="openModal('adicionar-modal')" class="btn btn-warning btn-editar" update="form-produto:adicionar-modal-content-id">
+									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" for="adicionar-id" />
 								</p:commandLink>
-								<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
-									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" />
+								<p:commandLink id="excluir-id" value="#{msg['excluir.label']}" onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
+									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" for="excluir-id" />
 								</p:commandLink>
 							</p:column>
 						</p:dataTable>

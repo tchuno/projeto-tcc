@@ -1,6 +1,7 @@
 package net.gnfe.bin.domain.vo.filtro;
 
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
+import org.primefaces.model.SortOrder;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,6 +24,8 @@ public class ProdutoFiltro implements Cloneable {
 	private BigDecimal valorUnidade;
 	private Integer tempoReposicao;
 	private Integer estoqueMinimo;
+	private String campoOrdem;
+	private SortOrder ordem;
 
 	public Long getId() {
 		return id;
@@ -150,5 +153,26 @@ public class ProdutoFiltro implements Cloneable {
 
 	public void setEstoqueMinimo(Integer estoqueMinimo) {
 		this.estoqueMinimo = estoqueMinimo;
+	}
+
+	public void setOrdenar(String campoOrdem, SortOrder ordem) {
+		this.campoOrdem = campoOrdem;
+		this.ordem = ordem;
+	}
+
+	public String getCampoOrdem() {
+		return campoOrdem;
+	}
+
+	public void setCampoOrdem(String campoOrdem) {
+		this.campoOrdem = campoOrdem;
+	}
+
+	public SortOrder getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(SortOrder ordem) {
+		this.ordem = ordem;
 	}
 }

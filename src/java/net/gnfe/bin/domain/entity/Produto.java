@@ -100,7 +100,7 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="FORNCEDOR_ID")
+	@JoinColumn(name="FORNECEDOR_ID")
 	public Usuario getFornecedor() {
 		return fornecedor;
 	}

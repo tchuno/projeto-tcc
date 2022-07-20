@@ -63,21 +63,26 @@ create table parametro
 
 create table produto
 (
-    id    serial        not null
+    id              serial       not null
         constraint produto_pk
             primary key,
-    cod varchar(100)   not null,
-    descricao varchar(500),
-    gtin varchar(100),
-    cnm varchar(100),
-    cst varchar(100),
-    cest varchar(100),
-    fornecedor_id integer
+    cod             varchar(100) not null,
+    descricao       varchar(500),
+    gtin            varchar(100),
+    cnm             varchar(100),
+    cst             varchar(100),
+    cest            varchar(100),
+    fornecedor_id   integer
         constraint produto_fk1
-        references usuario
-        on delete set null,
-    unidade_medica varchar(50),
-    estoque_minomo integer
+            references usuario
+            on delete set null,
+    unidade_medica  varchar(50),
+    estoque_minimo  integer,
+    estoque_atual   integer,
+    nome            varchar(300),
+    tempo_reposicao integer,
+    unidade_medida  varchar(10),
+    valor_unidade   bigint
 );
 
 create table orcamento

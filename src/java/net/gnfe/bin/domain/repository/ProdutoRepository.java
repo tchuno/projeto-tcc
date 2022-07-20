@@ -6,6 +6,7 @@ import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.util.ddd.HibernateRepository;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.primefaces.model.SortOrder;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 
 		Map<String, Object> params = makeQuery(filtro, hql);
 
-		hql.append("order by u.id");
+		makeOrderBy(filtro, hql);
 
 		Query query = createQuery(hql.toString(), params);
 
@@ -61,6 +62,24 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		Query query = createQuery(hql.toString(), params);
 
 		return ((Number) query.uniqueResult()).intValue();
+	}
+
+	private void makeOrderBy(ProdutoFiltro filtro, StringBuilder hql) {
+
+		String campoOrdem = filtro.getCampoOrdem();
+		if(org.apache.commons.lang3.StringUtils.isNotBlank(campoOrdem)) {
+
+			campoOrdem = campoOrdem.replace("usuario.", "u.");
+
+			SortOrder ordem = filtro.getOrdem();
+			String ordemStr = SortOrder.DESCENDING.equals(ordem) ? " desc " : " asc ";
+
+			hql.append(" order by ").append(campoOrdem).append(ordemStr);
+		}
+		else {
+
+			hql.append(" order by u.id desc ");
+		}
 	}
 
 	private Map<String, Object> makeQuery(ProdutoFiltro filtro, StringBuilder hql) {
