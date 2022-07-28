@@ -102,6 +102,28 @@
 				    </f:facet>
 				</b:modal>
 			</h:form>
+			<h:form id="form-importacao">
+				<div class="row">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-3"><h4 class="tituloForm"><h:outputText value="Upload de Produtos"/></h4></div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<p:fileUpload
+									label="Escolher Arquivo"
+									mode="advanced" auto="true"
+									multiple="false"
+									accept="csv"
+									sizeLimit="10000000"
+									update="form-importacao mensagensGlobais"
+									fileUploadListener="#{produtoCrudBean.uploadEvent}"/>
+						</div>
+					</div>
+				</div>
+			</h:form>
 			<h:form id="form-produto-list">
 				<div class="row">
 					<div class="col-sm-12">

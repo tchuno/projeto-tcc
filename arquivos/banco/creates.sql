@@ -66,7 +66,8 @@ create table produto
     id              serial       not null
         constraint produto_pk
             primary key,
-    cod             varchar(100) not null,
+    id_produto      varchar(100),
+    cod             varchar(100),
     descricao       varchar(500),
     gtin            varchar(100),
     cnm             varchar(100),

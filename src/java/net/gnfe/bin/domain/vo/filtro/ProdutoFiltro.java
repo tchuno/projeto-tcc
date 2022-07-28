@@ -9,6 +9,7 @@ import java.util.List;
 public class ProdutoFiltro implements Cloneable {
 
 	private Long id;
+	private String idProduto;
 	private List<Long> ids;
 	private String cod;
 	private String nome;
@@ -33,6 +34,14 @@ public class ProdutoFiltro implements Cloneable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getIdProduto() {
+		return idProduto;
+	}
+
+	public void setIdProduto(String idProduto) {
+		this.idProduto = idProduto;
 	}
 
 	public List<Long> getIds() {

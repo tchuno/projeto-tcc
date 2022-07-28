@@ -7,11 +7,15 @@ import net.gnfe.util.rest.jackson.ObjectMapper;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jsoup.Jsoup;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -236,40 +240,6 @@ public abstract class DummyUtils {
 		return className;
 	}
 
-	public static String getHashChecksum(File file) {
-
-		try {
-
-			MessageDigest md = MessageDigest.getInstance("SHA1");
-			FileInputStream fis = new FileInputStream(file);
-			byte[] dataBytes = new byte[1024];
-
-			int nread = 0; 
-
-			while ((nread = fis.read(dataBytes)) != -1) {
-				md.update(dataBytes, 0, nread);
-			};
-
-			byte[] mdbytes = md.digest();
-
-			//convert the byte to hex format
-			StringBuffer sb = new StringBuffer("");
-			for (int i = 0; i < mdbytes.length; i++) {
-				sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
-			}
-
-			fis.close();
-
-			return sb.toString();
-		}
-		catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public static String toMegabytes(long size) {
 
 		double mb = size / 1024d / 1024d;
@@ -464,4 +434,48 @@ public abstract class DummyUtils {
 		return null;
 	}
 
+	public static File getFileDestino(File dirDestino, String fileName) {
+
+		String extensao = DummyUtils.getExtensao(fileName);
+		String nomeSemExtensao = fileName.substring(0, fileName.lastIndexOf("."));
+
+		File file;
+		int count = 0;
+		do {
+
+			String nome = count == 0 ? nomeSemExtensao : nomeSemExtensao + "(" + count + ")";
+
+			String nomeCompleto = nome + "." + extensao;
+
+			file = new File(dirDestino, nomeCompleto);
+
+			count++;
+		}
+		while(file.exists());
+
+		return file;
+	}
+
+	public static String substituirCaracteresEspeciais(String str) {
+
+		if(StringUtils.isBlank(str)) {
+			return str;
+		}
+
+		return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
+
+	public static String htmlToString(String html) {
+
+		html = Jsoup.parse(html).wholeText();
+		html = StringUtils.trim(html);
+		html = html.replaceAll("\r", "");
+		html = html.replaceAll("\n", "`%`");
+		html = html.replaceAll("^[ \t]*`%`[ \t]*`%`", "");
+		html = html.replaceAll("`%`[ \t]*`%`$", "");
+		html = StringUtils.trim(html);
+		html = html.replaceAll("`%`", "\n");
+		html = html.replaceAll("\n[ \t]*", "\n");
+		return html;
+	}
 }

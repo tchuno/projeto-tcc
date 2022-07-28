@@ -85,6 +85,7 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 	private Map<String, Object> makeQuery(ProdutoFiltro filtro, StringBuilder hql) {
 
 		Long id = filtro.getId();
+		String idProduto = filtro.getIdProduto();
 		List<Long> ids = filtro.getIds();
 		String cod = filtro.getCod();
 		String nome = filtro.getNome();
@@ -108,6 +109,11 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		if(id != null) {
 			hql.append(" and u.id = :id ");
 			params.put("id", id);
+		}
+
+		if(idProduto != null) {
+			hql.append(" and u.idProduto = :idProduto ");
+			params.put("idProduto", idProduto);
 		}
 
 		if(ids != null && !ids.isEmpty()) {

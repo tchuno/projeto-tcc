@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class Produto extends net.gnfe.util.ddd.Entity {
 
 	private Long id;
+	private String idProduto;
 	private String cod;
 	private String nome;
 	private String descricao;
@@ -36,7 +37,16 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 		this.id = id;
 	}
 
-	@Column(name="COD", nullable=false, length=100)
+	@Column(name="ID_PRODUTO", nullable=false, length=100)
+	public String getIdProduto() {
+		return idProduto;
+	}
+
+	public void setIdProduto(String idProduto) {
+		this.idProduto = idProduto;
+	}
+
+	@Column(name="COD", length=100)
 	public String getCod() {
 		return cod;
 	}
@@ -119,7 +129,7 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	}
 
 	@Enumerated(EnumType.STRING)
-	@Column(name="UNIDADE_MEDIDA", nullable=false)
+	@Column(name="UNIDADE_MEDIDA")
 	public UnidadeMedida getUnidadeMedida() {
 		return unidadeMedida;
 	}

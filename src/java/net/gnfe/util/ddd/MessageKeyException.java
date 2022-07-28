@@ -1,6 +1,6 @@
 package net.gnfe.util.ddd;
 
-public class MessageKeyException extends Exception {
+public class MessageKeyException extends RuntimeException {
 
 	private final String key;
 	private final Object[] args;
