@@ -16,8 +16,14 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<h4 class="tituloForm"><h:outputText value="#{msg['cores.label']}"/></h4>
-					<div class="col-sm-3"></div>
+					<div class="col-sm-4"></div>
 					<div class="col-sm-6">
+						<div class="form-group">
+							<label>#{msg['titulo.label']}</label><br/>
+							<p:inputText value="#{customizacaoEditBean.map['TITULO']}"
+										   required="true" label="#{msg['titulo.label']}"/>
+							<b:message/>
+						</div>
 						<div class="form-group">
 							<label>#{msg['corBarra.label']}</label><br/>
 							<p:colorPicker value="#{customizacaoEditBean.map['COR_BARRA']}"

@@ -47,11 +47,11 @@ public class UtilBean extends AbstractBean {
 	}
 
 	public String cccCorFontTituloBarra() {
-		return "#"+parametroService.getValor(P.COR_FONTE_TITULO_BARRA);
+		return "#"+parametroService.getValorCache(P.COR_FONTE_TITULO_BARRA);
 	}
 
 	public String cccCorMenu() {
-		return "#"+parametroService.getValor(P.COR_MENU);
+		return "#"+parametroService.getValorCache(P.COR_MENU);
 	}
 
 	public String getDateStr(Date data) {
@@ -99,65 +99,6 @@ public class UtilBean extends AbstractBean {
 
 		if(bd == null) {
 			return null;
-		}
-
-		Locale ptBr = new Locale("pt", "BR");
-		String format = NumberFormat.getCurrencyInstance(ptBr).format(bd);
-		return format;
-	}
-
-	public String diasAtraso (Date data) {
-		if(data == null){
-			return null;
-		}
-
-		Date dataAtual = new Date();
-		int numeroDias = (int) ((dataAtual.getTime() - data.getTime()) / (1000 * 60 * 60 * 24));
-		int i = numeroDias - 30;
-		return numeroDias + " - 30 = " + i ;
-	}
-
-	public String jurosAplicado (BigDecimal bd, Date data) {
-		if(bd == null || data == null) {
-			return null;
-		}
-
-		Date dataAtual = new Date();
-		int numeroDias = (int) ((dataAtual.getTime() - data.getTime()) / (1000 * 60 * 60 * 24));
-		int i = numeroDias / 30;
-		Integer porcentagemJuros = 0;
-		BigDecimal juros = new BigDecimal(0);
-		if(i >= 1) {
-			i--;
-			porcentagemJuros = 20;
-			porcentagemJuros = porcentagemJuros + i;
-			String s = porcentagemJuros.toString();
-			juros = new BigDecimal(s);
-			juros = juros.setScale(0, BigDecimal.ROUND_HALF_EVEN);
-		}
-
-		return juros.toString() + "%";
-	}
-
-	public String formatNumberJuros(BigDecimal bd, Date data) {
-
-		if(bd == null || data == null) {
-			return null;
-		}
-
-		Date dataAtual = new Date();
-		int numeroDias = (int) ((dataAtual.getTime() - data.getTime()) / (1000 * 60 * 60 * 24));
-		int i = numeroDias / 30;
-		Integer porcentagemJuros = 0;
-		if(i >= 1) {
-			i--;
-			porcentagemJuros = 20;
-			porcentagemJuros = porcentagemJuros + i;
-			String s = porcentagemJuros.toString();
-			s = "0." + s;
-			BigDecimal juros = new BigDecimal(s);
-			juros = bd.multiply(juros);
-			bd = bd.add(juros).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 		}
 
 		Locale ptBr = new Locale("pt", "BR");

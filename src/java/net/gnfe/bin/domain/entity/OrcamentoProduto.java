@@ -9,6 +9,7 @@ public class OrcamentoProduto extends net.gnfe.util.ddd.Entity {
 
 	private Orcamento orcamento;
 	private Produto produto;
+	private Integer quantidade = 1;
 
 	@Id
 	@Override
@@ -40,5 +41,17 @@ public class OrcamentoProduto extends net.gnfe.util.ddd.Entity {
 
 	public void setProduto(Produto produto) {
 		this.produto = produto;
+	}
+
+	@Column(name="QUANTIDADE", nullable=false)
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		if(quantidade == null || quantidade == 0) {
+			quantidade = 1;
+		}
+		this.quantidade = quantidade;
 	}
 }

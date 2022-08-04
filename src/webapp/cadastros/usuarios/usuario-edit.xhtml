@@ -14,11 +14,6 @@
 	<ui:composition template="/templates/navegacao.xhtml">
 		<ui:define name="tituloPagina">#{msg['Edit.titulo']}</ui:define>
 		<ui:define name="head">
-			<style>
-				.col-right label {
-					font-weight: 600 !important;
-				}
-			</style>
 		</ui:define>
 		<ui:define name="conteudo">
 			<h:form id="form-modal1">
@@ -178,7 +173,7 @@
 										<b:commandButton value="#{msg['salvar.label']}" styleClass="btn btn-primary btn-lg" actionListener="#{usuarioEditBean.salvar()}" ajax="true" update="content-pg-id" rendered="#{menuBean.podeEditar()}"/>
 									</div>
 								</div>
-								<b:column col-sm="4" rendered="#{not empty usuarioEditBean.usuario.id}" class="col-right">
+								<b:column col-sm="4" rendered="#{not empty usuarioEditBean.usuario.id}">
 									<div class="form-group" >
 										<h:outputLabel value="#{msg['status.label']}"/>
 										<div class="form-group label-form-goup">

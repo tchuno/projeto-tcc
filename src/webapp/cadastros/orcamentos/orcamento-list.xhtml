@@ -28,7 +28,7 @@
 									 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 									 currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 									 paginatorPosition="bottom">
-							<p:column headerText="#{msg['id.label']}" style="width: 130px; text-align: center;" sortBy="#{orcamento.id}">
+							<p:column headerText="#{msg['id.label']}" style="width: 100px; text-align: center;" sortBy="#{orcamento.id}">
 								<h:outputText value="#{orcamento.id}" />
 							</p:column>
 							<p:column headerText="#{msg['autor.label']}" style="text-align: center;" sortBy="#{orcamento.autor}">
@@ -37,13 +37,33 @@
 							<p:column headerText="#{msg['cliente.label']}" style="text-align: center;" sortBy="#{orcamento.cliente}">
 								<h:outputText value="#{orcamento.cliente.nome}" />
 							</p:column>
-							<p:column style="width: 240px;" sortable="false" rendered="#{menuBean.podeEditar()}">
-								<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
-									<h:outputText value="#{msg['editar.label']}"/>
-								</h:link>
-								<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-orcamento-modal', 'form-orcamento-list:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
-									<f:setPropertyActionListener target="#{orcamentoListBean.orcamentoId}" value="#{orcamento.id}" />
-								</p:commandLink>
+							<p:column headerText="#{msg['formaPagamento.label']}" style="text-align: center;" sortBy="#{orcamento.formaPagamento}">
+								<h:outputText value="#{msg['FormaPagamento.'.concat(orcamento.formaPagamento).concat('.label')]}" />
+							</p:column>
+							<p:column headerText="#{msg['total.label']}" style="text-align: center;">
+								<h:outputText
+										value="#{orcamentoEditBean.totalGeral(orcamento.orcamentoProdutos)}"
+										style="font-weight: 700">
+									<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency"/>
+								</h:outputText>
+							</p:column>
+							<p:column style="width: 120px; text-align: center" sortable="false" rendered="#{menuBean.podeEditar()}">
+								<div class="form-group">
+									<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}"
+											styleClass="btn btn-warning btn-editar"
+											rendered="#{menuBean.podeEditar()}">
+										<h:outputText value="#{msg['editar.label']}"/>
+									</h:link>
+								</div>
+								<div class="form-group">
+									<p:commandLink value="#{msg['excluir.label']}"
+												   onclick="openModal('excluir-orcamento-modal', 'form-orcamento-list:excluir-btn')"
+												   class="btn btn-danger btn-excluir"
+												   rendered="#{menuBean.podeExcluir()}">
+										<f:setPropertyActionListener target="#{orcamentoListBean.orcamentoId}"
+																	 value="#{orcamento.id}"/>
+									</p:commandLink>
+								</div>
 							</p:column>
 						</p:dataTable>
 					</div>

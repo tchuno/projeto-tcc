@@ -4,7 +4,9 @@ import net.gnfe.bin.domain.enumeration.FormaPagamento;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity(name = "ORCAMENTO")
 public class Orcamento extends net.gnfe.util.ddd.Entity {
@@ -14,7 +16,7 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 	private Usuario cliente;
 	private FormaPagamento formaPagamento;
 
-	private Set<OrcamentoProduto> produtos = new HashSet<OrcamentoProduto>(0);
+	private Set<OrcamentoProduto> orcamentoProdutos = new HashSet<OrcamentoProduto>(0);
 
 	@Id
 	@Column(name="ID", unique=true, nullable=false)
@@ -58,11 +60,16 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 	}
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="orcamento", cascade=CascadeType.ALL, orphanRemoval=true)
-	public Set<OrcamentoProduto> getProdutos() {
-		return produtos;
+	public Set<OrcamentoProduto> getOrcamentoProdutos() {
+		return orcamentoProdutos;
 	}
 
-	public void setProdutos(Set<OrcamentoProduto> produtos) {
-		this.produtos = produtos;
+	public void setOrcamentoProdutos(Set<OrcamentoProduto> orcamentoProdutos) {
+		this.orcamentoProdutos = orcamentoProdutos;
+	}
+
+	@Transient
+	public List<Produto> getProdutos() {
+		return this.getOrcamentoProdutos().stream().map(OrcamentoProduto::getProduto).collect(Collectors.toList());
 	}
 }

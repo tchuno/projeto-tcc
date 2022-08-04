@@ -1242,25 +1242,24 @@ ul.faq li > div h3 {
 	font-weight: bold;
 	position: absolute;
 	margin-top: 2px;
+    max-width: 120px;
+    overflow: hidden !important;
 }
 .logo-login {
     height: 150px;
     display: flex;
+    font-family: Consolas,monaco,monospace !important;
     align-items: center;
     padding: 20px;
     justify-content: center;
+    overflow: hidden !important;
 }
-/* .logo img {
-	position: absolute;
-	bottom: 4px;
-	max-height: 50px;
-	max-width: 150px;
-} */
-.logo2 img {
-	position: absolute;
-	bottom: 4px;
-	max-width: 180px;
-	max-height: 55px;
+
+.link-logo {
+    color: black;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 42px
 }
 
 .showmore {
@@ -1652,12 +1651,7 @@ th.ui-state-default{
   	width: 14%;
    }
 }
-@media (max-width: 945px) 
-{
-  .bgr-footer-right {
-  	width: 10%;
-   }
-}
+st
 
 .ui-autocomplete {
 	padding: 0 !important;

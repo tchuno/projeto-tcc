@@ -16,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @ManagedBean
 @ViewScoped
@@ -32,15 +33,13 @@ public class OrcamentoEditBean extends AbstractBean {
     private Orcamento orcamento;
     private List<Usuario> clientes;
     private List<Produto> produtos;
-    private Produto produto;
-    private List<Produto> produtosOrcamento = new ArrayList<>();
-    private List<Produto> produtosSelecionados = new ArrayList<>();
+    private OrcamentoProduto orcamentoProduto;
+    private List<OrcamentoProduto> produtosSelecionados = new ArrayList<>();
 
     public void initBean() {
 
         if (id != null) {
             this.orcamento = service.get(id);
-            this.produtosOrcamento = orcamento.getProdutos().stream().map(OrcamentoProduto::getProduto).collect(Collectors.toList());
         } else {
             this.orcamento = new Orcamento();
         }
@@ -62,7 +61,7 @@ public class OrcamentoEditBean extends AbstractBean {
 
             Usuario usuarioLogado = getUsuarioLogado();
             orcamento.setAutor(usuarioLogado);
-            service.saveOrUpdate(orcamento, produtosOrcamento);
+            service.saveOrUpdate(orcamento);
 
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
         }
@@ -74,24 +73,36 @@ public class OrcamentoEditBean extends AbstractBean {
     public String getDeleteButtonMessage() {
         if (hasSelectedProducts()) {
             int size = this.produtosSelecionados.size();
-            return size > 1 ? size + getMessage("produtosSelecionados.label") : getMessage("umProdutoSelecionado.label");
+            return size > 1 ? size + " "+getMessage("produtosSelecionados.label") : getMessage("umProdutoSelecionado.label");
         }
 
         return getMessage("remover.label");
     }
 
-    public void deleteProduct(Produto produtoRemover) {
-        this.produtosOrcamento.remove(produtoRemover);
-        this.produtosSelecionados.remove(produtoRemover);
+    public void deleteProduct(OrcamentoProduto orcamentoProduto) {
+        this.orcamento.getOrcamentoProdutos().remove(orcamentoProduto);
+        this.produtosSelecionados.remove(orcamentoProduto);
     }
 
     public void deleteSelectedProducts() {
-        this.produtosOrcamento.removeAll(this.produtosSelecionados);
+        this.produtosSelecionados.forEach(this.orcamento.getOrcamentoProdutos()::remove);
         this.produtosSelecionados = null;
     }
 
     public boolean hasSelectedProducts() {
         return this.produtosSelecionados != null && !this.produtosSelecionados.isEmpty();
+    }
+
+    public BigDecimal totalGeral(Set<OrcamentoProduto> orcamentoProdutos) {
+        BigDecimal totalGeral = new BigDecimal(0);
+        for(OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
+            Produto produto = orcamentoProduto.getProduto();
+            BigDecimal valorUnidade = produto.getValorUnidade();
+            Integer quantidade = orcamentoProduto.getQuantidade();
+            valorUnidade = valorUnidade.multiply(new BigDecimal(quantidade));
+            totalGeral = totalGeral.add(valorUnidade);
+        }
+        return totalGeral;
     }
 
     public Orcamento getOrcamento() {
@@ -127,27 +138,23 @@ public class OrcamentoEditBean extends AbstractBean {
         return produtos;
     }
 
-    public List<Produto> getProdutosOrcamento() {
-        return produtosOrcamento;
+    public OrcamentoProduto getOrcamentoProduto() {
+        return orcamentoProduto;
     }
 
-    public void setProdutosOrcamento(List<Produto> produtosOrcamento) {
-        this.produtosOrcamento = produtosOrcamento;
+    public void setOrcamentoProduto(OrcamentoProduto orcamentoProduto) {
+        if(orcamentoProduto == null) {
+            orcamentoProduto = new OrcamentoProduto();
+            orcamentoProduto.setOrcamento(orcamento);
+        }
+        this.orcamentoProduto = orcamentoProduto;
     }
 
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
-
-    public List<Produto> getProdutosSelecionados() {
+    public List<OrcamentoProduto> getProdutosSelecionados() {
         return produtosSelecionados;
     }
 
-    public void setProdutosSelecionados(List<Produto> produtosSelecionados) {
+    public void setProdutosSelecionados(List<OrcamentoProduto> produtosSelecionados) {
         this.produtosSelecionados = produtosSelecionados;
     }
 

@@ -11,7 +11,7 @@
 		<f:viewAction action="#{orcamentoEditBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
 	</f:metadata>
 	<ui:composition template="/templates/navegacao.xhtml">
-		<ui:define name="tituloPagina">#{msg['Edit.titulo']}</ui:define>
+		<ui:define name="tituloPagina">#{msg['Edit.titulo']} #{msg['orcamento.label']}: #{orcamentoEditBean.id == null ? "Novo" : orcamentoEditBean.id}</ui:define>
 		<ui:define name="conteudo">
 			<h:form id="form-produto">
 				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
@@ -19,9 +19,9 @@
 						<div class="col-sm-12">
 							<b:messages globalOnly="true" showSummary="true"/>
 							<div class="form-group">
-								<h:outputLabel value="#{msg['produto.label']}" styleClass="bf-no-message"/>
-								<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{orcamentoEditBean.produto}" label="#{msg['produto.label']}"
-												 converter="entity" required="false">
+								<h:outputLabel value="#{msg['produto.label']}*" styleClass="bf-no-message"/>
+								<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{orcamentoEditBean.orcamentoProduto.produto}" label="#{msg['produto.label']}"
+												 converter="entity" required="true">
 									<f:selectItem itemValue="" itemLabel=""/>
 									<f:selectItems value="#{orcamentoEditBean.produtos}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome}"/>
 								</h:selectOneMenu>
@@ -32,25 +32,28 @@
 
 					<f:facet name="footer">
 						<b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-						<p:commandButton value="#{msg['adicionarProduto.label']}" actionListener="#{orcamentoEditBean.produtosOrcamento.add(orcamentoEditBean.produto)}"
+						<p:commandButton value="#{msg['adicionarProduto.label']}" actionListener="#{orcamentoEditBean.orcamento.orcamentoProdutos.add(orcamentoEditBean.orcamentoProduto)}"
 										 update="form-orcamento:dt-products" styleClass="btn" onsuccess="closeModal('adicionar-modal')"/>
 					</f:facet>
 				</b:modal>
 			</h:form>
 			<h:form id="form-orcamento">
 				<div class="col-sm-12">
+					<h4 class="tituloForm"><h:outputText value="#{msg['orcamentoForm.label']}"/></h4>
+
 					<div class="form-group">
-						<h:outputLabel value="#{msg['cliente.label']}" styleClass="bf-no-message"/>
+						<h:outputLabel value="#{msg['cliente.label']} *" styleClass="bf-no-message"/>
 						<h:selectOneMenu styleClass="form-control bf-no-message" id="cliente-id" value="#{orcamentoEditBean.orcamento.cliente}" label="#{msg['cliente.label']}"
-										 converter="entity" required="false">
+										 converter="entity" required="true">
 							<f:selectItem itemValue="" itemLabel=""/>
 							<f:selectItems value="#{orcamentoEditBean.clientes}" var="usu" itemValue="#{usu}" itemLabel="#{usu.nome}"/>
 						</h:selectOneMenu>
 						<b:message/>
 					</div>
+
 					<p:toolbar>
 						<p:toolbarGroup>
-							<p:commandButton value="#{msg['adicionarProduto.label']}" icon="fa fa-plus" onclick="openModal('adicionar-modal')"
+							<p:commandButton value="#{msg['adicionarProduto.label']}" icon="fa fa-plus" onclick="openModal('adicionar-modal')" actionListener="#{orcamentoEditBean.setOrcamentoProduto(null)}"
 											 class="btn" style="margin-right: 5px">
 							</p:commandButton>
 							<p:commandButton id="delete-products-button" value="#{orcamentoEditBean.deleteButtonMessage}"
@@ -60,13 +63,11 @@
 						</p:toolbarGroup>
 					</p:toolbar>
 
-					<p:dataTable id="dt-products" var="product" value="#{orcamentoEditBean.produtosOrcamento}"
+					<p:dataTable id="dt-products" var="product" value="#{orcamentoEditBean.orcamento.orcamentoProdutos}"
 								 reflow="true" selection="#{orcamentoEditBean.produtosSelecionados}" emptyMessage="#{msg['emptyMessage.label']}"
-								 rowKey="#{product.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom"
-								 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
-								 currentPageReportTemplate="Total: {totalRecords}" >
+								 rowKey="#{product.produto.id}" paginator="false" rowSelectMode="add">
 						<f:facet name="header">
-							<div class="products-table-header">
+							<div class="form-group">
 								<span style="font-weight: bold">#{msg['produtos.label']}</span>
 							</div>
 						</f:facet>
@@ -76,26 +77,72 @@
 						<p:ajax event="rowSelectCheckbox" update=":form-orcamento:delete-products-button" />
 						<p:ajax event="rowUnselectCheckbox" update=":form-orcamento:delete-products-button" />
 						<p:ajax event="toggleSelect" update=":form-orcamento:delete-products-button" />
+						<p:ajax event="toggleSelect" update=":form-orcamento:delete-products-button" />
 
-						<p:column selectionMode="multiple" style="width: 50px; text-align: center;"/>
+						<p:column selectionMode="multiple" style="width: 30px; text-align: center;"/>
 
-						<p:column headerText="#{msg['codigo.label']}" sortBy="#{product.cod}" style="width: 150px; text-align: center;" filterBy="#{product.cod}">
-							<h:outputText value="#{product.cod}" />
+						<p:column headerText="#{msg['codigo.label']}" style="text-align: center;" filterBy="#{product.produto.cod}">
+							<h:outputText value="#{product.produto.cod}" />
 						</p:column>
-						<p:column headerText="#{msg['nome.label']}" sortBy="#{product.nome}" filterBy="#{product.nome}">
-							<h:outputText value="#{product.nome}" />
+						<p:column headerText="#{msg['nome.label']}" filterBy="#{product.produto.nome}">
+							<h:outputText value="#{product.produto.nome}" />
 						</p:column>
-						<p:column headerText="#{msg['preco.label']}" sortBy="#{product.valorUnidade}" style="width: 150px; text-align: center;">
-							<h:outputText value="#{product.valorUnidade}" style="font-weight: 700">
+						<p:column headerText="#{msg['preco.label']}:" style="width: 150px; text-align: center;">
+							<h:outputText value="#{product.produto.valorUnidade}" style="font-weight: 700">
 								<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency" />
 							</h:outputText>
+						</p:column>
+						<p:column headerText="#{msg['total.label']}:" style="width: 150px; text-align: center;">
+							<h:outputText value="#{product.produto.valorUnidade * product.quantidade}" style="font-weight: 700">
+								<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width: 80px; text-align: center">
+							<div class="form-group">
+							<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, 1))}">
+								<i class="fa fa-arrow-up" style="color: white"></i>
+							</p:commandLink>
+							</div>
+							<div class="form-group">
+							<b:inputText value="#{product.quantidade}" placeholder="#{msg['quantidade.label']}" ajax="true"
+										 label="#{msg['quantidade.label']}" renderLabel="false" styleClass="mask-number" required="false">
+								<f:ajax event="blur" render="form-orcamento:dt-products form-orcamento:delete-products-button"/>
+							</b:inputText>
+							<b:message/>
+							</div>
+							<div class="form-group">
+							<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, -1))}">
+								<i class="fa fa-arrow-down" style="color: white"></i>
+							</p:commandLink>
+							</div>
 						</p:column>
 						<p:column style="width: 80px;">
 							<p:commandLink class="btn btn-danger" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{orcamentoEditBean.deleteProduct(product)}">
 								<i class="fa fa-trash" style="color: white"></i>
 							</p:commandLink>
 						</p:column>
+						<f:facet name="footer">
+							<div class="form-group">
+								<span style="font-weight: bold">#{msg['total.label']} :
+									<h:outputText
+											value="#{orcamentoEditBean.totalGeral(orcamentoEditBean.orcamento.orcamentoProdutos)}"
+											style="font-weight: 700">
+										<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency"/>
+									</h:outputText>
+								</span>
+							</div>
+						</f:facet>
 					</p:dataTable>
+
+					<div class="form-group">
+						<h:outputLabel value="#{msg['formaPagamento.label']}" styleClass="bf-no-message"/>
+						<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoEditBean.orcamento.formaPagamento}" label="#{msg['formaPagamento.label']}" required="false">
+							<f:selectItem itemValue="" itemLabel=""/>
+							<f:selectItems value="#{utilBean.getValues('FormaPagamento')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['FormaPagamento.'.concat(fp).concat('.label')]}"/>
+						</h:selectOneMenu>
+						<b:message/>
+					</div>
+
 					<div class="form-group">
 						<b:commandButton value="#{msg['salvar.label']}" styleClass="btn btn-primary btn-lg" actionListener="#{orcamentoEditBean.salvar()}" ajax="true" update="content-pg-id" rendered="#{menuBean.podeEditar()}"/>
 					</div>

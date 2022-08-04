@@ -138,11 +138,11 @@
 								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 								paginatorPosition="bottom">
-							<p:column headerText="#{msg['codigo.label']}" style="width: 130px; text-align: center;" sortBy="#{produto.cod}">
-								<h:outputText value="#{produto.cod}" />
-							</p:column>
 							<p:column headerText="#{msg['nome.label']}" style="text-align: center;" sortBy="#{produto.nome}">
 								<h:outputText value="#{produto.nome}" />
+							</p:column>
+							<p:column headerText="#{msg['codigo.label']}" style="text-align: center;" sortBy="#{produto.cod}">
+								<h:outputText value="#{produto.cod}" />
 							</p:column>
 							<p:column headerText="#{msg['descricao.label']}" style="text-align: center;" sortBy="#{produto.descricao}">
 								<h:outputText value="#{produto.descricao}" />
@@ -150,7 +150,7 @@
 							<p:column headerText="#{msg['valorUnidade.label']}" style="text-align: center;" sortBy="#{produto.valorUnidade}">
 								<h:outputText value="#{produto.valorUnidade}" />
 							</p:column>
-							<p:column style="width: 240px;" sortable="false" rendered="#{menuBean.podeEditar()}">
+							<p:column style="width: 120px;" sortable="false" rendered="#{menuBean.podeEditar()}">
 								<p:commandLink id="adicionar-id" value="#{msg['editar.label']}" onclick="openModal('adicionar-modal')" class="btn btn-warning btn-editar" update="form-produto:adicionar-modal-content-id">
 									<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{produto}" for="adicionar-id" />
 								</p:commandLink>

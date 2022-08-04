@@ -10,7 +10,7 @@
       xmlns:gnfe="http://java.sun.com/jsf/composite/gnfe">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>#{msg['appName.label']}</title>
+    <title>#{utilBean.customizacao['TITULO']}</title>
     <link href="#{request.contextPath}/resources/images/favicon-gnfe.png" rel="shortcut icon"/>
     <link href="#{request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="#{request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
@@ -35,11 +35,10 @@
     <div id="wrapper">
         <div id="header">
             <header class="navbar navbar-inverse navbar-fixed-top wet-asphalt" role="banner">
-                <div class="container containerLogo">
+                <div class="container">
                     <div class="navbar-header">
-                        <a class="navbar-brand logo2" href="#{request.contextPath}">
-                            <IMG src="#{request.contextPath}/resources/images/logo-gnfe-transparent.png"
-                                 style="opacity: 0.7;"/>
+                        <a href="#{request.contextPath}/" class="link-logo">
+                            #{utilBean.customizacao['TITULO']}
                         </a>
                     </div>
                 </div>
