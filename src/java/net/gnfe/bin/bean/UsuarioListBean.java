@@ -59,7 +59,7 @@ public class UsuarioListBean extends AbstractBean {
 		Usuario usuarioLogado = getUsuarioLogado();
 
 		try {
-			usuarioService.excluir(usuarioId, usuarioLogado);
+			usuarioService.excluir(usuarioId);
 
 			bloqueadosHide = true;
 			inativosHide = true;

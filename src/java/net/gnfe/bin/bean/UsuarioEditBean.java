@@ -69,7 +69,8 @@ public class UsuarioEditBean extends AbstractBean {
 			boolean insert = isInsert(usuario);
 
 			String cpf = usuario.getCpf();
-			if(!DummyUtils.isCpfValido(cpf)) {
+			boolean cpfValido = DummyUtils.isCpfValido(cpf);
+			if(!cpfValido) {
 				throw new MessageKeyException("cpfInvalido.error");
 			}
 

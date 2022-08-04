@@ -39,7 +39,7 @@ public class ProdutoCrudBean extends AbstractBean {
         dataModel.setFiltro(new ProdutoFiltro());
 
         UsuarioFiltro filtro = new UsuarioFiltro();
-        filtro.setRoleGNFE(RoleGNFE.FORNCEDOR);
+        filtro.setRoleGNFE(RoleGNFE.FORNECEDOR);
         fornecedores = usuarioService.findByFiltro(filtro);
     }
 
@@ -79,7 +79,7 @@ public class ProdutoCrudBean extends AbstractBean {
                 String fileName = updateFile.getFileName();
                 String extensao = DummyUtils.getExtensao(fileName);
                 if(!"csv".equals(extensao)) {
-                    addMessageError("importacaoProcessos.arquivoInvalido.error");
+                    addMessageError("importacao.arquivoInvalido.error");
                     return;
                 }
 
@@ -94,7 +94,7 @@ public class ProdutoCrudBean extends AbstractBean {
 
                 service.iniciarProcessamentoDoArquivo(fileDestino, usuario, fileName);
 
-                addMessage("importacaoUsuarios.sucesso");
+                addMessage("importacao.sucesso");
             }
             catch (Exception e) {
                 addMessageError(e);

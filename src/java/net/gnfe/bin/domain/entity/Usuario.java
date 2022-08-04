@@ -465,7 +465,7 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 	@Transient
 	public boolean isCopRole() {
 		RoleGNFE roleGNFE = getRoleGNFE();
-		return RoleGNFE.FORNCEDOR.equals(roleGNFE);
+		return RoleGNFE.FORNECEDOR.equals(roleGNFE);
 	}
 
 	@Transient

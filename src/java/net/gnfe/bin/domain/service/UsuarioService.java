@@ -19,7 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UsuarioService {
@@ -82,10 +86,7 @@ public class UsuarioService {
 	}
 
 	@Transactional(rollbackFor=Exception.class)
-	public void excluir(Long usuarioId, Usuario usuarioLogado) throws MessageKeyException {
-
-		Usuario usuario = get(usuarioId);
-
+	public void excluir(Long usuarioId) throws MessageKeyException {
 		try {
 			usuarioRepository.deleteById(usuarioId);
 		}

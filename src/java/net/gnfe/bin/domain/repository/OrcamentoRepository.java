@@ -5,6 +5,7 @@ import net.gnfe.bin.domain.enumeration.FormaPagamento;
 import net.gnfe.bin.domain.vo.filtro.OrcamentoFiltro;
 import net.gnfe.util.ddd.HibernateRepository;
 import org.hibernate.Query;
+import org.primefaces.model.SortOrder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class OrcamentoRepository extends HibernateRepository<Orcamento> {
 
 		Map<String, Object> params = makeQuery(filtro, hql);
 
-		hql.append("order by u.id");
+		makeOrderBy(filtro, hql);
 
 		Query query = createQuery(hql.toString(), params);
 
@@ -59,6 +60,24 @@ public class OrcamentoRepository extends HibernateRepository<Orcamento> {
 		Query query = createQuery(hql.toString(), params);
 
 		return ((Number) query.uniqueResult()).intValue();
+	}
+
+	private void makeOrderBy(OrcamentoFiltro filtro, StringBuilder hql) {
+
+		String campoOrdem = filtro.getCampoOrdem();
+		if(org.apache.commons.lang3.StringUtils.isNotBlank(campoOrdem)) {
+
+			campoOrdem = campoOrdem.replace("orcamento.", "u.");
+
+			SortOrder ordem = filtro.getOrdem();
+			String ordemStr = SortOrder.DESCENDING.equals(ordem) ? " desc " : " asc ";
+
+			hql.append(" order by ").append(campoOrdem).append(ordemStr);
+		}
+		else {
+
+			hql.append(" order by u.id desc ");
+		}
 	}
 
 	private Map<String, Object> makeQuery(OrcamentoFiltro filtro, StringBuilder hql) {

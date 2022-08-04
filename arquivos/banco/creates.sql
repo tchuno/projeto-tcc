@@ -15,7 +15,7 @@ create table usuario
     endereco varchar(250),
     numero integer,
     bairro varchar(150),
-    cep varchar(8),
+    cep varchar(9),
     cidade varchar(150),
     estado varchar(150),
     status                             varchar(20)          not null,

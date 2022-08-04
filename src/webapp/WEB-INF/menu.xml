@@ -3,6 +3,11 @@
 	<arvoreMenuItens>
 
 		<menu-item id="PRODUTOS" url="/cadastros/produtos/" labelKey="menu-produtos.label"/>
+		<menu-item id="ORCAMENTOS" url="/cadastros/orcamentos/" labelKey="menu-orcamentos.label">
+			<subItens>
+				<sub-item id="ORCAMENTOS_EDIT" url="/cadastros/orcamentos/edit/" labelKey="menu-editar.label"></sub-item>
+			</subItens>
+		</menu-item>
 
 		<menu-item id="USUARIOS" url="/cadastros/usuarios/" labelKey="menu-usuarios.label">
 			<subItens>

@@ -69,7 +69,7 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		String campoOrdem = filtro.getCampoOrdem();
 		if(org.apache.commons.lang3.StringUtils.isNotBlank(campoOrdem)) {
 
-			campoOrdem = campoOrdem.replace("usuario.", "u.");
+			campoOrdem = campoOrdem.replace("produto.", "u.");
 
 			SortOrder ordem = filtro.getOrdem();
 			String ordemStr = SortOrder.DESCENDING.equals(ordem) ? " desc " : " asc ";

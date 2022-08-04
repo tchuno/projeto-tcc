@@ -2,6 +2,7 @@ package net.gnfe.bin.domain.service;
 
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.enumeration.CamposProduto;
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
 import net.gnfe.bin.domain.repository.ProdutoRepository;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
@@ -215,9 +216,6 @@ public class ProdutoService {
 			int linha = 1;
 			for (Map<String, String> map : maps) {
 				DummyUtils.systrace("Importando Produto " + linha + " de " + maps.size());
-				if(linha == 204) {
-					DummyUtils.systrace("VSF");
-				}
 				criaProduto(map);
 				DummyUtils.sleep(400);
 				linha++;
@@ -250,23 +248,24 @@ public class ProdutoService {
 
 	private void criarOuAtualizarProduto(Produto produto, Map<String, String> map) {
 
-		String idProduto = map.get("ID");
-		String codigo = map.get("CODIGO");
+		String idProduto = map.get(CamposProduto.ID.getNome());
+		String codigo = map.get(CamposProduto.COD.getNome());
 		codigo = codigo.replace("\"", "");
-		String nome = map.get("DESCRICAO");
-		String descricaoCurta = map.get("DESCRICAO CURTA");
-		String gtin = map.get("GTIN/EAN");
-		String cnm = map.get("CLASSIFICACAO FISCAL");
-		String cst = map.get("ORIGEM");
-		String cest = map.get("CEST");
-		String estoque = map.get("ESTOQUE");
+		String nome = map.get(CamposProduto.DESC.getNome());
+		nome = nome.replace("\"", "");
+		String descricaoCurta = map.get(CamposProduto.DESC_CURTA.getNome());
+		String gtin = map.get(CamposProduto.GTIN.getNome());
+		String cnm = map.get(CamposProduto.CNM.getNome());
+		String cst = map.get(CamposProduto.CST.getNome());
+		String cest = map.get(CamposProduto.CEST.getNome());
+		String estoque = map.get(CamposProduto.ESTOQUE.getNome());
 		estoque = estoque.replace(".", "");
 		estoque = estoque.replace(",", "");
-		String unidadeMedida = map.get("UNIDADE");
-		String valorUnidade = map.get("PRECO");
+		String unidadeMedida = map.get(CamposProduto.UNIDADE_MED.getNome());
+		String valorUnidade = map.get(CamposProduto.PRECO.getNome());
 		valorUnidade = valorUnidade.replace(".", "");
 		valorUnidade = valorUnidade.replace(",", ".");
-		String estoqueMinimo = map.get("ESTOQUE MINIMO");
+		String estoqueMinimo = map.get(CamposProduto.ESTOQUE_MIN.getNome());
 
 		produto.setIdProduto(idProduto);
 		produto.setCod(codigo);
