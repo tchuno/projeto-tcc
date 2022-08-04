@@ -29,7 +29,7 @@
 	</mvc:annotation-driven>
 
 	<mvc:interceptors>
-		<bean class="net.gnfe.util.rest.RestWsHandlerInterceptorAdapter" />
+		<bean class="net.gnfe.bin.rest.config.SuperInterceptorRestAdapter" />
 	</mvc:interceptors>
 
 	<bean id="resource" class="org.springframework.context.support.ResourceBundleMessageSource">

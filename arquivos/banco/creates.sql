@@ -129,3 +129,12 @@ create table nota_fiscal
     data_criacao timestamp,
     chave_acesso varchar(1000)
 );
+
+create table sessao_http_request
+(
+    id         serial    not null,
+    usuario_id integer,
+    jsessionid varchar(100),
+    data       timestamp not null,
+    ativa      boolean   not null
+);

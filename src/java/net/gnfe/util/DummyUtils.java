@@ -3,6 +3,7 @@ package net.gnfe.util;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import net.gnfe.bin.GNFEConstants;
 import net.gnfe.util.ddd.Entity;
+import net.gnfe.util.ddd.MessageKeyException;
 import net.gnfe.util.rest.jackson.ObjectMapper;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public abstract class DummyUtils {
@@ -425,6 +427,24 @@ public abstract class DummyUtils {
 		return message;
 	}
 
+	public static String getExceptionMessage(Throwable e) {
+		String message = e.getMessage();
+		String rootCauseMessage = ExceptionUtils.getRootCauseMessage(e);
+		if(rootCauseMessage != null) {
+			if(message == null || rootCauseMessage.endsWith(message)) {
+				if(e instanceof MessageKeyException) {
+					Object[] args = ((MessageKeyException) e).getArgs();
+					rootCauseMessage += " " + (args != null ? Arrays.asList((Object[]) args) : "");
+				}
+				return rootCauseMessage;
+			}
+			else if(!rootCauseMessage.equals(message)) {
+				return message + " Caused by: " + rootCauseMessage;
+			}
+		}
+		return message;
+	}
+
 	public static void sleep(long timeout) {
 		try {
 			Thread.sleep(timeout);
@@ -487,4 +507,21 @@ public abstract class DummyUtils {
 		html = html.replaceAll("\n[ \t]*", "\n");
 		return html;
 	}
-}
+
+	public static String gerarSenha() {
+		int qtdeMaximaCaracteres = 8;
+		String[] caracteres = {"0", "1", "b", "2", "4", "5", "6", "7", "8",
+				"9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+				"l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w",
+				"x", "y", "z"};
+
+		StringBuilder senha = new StringBuilder();
+
+		for (int i = 0; i < qtdeMaximaCaracteres; i++) {
+			int posicao = (int) (Math.random() * caracteres.length);
+			senha.append(caracteres[posicao]);
+		}
+		return senha.toString();
+	}
+
+	}

@@ -4,14 +4,13 @@
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">
 	<application>
-
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
 		<resource-bundle>
 			<base-name>net.bin.gnfe.messages.msg</base-name>
 			<var>msg</var>
 		</resource-bundle>
-
-		<resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
-
 	</application>
 
 	<lifecycle>

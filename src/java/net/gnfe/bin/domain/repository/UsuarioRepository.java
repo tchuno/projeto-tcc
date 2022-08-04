@@ -191,13 +191,15 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 		Map<String, Object> params = new HashMap<>();
 
 		hql.append(getStartQuery()).append(" u ");
-		hql.append("where u.login = :login ");
-		hql.append("and u.senha = :senha ");
-		hql.append(" and (select count(*) from Role r where r.usuario.id = u.id and r.nome = :roleGNFE) > 0 ");
+		hql.append(" where u.login = :login ");
+		hql.append(" and u.senha = :senha ");
+		hql.append(" and (select count(*) from ");
+		hql.append(Role.class.getName()).append(" r ");
+		hql.append(" where r.usuario.id = u.id and r.nome = :roleGNFE) > 0 ");
 
 		params.put("login", login);
 		params.put("senha", senha);
-		params.put("roleGNFE",  RoleGNFE.CLIENTE.name());
+		params.put("roleGNFE", RoleGNFE.ADMIN.name());
 
 		Query query = createQuery(hql.toString(), params);
 

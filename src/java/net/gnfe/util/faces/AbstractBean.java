@@ -5,12 +5,14 @@ import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.Funcionalidade;
 import net.gnfe.util.ddd.Entity;
 import net.gnfe.util.ddd.MessageKeyException;
+import net.gnfe.util.ddd.MessageKeyListException;
 import net.gnfe.util.menu.Item;
 import net.gnfe.util.menu.Menu;
 import net.gnfe.util.other.LoginJwtUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import javax.faces.validator.ValidatorException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -148,17 +151,27 @@ public abstract class AbstractBean implements Serializable {
 		viewMap.put(SECURITY_CHECK_KEY, false);
 	}
 
-	protected void addMessageError(Exception e) {
+	protected void addMessageError(Throwable e) {
 
 		if(e instanceof MessageKeyException) {
-			try {
-				addMessageError((MessageKeyException) e);
-				return;
-			}
-			catch (Exception e2) {
-				e2.printStackTrace();
+			addMessageError((MessageKeyException) e);
+			return;
+		}
+		else if(e instanceof MessageKeyListException) {
+			List<MessageKeyException> messageKeyExceptions = ((MessageKeyListException) e).getMessageKeyExceptions();
+			for (MessageKeyException mke : messageKeyExceptions) {
+				addMessageError(mke);
 			}
 		}
+		else if(e instanceof ValidatorException) {
+			addMessageError((ValidatorException) e);
+			return;
+		}
+
+		addMessageErrorInesperado(e);
+	}
+
+	private void addMessageErrorInesperado(Throwable e) {
 
 		e.printStackTrace();
 
@@ -171,12 +184,47 @@ public abstract class AbstractBean implements Serializable {
 
 	protected void addMessageError(MessageKeyException e) {
 
-		String key = e.getKey();
-		Object[] args = e.getArgs();
+		try {
+			String key = e.getKey();
+			Object[] args = e.getArgs();
 
+			String message = getMessage(key, args);
+
+			addFaceMessage(FacesMessage.SEVERITY_ERROR, message, null);
+		}
+		catch (Exception e2) {
+			e2.printStackTrace();
+			addMessageErrorInesperado(e);
+		}
+	}
+
+	protected void addMessageError(ValidatorException e) {
+
+		try {
+			FacesMessage facesMessage = e.getFacesMessage();
+			addFaceMessage(facesMessage, null);
+		}
+		catch (Exception e2) {
+			e2.printStackTrace();
+			addMessageErrorInesperado(e);
+		}
+	}
+
+	protected void addMessageWarn(String key) {
+		addMessageWarnToComponent(key, null, (Object[]) null);
+	}
+
+	protected void addMessageWarn(String key, Object... args) {
+		addMessageWarnToComponent(key, null, args);
+	}
+
+	protected void addMessageWarnToComponent(String key, String componentId) {
+		addMessageWarnToComponent(key, componentId, (Object[]) null);
+	}
+
+	protected void addMessageWarnToComponent(String key, String componentId, Object... args) {
 		String message = getMessage(key, args);
-
-		addFaceMessage(FacesMessage.SEVERITY_ERROR, message, null);
+		addFaceMessage(FacesMessage.SEVERITY_WARN, message, componentId);
 	}
 
 	protected void addMessageError(String key) {
@@ -217,11 +265,6 @@ public abstract class AbstractBean implements Serializable {
 		addMessageToComponent(key, null);
 	}
 
-	protected void addMessage(String key, String componentId) {
-		String message = getMessage(key);
-		addFaceMessage(FacesMessage.SEVERITY_INFO, message, componentId);
-	}
-
 	protected void addMessage(String key, Object... args) {
 		addMessageToComponent(key, null, args);
 	}
@@ -229,7 +272,7 @@ public abstract class AbstractBean implements Serializable {
 	protected void addMessageToComponent(String key, String componentId, Object... args) {
 		String message = getMessage(key, args);
 		addFaceMessage(FacesMessage.SEVERITY_INFO, message, componentId);
-	}	
+	}
 
 	protected void addFaceMessage(Severity severity, String message) {
 		addFaceMessage(severity, message, null);
@@ -237,15 +280,17 @@ public abstract class AbstractBean implements Serializable {
 
 	protected void addFaceMessage(Severity severity, String message, String componentId) {
 
+		addFaceMessage(new FacesMessage(severity, message, null), componentId);
+	}
+
+	protected void addFaceMessage(FacesMessage facesMessage, String componentId) {
+
 		FacesContext facesContext = getFacesContext();
-		facesContext.addMessage(componentId, new FacesMessage(severity, message, null));
+		facesContext.addMessage(componentId, facesMessage);
 
-		if(FacesMessage.SEVERITY_INFO.equals(severity)) {
-
-			ExternalContext externalContext = getExternalContext();
-			Flash flash = externalContext.getFlash();
-			flash.setKeepMessages(true);
-		}
+		ExternalContext externalContext = getExternalContext();
+		Flash flash = externalContext.getFlash();
+		flash.setKeepMessages(true);
 	}
 
 	protected boolean isInsert(Entity entity) {

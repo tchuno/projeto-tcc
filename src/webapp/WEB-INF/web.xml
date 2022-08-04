@@ -6,16 +6,6 @@
 
 	<display-name>GNFE</display-name>
 
-	<session-config>
-		<cookie-config>
-			<http-only>true</http-only>
-			<secure>true</secure>
-			<!--			descomentar abaixo para usar em HTTP SOMENTE LOCALHOST!! -->
-			<!--			<secure>false</secure>-->
-		</cookie-config>
-		<tracking-mode>COOKIE</tracking-mode>
-	</session-config>
-
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 		<welcome-file>cadastros/usuarios/usuario-list.xhtml</welcome-file>
@@ -148,17 +138,6 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<display-name>Apache-Axis Servlet</display-name>
-		<servlet-name>AxisServlet</servlet-name>
-		<servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<display-name>Axis Admin Servlet</display-name>
-		<servlet-name>AdminServlet</servlet-name>
-		<servlet-class>org.apache.axis.transport.http.AdminServlet</servlet-class>
-		<load-on-startup>100</load-on-startup>
-	</servlet>
-	<servlet>
 		<servlet-name>DispatcherServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
@@ -171,22 +150,6 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/servlet/AxisServlet</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>*.jws</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/services/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AdminServlet</servlet-name>
-		<url-pattern>/servlet/AdminServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>DispatcherServlet</servlet-name>
@@ -254,16 +217,16 @@
 			<url-pattern>/cadastrar/*</url-pattern>
 		</web-resource-collection>
 		<web-resource-collection>
-			<web-resource-name>WebServicesAxis</web-resource-name>
-			<url-pattern>/services/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>WebServicesAxis</web-resource-name>
-			<url-pattern>*.jws</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
 			<web-resource-name>Restful</web-resource-name>
 			<url-pattern>/rest/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>swagger</web-resource-name>
+			<url-pattern>/swagger-ui.html</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>swagger-docs</web-resource-name>
+			<url-pattern>/v2/api-docs/*</url-pattern>
 		</web-resource-collection>
 	</security-constraint>
 
@@ -276,8 +239,26 @@
 		</form-login-config>
 	</login-config>
 
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>swagger-docs</web-resource-name>
+			<url-pattern>/v2/api-docs/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>ADMIN</role-name>
+		</auth-constraint>
+	</security-constraint>
+
 	<security-role>
-		<role-name>*</role-name>
+		<role-name>ADMIN</role-name>
+	</security-role>
+
+	<security-role>
+		<role-name>FORNECEDOR</role-name>
+	</security-role>
+
+	<security-role>
+		<role-name>CLIENTE</role-name>
 	</security-role>
 
 </web-app>

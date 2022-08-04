@@ -70,6 +70,8 @@ public class UsuarioService {
 		if(StringUtils.isEmpty(senha)) {
 			usuario.setSenha(login);
 			usuario.setDataExpiracaoSenha(agora);
+		} else if (isNew) {
+			usuario.setDataExpiracaoSenha(agora);
 		}
 
 		try {
@@ -80,9 +82,6 @@ public class UsuarioService {
 			throw e;
 		}
 
-		if (isNew) {
-			reiniciarSenha(usuario.getId(), usuarioLogado != null ? usuarioLogado.getId() : null);
-		}
 	}
 
 	@Transactional(rollbackFor=Exception.class)
