@@ -117,9 +117,9 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <b:inputText value="#{usuarioEditBean.usuario.cpf}"
-                                                                     label="#{msg['cpf.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
-                                                                     styleClass="mask-cpf" required="true" />
+                                                        <b:inputText value="#{usuarioEditBean.usuario.cpfCnpj}"
+                                                                     label="#{msg['cpfCnpj.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
+                                                                     styleClass="mask-cpf-cnpj" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -201,71 +201,9 @@
                         </section>
                     </h:form>
                     <script type="text/javascript">
-
-                        $(document).ready(function() {
-
-                            function limpa_formulário_cep() {
-                                // Limpa valores do formulário de cep.
-                                $("#input_form-usuario\\:rua").val("");
-                                $("#input_form-usuario\\:bairro").val("");
-                                $("#input_form-usuario\\:cidade").val("");
-                                $("#input_form-usuario\\:estado").val("");
-                            }
-
-                            //Quando o campo cep perde o foco.
-                            $("#input_form-usuario\\:cep").blur(function() {
-
-                                //Nova variável "cep" somente com dígitos.
-                                var cep = $(this).val().replace(/\D/g, '');
-
-                                //Verifica se campo cep possui valor informado.
-                                if (cep != "") {
-
-                                    //Expressão regular para validar o CEP.
-                                    var validacep = /^[0-9]{8}$/;
-
-                                    //Valida o formato do CEP.
-                                    if(validacep.test(cep)) {
-
-                                        //Preenche os campos com "..." enquanto consulta webservice.
-                                        $("#input_form-usuario\\:rua").val("...");
-                                        $("#input_form-usuario\\:bairro").val("...");
-                                        $("#input_form-usuario\\:cidade").val("...");
-                                        $("#input_form-usuario\\:estado").val("...");
-
-                                        //Consulta o webservice viacep.com.br/
-                                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
-
-                                            if (!("erro" in dados)) {
-                                                //Atualiza os campos com os valores da consulta.
-                                                $("#input_form-usuario\\:rua").val(dados.logradouro);
-                                                $("#input_form-usuario\\:bairro").val(dados.bairro);
-                                                $("#input_form-usuario\\:cidade").val(dados.localidade);
-                                                $("#input_form-usuario\\:estado").val(dados.uf);
-                                            } //end if.
-                                            else {
-                                                //CEP pesquisado não foi encontrado.
-                                                limpa_formulário_cep();
-                                                alert("CEP não encontrado.");
-                                            }
-                                        });
-                                    } //end if.
-                                    else {
-                                        //cep é inválido.
-                                        limpa_formulário_cep();
-                                        alert("Formato de CEP inválido.");
-                                    }
-                                } //end if.
-                                else {
-                                    //cep sem valor, limpa formulário.
-                                    limpa_formulário_cep();
-                                }
-                            });
-                        });
-
                         jQuery(function($) {
+                            carregarCep();
                             configurarMascaras();
-                            configurarDatePicker();
                         });
                     </script>
                 </section>

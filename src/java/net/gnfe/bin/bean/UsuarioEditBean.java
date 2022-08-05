@@ -49,6 +49,12 @@ public class UsuarioEditBean extends AbstractBean {
 			boolean insert = isInsert(usuario);
 			Usuario usuarioLogado = getUsuarioLogado();
 
+			String cpfCnpj = usuario.getCpfCnpj();
+			boolean cpfCnpjValido = DummyUtils.isCpfCnpjValido(cpfCnpj);
+			if(!cpfCnpjValido) {
+				throw new MessageKeyException("cpfCnpjInvalido.error");
+			}
+
 			usuarioService.saveOrUpdate(usuario, usuarioLogado);
 			addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
 
@@ -68,10 +74,10 @@ public class UsuarioEditBean extends AbstractBean {
 		try {
 			boolean insert = isInsert(usuario);
 
-			String cpf = usuario.getCpf();
-			boolean cpfValido = DummyUtils.isCpfValido(cpf);
-			if(!cpfValido) {
-				throw new MessageKeyException("cpfInvalido.error");
+			String cpfCnpj = usuario.getCpfCnpj();
+			boolean cpfCnpjValido = DummyUtils.isCpfCnpjValido(cpfCnpj);
+			if(!cpfCnpjValido) {
+				throw new MessageKeyException("cpfCnpjInvalido.error");
 			}
 
 			usuario.setRoleGNFE(RoleGNFE.CLIENTE);

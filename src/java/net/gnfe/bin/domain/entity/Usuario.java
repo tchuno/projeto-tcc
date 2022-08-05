@@ -29,7 +29,7 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 	private String senha;
 	private String email;
 	private String telefone;
-	private String cpf;
+	private String cpfCnpj;
 	private String rg;
 	private String endereco;
 	private Integer numero;
@@ -110,13 +110,13 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 		this.telefone = telefone;
 	}
 
-	@Column(name="CPF", length=11)
-	public String getCpf() {
-		return cpf;
+	@Column(name="CPF_CNPJ", length=14)
+	public String getCpfCnpj() {
+		return cpfCnpj;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = DummyUtils.getCpfCnpjDesformatado(cpf);
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = DummyUtils.getCpfCnpjDesformatado(cpfCnpj);
 	}
 
 	@Column(name="RG", length=15)

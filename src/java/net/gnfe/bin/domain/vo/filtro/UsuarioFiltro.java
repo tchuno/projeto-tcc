@@ -17,7 +17,7 @@ public class UsuarioFiltro implements Cloneable {
 	private Date dataAtualizacao;
 	private MotivoDesativacaoUsuario motivoDesativacaoUsuario;
 	private List<String> logins;
-	private String cpf;
+	private String cpfCnpj;
 	private String endereco;
 	private Integer numero;
 	private String bairro;
@@ -97,12 +97,12 @@ public class UsuarioFiltro implements Cloneable {
 		this.logins = logins;
 	}
 
-	public String getCpf() {
-		return cpf;
+	public String getCpfCnpj() {
+		return cpfCnpj;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = cpfCnpj;
 	}
 
 	public String getEndereco() {

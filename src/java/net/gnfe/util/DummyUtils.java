@@ -573,6 +573,9 @@ public abstract class DummyUtils {
 		BigDecimal totalGeral = new BigDecimal(0);
 		for(OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
 			Produto produto = orcamentoProduto.getProduto();
+			if(produto == null) {
+				continue;
+			}
 			BigDecimal valorUnidade = produto.getValorUnidade();
 			Integer quantidade = orcamentoProduto.getQuantidade();
 			valorUnidade = valorUnidade.multiply(new BigDecimal(quantidade));

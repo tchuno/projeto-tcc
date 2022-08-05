@@ -77,7 +77,7 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 		Date dataAtualizacao = filtro.getDataAtualizacao();
 		MotivoDesativacaoUsuario motivoDesativacaoUsuario = filtro.getMotivoDesativacaoUsuario();
 		List<String> logins = filtro.getLogins();
-		String cpf = filtro.getCpf();
+		String cpfCnpj = filtro.getCpfCnpj();
 		String endereco = filtro.getEndereco();
 		Integer numero = filtro.getNumero();
 		String bairro = filtro.getBairro();
@@ -129,9 +129,9 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 			params.put("logins", logins);
 		}
 
-		if(StringUtils.isNotBlank(cpf)) {
-			hql.append(" and u.cpf = :cpf ");
-			params.put("cpf", cpf);
+		if(StringUtils.isNotBlank(cpfCnpj)) {
+			hql.append(" and u.cpfCnpj = :cpfCnpj ");
+			params.put("cpfCnpj", cpfCnpj);
 		}
 
 		if(StringUtils.isNotBlank(endereco)) {

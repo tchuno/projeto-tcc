@@ -79,8 +79,9 @@
 								var mensagensGlobais = $('#mensagensGlobais');
 								if(mensagensGlobais.html()) {
 									$('html,body').animate({
-										scrollTop: mensagensGlobais.offset().top - 80
+										scrollTop: 0
 									}, 500);
+									$('body').css('overflow', 'auto');
 								}
 							});
 						</script>

@@ -78,7 +78,7 @@ function configurarMascaras() {
 	$('.mask-cpf-cnpj').each(function() {
 
 		var val = $(this).val();
-		var mask = val ? (val.length > 14 ? '00.000.000/0000-00' : '000.000.000-000') : '00.000.000/0000-00';
+		var mask = val ? (val.length >= 14 ? '00.000.000/0000-00' : '000.000.000-000') : '00.000.000/0000-00';
 		$(this).mask(mask, {
 			clearIfNotMatch: true,
 			onKeyPress: keyPressCpfCnpj
@@ -176,4 +176,65 @@ function hideMessage(timeout) {
 	if($('div', '.bf-messages').size() > 0) {
 		setTimeout(hideAlertInfo, timeout);
 	}
+}
+
+function carregarCep() {
+
+	//Quando o campo cep perde o foco.
+	$("#input_form-usuario\\:cep").blur(function() {
+
+		//Nova variável "cep" somente com dígitos.
+		var cep = $(this).val().replace(/\D/g, '');
+
+		//Verifica se campo cep possui valor informado.
+		if (cep != "") {
+
+			//Expressão regular para validar o CEP.
+			var validacep = /^[0-9]{8}$/;
+
+			//Valida o formato do CEP.
+			if(validacep.test(cep)) {
+
+				//Preenche os campos com "..." enquanto consulta webservice.
+				$("#input_form-usuario\\:rua").val("...");
+				$("#input_form-usuario\\:bairro").val("...");
+				$("#input_form-usuario\\:cidade").val("...");
+				$("#input_form-usuario\\:estado").val("...");
+
+				//Consulta o webservice viacep.com.br/
+				$.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+					if (!("erro" in dados)) {
+						//Atualiza os campos com os valores da consulta.
+						$("#input_form-usuario\\:rua").val(dados.logradouro);
+						$("#input_form-usuario\\:bairro").val(dados.bairro);
+						$("#input_form-usuario\\:cidade").val(dados.localidade);
+						$("#input_form-usuario\\:estado").val(dados.uf);
+					} //end if.
+					else {
+						//CEP pesquisado não foi encontrado.
+						limpa_formulario_cep();
+						alert("Digite um CEP existente!");
+					}
+				});
+			} //end if.
+			else {
+				//cep é inválido.
+				limpa_formulario_cep();
+				alert("Formato de CEP inexistente!");
+			}
+		} //end if.
+		else {
+			//cep sem valor, limpa formulário.
+			limpa_formulario_cep();
+		}
+	});
+}
+
+function limpa_formulario_cep() {
+	// Limpa valores do formulário de cep.
+	$("#input_form-usuario\\:rua").val("");
+	$("#input_form-usuario\\:bairro").val("");
+	$("#input_form-usuario\\:cidade").val("");
+	$("#input_form-usuario\\:estado").val("");
 }

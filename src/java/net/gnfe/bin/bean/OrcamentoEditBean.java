@@ -21,11 +21,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.File;
 import java.io.FileInputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @ManagedBean
 @ViewScoped
@@ -37,6 +35,7 @@ public class OrcamentoEditBean extends AbstractBean {
 
     private Long id;
     private Orcamento orcamento;
+    private Usuario usuarioNovo;
     private List<Usuario> clientes;
     private List<Produto> produtos;
     private OrcamentoProduto orcamentoProduto;
@@ -54,6 +53,8 @@ public class OrcamentoEditBean extends AbstractBean {
             notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.PENDENTE);
             orcamento.setNotaFiscal(notaFiscal);
         }
+
+        usuarioNovo = new Usuario();
 
         UsuarioFiltro filtro = new UsuarioFiltro();
         filtro.setRoleGNFE(RoleGNFE.CLIENTE);
@@ -104,16 +105,14 @@ public class OrcamentoEditBean extends AbstractBean {
         return this.produtosSelecionados != null && !this.produtosSelecionados.isEmpty();
     }
 
-    public BigDecimal totalGeral(Set<OrcamentoProduto> orcamentoProdutos) {
-        BigDecimal totalGeral = new BigDecimal(0);
-        for(OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
-            Produto produto = orcamentoProduto.getProduto();
-            BigDecimal valorUnidade = produto.getValorUnidade();
-            Integer quantidade = orcamentoProduto.getQuantidade();
-            valorUnidade = valorUnidade.multiply(new BigDecimal(quantidade));
-            totalGeral = totalGeral.add(valorUnidade);
-        }
-        return totalGeral;
+    public void cadastrarUsuarioNovo() {
+        Usuario usuarioLogado = getUsuarioLogado();
+        usuarioNovo.setRoleGNFE(RoleGNFE.CLIENTE);
+        usuarioService.saveOrUpdate(usuarioNovo, usuarioLogado);
+        UsuarioFiltro filtro = new UsuarioFiltro();
+        filtro.setRoleGNFE(RoleGNFE.CLIENTE);
+        clientes = usuarioService.findByFiltro(filtro);
+        orcamento.setCliente(usuarioNovo);
     }
 
     public Orcamento getOrcamento() {
@@ -184,5 +183,16 @@ public class OrcamentoEditBean extends AbstractBean {
         catch (Exception e1) {
             addMessageError(e1);
         }
+    }
+
+    public Usuario getUsuarioNovo() {
+        return usuarioNovo;
+    }
+
+    public void setUsuarioNovo(Usuario usuarioNovo) {
+        if(usuarioNovo == null) {
+            usuarioNovo = new Usuario();
+        }
+        this.usuarioNovo = usuarioNovo;
     }
 }

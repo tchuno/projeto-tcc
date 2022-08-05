@@ -1986,3 +1986,9 @@ label {
 .greenColumn {
     background: mediumseagreen;
 }
+
+.ui-inputfield {
+    -moz-box-shadow: none;
+    -webkit-box-shadow:none;
+    box-shadow: none;
+}
