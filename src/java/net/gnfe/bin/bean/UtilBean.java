@@ -1,6 +1,7 @@
 package net.gnfe.bin.bean;
 
 import net.gnfe.bin.GNFEConstants;
+import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.service.ParametroService;
 import net.gnfe.bin.domain.service.ParametroService.P;
 import net.gnfe.util.DummyUtils;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 @ManagedBean
 @ViewScoped
@@ -104,6 +106,10 @@ public class UtilBean extends AbstractBean {
 		Locale ptBr = new Locale("pt", "BR");
 		String format = NumberFormat.getCurrencyInstance(ptBr).format(bd);
 		return format;
+	}
+
+	public BigDecimal totalGeral(Set<OrcamentoProduto> orcamentoProduto) {
+		return DummyUtils.totalGeral(orcamentoProduto);
 	}
 
 }

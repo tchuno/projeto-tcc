@@ -119,16 +119,22 @@ create table orcamento_produto
 
 create table nota_fiscal
 (
-    id    serial        not null
+    id                 serial not null
         constraint nota_fiscal_pk
             primary key,
-    orcamento_id integer
+    orcamento_id       integer
         constraint nota_fiscal_fk1
             references orcamento
             on delete set null,
-    data_criacao timestamp,
-    chave_acesso varchar(1000)
+    data_criacao       timestamp,
+    chave_acesso       varchar(1000),
+    xml                text,
+    status_nota_fiscal varchar(15),
+    data_envio         timestamp
 );
+
+create unique index nota_fiscal_orcamento_id_uindex
+    on nota_fiscal (orcamento_id);
 
 create table sessao_http_request
 (

@@ -42,7 +42,7 @@
 							</p:column>
 							<p:column headerText="#{msg['total.label']}" style="text-align: center;">
 								<h:outputText
-										value="#{orcamentoEditBean.totalGeral(orcamento.orcamentoProdutos)}"
+										value="#{utilBean.totalGeral(orcamento.orcamentoProdutos)}"
 										style="font-weight: 700">
 									<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency"/>
 								</h:outputText>

@@ -1,7 +1,8 @@
 package net.gnfe.util;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import net.gnfe.bin.GNFEConstants;
+import net.gnfe.bin.domain.entity.OrcamentoProduto;
+import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.util.ddd.Entity;
 import net.gnfe.util.ddd.MessageKeyException;
 import net.gnfe.util.rest.jackson.ObjectMapper;
@@ -18,12 +19,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Set;
+
+import static net.gnfe.bin.GNFEConstants.LOCALE_PT_BR;
 
 public abstract class DummyUtils {
 
@@ -31,11 +36,11 @@ public abstract class DummyUtils {
 	private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 	private static final int[] pesoCNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
 
-	private static final NumberFormat MINUTO_NF = NumberFormat.getNumberInstance(GNFEConstants.LOCALE_PT_BR);
-	private static final NumberFormat SEGUNDO_NF = NumberFormat.getNumberInstance(GNFEConstants.LOCALE_PT_BR);
-	private static final NumberFormat KILOBYTE_NF = NumberFormat.getNumberInstance(GNFEConstants.LOCALE_PT_BR);
-	private static final NumberFormat MEGABYTES_NF = NumberFormat.getNumberInstance(GNFEConstants.LOCALE_PT_BR);
-	private static final NumberFormat INTEGER_NF = NumberFormat.getNumberInstance(GNFEConstants.LOCALE_PT_BR);
+	private static final NumberFormat MINUTO_NF = NumberFormat.getNumberInstance(LOCALE_PT_BR);
+	private static final NumberFormat SEGUNDO_NF = NumberFormat.getNumberInstance(LOCALE_PT_BR);
+	private static final NumberFormat KILOBYTE_NF = NumberFormat.getNumberInstance(LOCALE_PT_BR);
+	private static final NumberFormat MEGABYTES_NF = NumberFormat.getNumberInstance(LOCALE_PT_BR);
+	private static final NumberFormat INTEGER_NF = NumberFormat.getNumberInstance(LOCALE_PT_BR);
 	private static final NumberFormat NF = NumberFormat.getInstance();
 	private static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
 	private static final String DATE_TIME_FORMAT_2 = "dd/MM/yyyy HH:mm:ss";
@@ -251,6 +256,17 @@ public abstract class DummyUtils {
 			className = className.substring(0, indexOf);
 		}
 		return className;
+	}
+
+	public static String formatCurrency(BigDecimal bd) {
+
+		if (bd == null) {
+			return null;
+		}
+
+		String format = NumberFormat.getCurrencyInstance(LOCALE_PT_BR).format(bd.doubleValue());
+		format = format.substring(3);
+		return format;
 	}
 
 	public static String toMegabytes(long size) {
@@ -551,6 +567,18 @@ public abstract class DummyUtils {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static BigDecimal totalGeral(Set<OrcamentoProduto> orcamentoProdutos) {
+		BigDecimal totalGeral = new BigDecimal(0);
+		for(OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
+			Produto produto = orcamentoProduto.getProduto();
+			BigDecimal valorUnidade = produto.getValorUnidade();
+			Integer quantidade = orcamentoProduto.getQuantidade();
+			valorUnidade = valorUnidade.multiply(new BigDecimal(quantidade));
+			totalGeral = totalGeral.add(valorUnidade);
+		}
+		return totalGeral;
 	}
 
 }

@@ -12,7 +12,6 @@ import net.gnfe.bin.domain.service.ProdutoService;
 import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
-import net.gnfe.util.DummyUtils;
 import net.gnfe.util.faces.AbstractBean;
 import org.omnifaces.util.Faces;
 import org.primefaces.model.SortOrder;
@@ -177,7 +176,7 @@ public class OrcamentoEditBean extends AbstractBean {
 
     public void gerarOrcamento() {
 
-        File file = DummyUtils.getFileFromResource("/net/gnfe/pdf/nota-fiscal.pdf");
+        File file = service.gerarOrcamento(orcamento);
         try {
             FileInputStream fis = new FileInputStream(file);
             Faces.sendFile(fis, "nota-fiscal.pdf", false);

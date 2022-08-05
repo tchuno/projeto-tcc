@@ -125,7 +125,7 @@
 							<div class="form-group">
 								<span style="font-weight: bold">#{msg['total.label']} :
 									<h:outputText
-											value="#{orcamentoEditBean.totalGeral(orcamentoEditBean.orcamento.orcamentoProdutos)}"
+											value="#{utilBean.totalGeral(orcamentoEditBean.orcamento.orcamentoProdutos)}"
 											style="font-weight: 700">
 										<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency"/>
 									</h:outputText>
@@ -147,7 +147,7 @@
 						<b:commandButton value="#{msg['salvar.label']}" styleClass="btn btn-primary btn-lg" actionListener="#{orcamentoEditBean.salvar()}" ajax="true" update="content-pg-id" rendered="#{menuBean.podeEditar()}"/>
 					</div>
 					<div class="form-group">
-						<b:commandButton value="#{msg['gerarOrcamento.label.label']}" styleClass="btn btn-primary btn-lg" action="#{orcamentoEditBean.gerarOrcamento()}" rendered="#{menuBean.podeEditar()}"/>
+						<b:commandButton value="#{msg['gerarOrcamento.label']}" styleClass="btn btn-primary btn-lg" action="#{orcamentoEditBean.gerarOrcamento()}" rendered="#{menuBean.podeEditar()}"/>
 					</div>
 				</div>
 			</h:form>
