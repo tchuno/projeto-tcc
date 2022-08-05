@@ -36,6 +36,7 @@
 		<property name="basenames">
 			<list>
 				<value>gnfe</value>
+				<value>net.gnfe.messages.msg</value>
 			</list>
 		</property>
 	</bean>
@@ -43,7 +44,7 @@
 	<bean id="resourceMessage" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
-				<value>net.bin.gnfe.messages.msg</value>
+				<value>net.gnfe.messages.msg</value>
 			</list>
 		</property>
 	</bean>

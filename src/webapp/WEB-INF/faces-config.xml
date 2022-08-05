@@ -8,7 +8,7 @@
 			<default-locale>pt_BR</default-locale>
 		</locale-config>
 		<resource-bundle>
-			<base-name>net.bin.gnfe.messages.msg</base-name>
+			<base-name>net.gnfe.messages.msg</base-name>
 			<var>msg</var>
 		</resource-bundle>
 	</application>

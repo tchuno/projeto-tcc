@@ -39,7 +39,8 @@
 			</h:form>
 			<h:form id="form-orcamento">
 				<div class="col-sm-12">
-					<h4 class="tituloForm"><h:outputText value="#{msg['orcamentoForm.label']}"/></h4>
+					<h4 class="tituloForm"><h:outputText value="#{msg['orcamentoForm.label']} / #{msg['statusNotaFiscal.label']}
+					#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? msg['StatusNotaFiscal.'.concat(orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal).concat('.label')] : 'Novo'}"/></h4>
 
 					<div class="form-group">
 						<h:outputLabel value="#{msg['cliente.label']} *" styleClass="bf-no-message"/>
@@ -76,7 +77,6 @@
 						<p:ajax event="rowUnselect" update=":form-orcamento:delete-products-button" />
 						<p:ajax event="rowSelectCheckbox" update=":form-orcamento:delete-products-button" />
 						<p:ajax event="rowUnselectCheckbox" update=":form-orcamento:delete-products-button" />
-						<p:ajax event="toggleSelect" update=":form-orcamento:delete-products-button" />
 						<p:ajax event="toggleSelect" update=":form-orcamento:delete-products-button" />
 
 						<p:column selectionMode="multiple" style="width: 30px; text-align: center;"/>
@@ -145,6 +145,9 @@
 
 					<div class="form-group">
 						<b:commandButton value="#{msg['salvar.label']}" styleClass="btn btn-primary btn-lg" actionListener="#{orcamentoEditBean.salvar()}" ajax="true" update="content-pg-id" rendered="#{menuBean.podeEditar()}"/>
+					</div>
+					<div class="form-group">
+						<b:commandButton value="#{msg['gerarOrcamento.label.label']}" styleClass="btn btn-primary btn-lg" action="#{orcamentoEditBean.gerarOrcamento()}" rendered="#{menuBean.podeEditar()}"/>
 					</div>
 				</div>
 			</h:form>

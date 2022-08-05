@@ -15,6 +15,7 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 	private Usuario autor;
 	private Usuario cliente;
 	private FormaPagamento formaPagamento;
+	private NotaFiscal notaFiscal;
 
 	private Set<OrcamentoProduto> orcamentoProdutos = new HashSet<OrcamentoProduto>(0);
 
@@ -57,6 +58,15 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
+	}
+
+	@OneToOne(fetch=FetchType.LAZY, mappedBy="orcamento", cascade=CascadeType.ALL, orphanRemoval=true)
+	public NotaFiscal getNotaFiscal() {
+		return notaFiscal;
+	}
+
+	public void setNotaFiscal(NotaFiscal notaFiscal) {
+		this.notaFiscal = notaFiscal;
 	}
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="orcamento", cascade=CascadeType.ALL, orphanRemoval=true)

@@ -65,7 +65,7 @@ public class FacesUtil {
 		Locale locale = viewRoot.getLocale();
 		Thread currentThread = Thread.currentThread();
 		ClassLoader loader = currentThread.getContextClassLoader();
-		ResourceBundle bundle = ResourceBundle.getBundle("net.bin.gnfe.messages.msg", locale, loader);
+		ResourceBundle bundle = ResourceBundle.getBundle("net.gnfe.messages.msg", locale, loader);
 
 		return bundle;
 	}

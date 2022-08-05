@@ -47,6 +47,9 @@
 									<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency"/>
 								</h:outputText>
 							</p:column>
+							<p:column headerText="#{msg['statusNotaFiscal.label']}" style="text-align: center;">
+								<h:outputText value="#{msg['StatusNotaFiscal.'.concat(orcamento.notaFiscal.statusNotaFiscal).concat('.label')]}" />
+							</p:column>
 							<p:column style="width: 120px; text-align: center" sortable="false" rendered="#{menuBean.podeEditar()}">
 								<div class="form-group">
 									<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}"

@@ -1,23 +1,30 @@
 package net.gnfe.bin.bean;
 
+import net.gnfe.bin.domain.entity.NotaFiscal;
 import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
+import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
 import net.gnfe.bin.domain.service.OrcamentoService;
 import net.gnfe.bin.domain.service.ProdutoService;
 import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
+import net.gnfe.util.DummyUtils;
 import net.gnfe.util.faces.AbstractBean;
+import org.omnifaces.util.Faces;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +49,11 @@ public class OrcamentoEditBean extends AbstractBean {
             this.orcamento = service.get(id);
         } else {
             this.orcamento = new Orcamento();
+            NotaFiscal notaFiscal = new NotaFiscal();
+            notaFiscal.setOrcamento(orcamento);
+            notaFiscal.setDataCriacao(new Date());
+            notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.PENDENTE);
+            orcamento.setNotaFiscal(notaFiscal);
         }
 
         UsuarioFiltro filtro = new UsuarioFiltro();
@@ -109,13 +121,18 @@ public class OrcamentoEditBean extends AbstractBean {
         return orcamento;
     }
 
-    public void setOrcamento(Orcamento Orcamento) {
+    public void setOrcamento(Orcamento orcamento) {
 
-        if(Orcamento == null) {
-            Orcamento = new Orcamento();
+        if(orcamento == null) {
+            orcamento = new Orcamento();
+            NotaFiscal notaFiscal = new NotaFiscal();
+            notaFiscal.setOrcamento(orcamento);
+            notaFiscal.setDataCriacao(new Date());
+            notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.PENDENTE);
+            this.orcamento.setNotaFiscal(notaFiscal);
         }
 
-        this.orcamento = Orcamento;
+        this.orcamento = orcamento;
     }
 
     public Long getId() {
@@ -158,4 +175,15 @@ public class OrcamentoEditBean extends AbstractBean {
         this.produtosSelecionados = produtosSelecionados;
     }
 
+    public void gerarOrcamento() {
+
+        File file = DummyUtils.getFileFromResource("/net/gnfe/pdf/nota-fiscal.pdf");
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            Faces.sendFile(fis, "nota-fiscal.pdf", false);
+        }
+        catch (Exception e1) {
+            addMessageError(e1);
+        }
+    }
 }

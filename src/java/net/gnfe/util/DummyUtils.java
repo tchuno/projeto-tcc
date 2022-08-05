@@ -5,6 +5,7 @@ import net.gnfe.bin.GNFEConstants;
 import net.gnfe.util.ddd.Entity;
 import net.gnfe.util.ddd.MessageKeyException;
 import net.gnfe.util.rest.jackson.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.text.Normalizer;
 import java.text.NumberFormat;
@@ -524,4 +526,31 @@ public abstract class DummyUtils {
 		return senha.toString();
 	}
 
+	public static File getFileFromResource(String path) {
+
+		int lastIndexOfBarra = path.lastIndexOf("/");
+		int lastIndexOfPonto = path.lastIndexOf(".");
+		String nome = path.substring(lastIndexOfBarra + 1, lastIndexOfPonto);
+		String extensao = path.substring(lastIndexOfPonto + 1, path.length());
+
+		try {
+			ClassLoader classLoader = DummyUtils.class.getClassLoader();
+			InputStream is = classLoader.getResourceAsStream(path);
+
+			if (is == null) {
+				throw new FileNotFoundException(path);
+			}
+
+			File tempFile = File.createTempFile(nome, "." + extensao);
+			//tempFile.deleteOnExit();
+			FileUtils.copyInputStreamToFile(is, tempFile);
+
+			return tempFile;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
+
+}
