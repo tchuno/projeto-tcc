@@ -1,6 +1,7 @@
 package net.gnfe.bin.domain.vo.filtro;
 
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
+import net.gnfe.util.DummyUtils;
 import org.primefaces.model.SortOrder;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class OrcamentoFiltro implements Cloneable {
 	private List<Long> clientIds;
 	private FormaPagamento formaPagamento;
 	private List<FormaPagamento> formaPagamentos;
+	private String cpfCnpj;
 	private String campoOrdem;
 	private SortOrder ordem;
 
@@ -80,6 +82,14 @@ public class OrcamentoFiltro implements Cloneable {
 
 	public void setFormaPagamentos(List<FormaPagamento> formaPagamentos) {
 		this.formaPagamentos = formaPagamentos;
+	}
+
+	public String getCpfCnpj() {
+		return cpfCnpj;
+	}
+
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = DummyUtils.getCpfCnpjDesformatado(cpfCnpj);
 	}
 
 	public void setOrdenar(String campoOrdem, SortOrder ordem) {

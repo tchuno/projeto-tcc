@@ -84,6 +84,7 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 		String cep = filtro.getCep();
 		String cidade = filtro.getCidade();
 		String estado = filtro.getEstado();
+		String email = filtro.getEmail();
 
 		Map<String, Object> params = new HashMap<>();
 
@@ -162,6 +163,11 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 		if(StringUtils.isNotBlank(estado)) {
 			hql.append(" and upper(u.estado) like :estado ");
 			params.put("estado", "%" + estado.toUpperCase() + "%");
+		}
+
+		if(StringUtils.isNotBlank(email)) {
+			hql.append(" and upper(u.email) like :email ");
+			params.put("email", "%" + email.toUpperCase() + "%");
 		}
 
 		return params;

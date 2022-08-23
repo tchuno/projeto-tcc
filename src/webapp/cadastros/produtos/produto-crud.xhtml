@@ -103,38 +103,72 @@
 				</b:modal>
 			</h:form>
 			<h:form id="form-importacao">
-				<div class="row">
-					<div class="col-sm-1"></div>
-					<div class="col-sm-3"><h4 class="tituloForm"><h:outputText value="Upload de Produtos"/></h4></div>
-				</div>
+				<b:modal id="importar-modal-id" title="#{msg['importarProdutos.label']}" styleClass="importar-modal" rendered="#{menuBean.podeEditar()}">
+					<b:row id="importar-modal-content-id">
+						<div class="col-sm-12">
+							<b:messages globalOnly="true" showSummary="true"/>
+							<div class="row">
+								<div class="col-sm-3"></div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<p:fileUpload
+												label="Escolher Arquivo"
+												mode="advanced" auto="true"
+												multiple="false"
+												accept="csv"
+												sizeLimit="10000000"
+												update="importar-modal-content-id mensagensGlobais"
+												fileUploadListener="#{produtoCrudBean.uploadEvent}"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</b:row>
+					<f:facet name="footer">
+						<b:button value="#{msg['fechar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+					</f:facet>
+				</b:modal>
+			</h:form>
 
-				<div class="row">
-					<div class="col-sm-3"></div>
-					<div class="col-sm-6">
-						<div class="form-group">
-							<p:fileUpload
-									label="Escolher Arquivo"
-									mode="advanced" auto="true"
-									multiple="false"
-									accept="csv"
-									sizeLimit="10000000"
-									update="form-importacao mensagensGlobais"
-									fileUploadListener="#{produtoCrudBean.uploadEvent}"/>
+			<h:form id="form-produto-list">
+				<div class="row default-form">
+					<div class="col-sm-10 col-sm-offset-1">
+						<h4 class="tituloForm"><h:outputText value="#{msg['filtroForm.label']}"/></h4>
+						<div class="row">
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<b:inputText value="#{produtoCrudBean.filtro.cod}" label="#{msg['codigo.label']}"/>
+								</div>
+							</div>
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<b:inputText value="#{produtoCrudBean.filtro.nome}" label="#{msg['nome.label']}"/>
+								</div>
+							</div>
+						</div>
+						<div class="row row-filtro">
+							<div class="col-sm-6 col-sm-offset-6 noMarginBottom">
+								<div style="float: right;">
+									<div class="form-group" style="float: left;">
+										<b:commandButton value="#{msg['buscar.label']}" styleClass="btn btn-primary btn-md" ajax="true" update="produto-list-id"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</h:form>
-			<h:form id="form-produto-list">
 				<div class="row">
 					<div class="col-sm-12">
- 						<p:commandLink value="#{msg['adicionarProduto.label']}" onclick="openModal('adicionar-modal')" class="btn btn-primary btn-lg" style="float: right;" update="form-produto:adicionar-modal-content-id" rendered="#{menuBean.podeEditar()}">
+						<p:commandLink value="#{msg['adicionarProduto.label']}" onclick="openModal('adicionar-modal')" class="btn btn-primary btn-lg" style="float: right;" update="form-produto:adicionar-modal-content-id" rendered="#{menuBean.podeEditar()}">
 							<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{null}" />
 						</p:commandLink>
+						<p:commandLink value="#{msg['importar.label']}" onclick="openModal('importar-modal')"
+									   class="btn btn-primary btn-lg" style="float: right; margin-right: 10px;" update="form-importacao:importar-modal-content-id" rendered="#{menuBean.podeEditar()}"/>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
-						<p:dataTable var="produto" value="#{produtoCrudBean.dataModel}" rows="20" paginator="true" lazy="true"
+						<p:dataTable id="produto-list-id" var="produto" value="#{produtoCrudBean.dataModel}" rows="20" paginator="true" lazy="true"
 								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 								paginatorPosition="bottom">

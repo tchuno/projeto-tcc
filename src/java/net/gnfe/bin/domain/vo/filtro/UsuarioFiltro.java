@@ -3,6 +3,7 @@ package net.gnfe.bin.domain.vo.filtro;
 import net.gnfe.bin.domain.enumeration.MotivoDesativacaoUsuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.enumeration.StatusUsuario;
+import net.gnfe.util.DummyUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ public class UsuarioFiltro implements Cloneable {
 	private String cep;
 	private String cidade;
 	private String estado;
+	private String email;
 
 	public StatusUsuario getStatus() {
 		return status;
@@ -102,7 +104,7 @@ public class UsuarioFiltro implements Cloneable {
 	}
 
 	public void setCpfCnpj(String cpfCnpj) {
-		this.cpfCnpj = cpfCnpj;
+		this.cpfCnpj = DummyUtils.getCpfCnpjDesformatado(cpfCnpj);
 	}
 
 	public String getEndereco() {
@@ -151,5 +153,13 @@ public class UsuarioFiltro implements Cloneable {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

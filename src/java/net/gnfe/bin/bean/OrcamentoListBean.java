@@ -22,14 +22,15 @@ public class OrcamentoListBean extends AbstractBean {
     @Autowired private UsuarioService usuarioService;
 
     private OrcamentoDataModel dataModel;
-    private OrcamentoFiltro orcamentoFiltro;
+    private OrcamentoFiltro filtro = new OrcamentoFiltro();
     private List<Usuario> clientes;
     private Long orcamentoId;
 
     public void initBean() {
+
         dataModel = new OrcamentoDataModel();
         dataModel.setService(service);
-        dataModel.setFiltro(new OrcamentoFiltro());
+        dataModel.setFiltro(filtro);
 
         UsuarioFiltro filtro = new UsuarioFiltro();
         filtro.setRoleGNFE(RoleGNFE.CLIENTE);
@@ -53,12 +54,12 @@ public class OrcamentoListBean extends AbstractBean {
         return dataModel;
     }
 
-    public OrcamentoFiltro getOrcamentoFiltro() {
-        return orcamentoFiltro;
+    public OrcamentoFiltro getFiltro() {
+        return filtro;
     }
 
-    public void setOrcamentoFiltro(OrcamentoFiltro OrcamentoFiltro) {
-        this.orcamentoFiltro = OrcamentoFiltro;
+    public void setFiltro(OrcamentoFiltro OrcamentoFiltro) {
+        this.filtro = OrcamentoFiltro;
     }
 
     public List<Usuario> getClientes() {

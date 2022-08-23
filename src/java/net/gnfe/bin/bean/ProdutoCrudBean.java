@@ -29,14 +29,14 @@ public class ProdutoCrudBean extends AbstractBean {
     @Autowired private UsuarioService usuarioService;
 
     private ProdutoDataModel dataModel;
-    private ProdutoFiltro produtoFiltro;
+    private ProdutoFiltro filtro = new ProdutoFiltro();
     private Produto produto = new Produto();
     private List<Usuario> fornecedores;
 
     public void initBean() {
         dataModel = new ProdutoDataModel();
         dataModel.setService(service);
-        dataModel.setFiltro(new ProdutoFiltro());
+        dataModel.setFiltro(filtro);
 
         UsuarioFiltro filtro = new UsuarioFiltro();
         filtro.setRoleGNFE(RoleGNFE.FORNECEDOR);
@@ -119,12 +119,12 @@ public class ProdutoCrudBean extends AbstractBean {
         this.produto = produto;
     }
 
-    public ProdutoFiltro getProdutoFiltro() {
-        return produtoFiltro;
+    public ProdutoFiltro getFiltro() {
+        return filtro;
     }
 
-    public void setProdutoFiltro(ProdutoFiltro produtoFiltro) {
-        this.produtoFiltro = produtoFiltro;
+    public void setFiltro(ProdutoFiltro filtro) {
+        this.filtro = filtro;
     }
 
     public List<Usuario> getFornecedores() {

@@ -4,6 +4,7 @@ import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
 import net.gnfe.bin.domain.vo.filtro.OrcamentoFiltro;
 import net.gnfe.util.ddd.HibernateRepository;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.primefaces.model.SortOrder;
 import org.springframework.stereotype.Repository;
@@ -90,6 +91,7 @@ public class OrcamentoRepository extends HibernateRepository<Orcamento> {
 		List<Long> clientIds = filtro.getClientIds();
 		FormaPagamento formaPagamento = filtro.getFormaPagamento();
 		List<FormaPagamento> formaPagamentos = filtro.getFormaPagamentos();
+		String cpfCnpj = filtro.getCpfCnpj();
 
 		Map<String, Object> params = new HashMap<>();
 
@@ -133,6 +135,11 @@ public class OrcamentoRepository extends HibernateRepository<Orcamento> {
 		if(formaPagamentos != null && !formaPagamentos.isEmpty()) {
 			hql.append(" and u.formaPagamentos in ( :formaPagamentos )");
 			params.put("formaPagamentos", formaPagamentos);
+		}
+
+		if(StringUtils.isNotBlank(cpfCnpj)) {
+			hql.append(" and u.cliente.cpfCnpj = :cpfCnpj ");
+			params.put("cpfCnpj", cpfCnpj);
 		}
 
 		return params;

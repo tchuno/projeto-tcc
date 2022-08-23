@@ -15,6 +15,53 @@
 		<ui:define name="conteudo">
 			<gnfe:excluirModal id="excluirModal" metodoExcluir="#{orcamentoListBean.excluir()}"/>
 			<h:form id="form-orcamento-list">
+				<div class="row default-form">
+					<div class="col-sm-10 col-sm-offset-1">
+						<h4 class="tituloForm"><h:outputText value="#{msg['filtroForm.label']}"/></h4>
+						<div class="row">
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<b:inputText value="#{orcamentoListBean.filtro.id}" label="#{msg['numero.label']}"/>
+								</div>
+							</div>
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<b:inputText value="#{orcamentoListBean.filtro.cpfCnpj}" label="#{msg['cpfCnpj.label']}"
+												 styleClass="mask-cpf-cnpj"/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<h:outputLabel value="#{msg['cliente.label']}" styleClass="bf-no-message"/>
+									<h:selectOneMenu styleClass="form-control bf-no-message" id="cliente-id" value="#{orcamentoListBean.filtro.clienteId}" label="#{msg['cliente.label']}" required="false">
+										<f:selectItem itemValue="" itemLabel=""/>
+										<f:selectItems value="#{orcamentoListBean.clientes}" var="cli" itemValue="#{cli.id}" itemLabel="#{cli.nome}"/>
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="col-sm-6 noMarginBottom" >
+								<div class="form-group">
+									<h:outputLabel value="#{msg['formaPagamento.label']}" styleClass="bf-no-message"/>
+									<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoListBean.filtro.formaPagamento}" label="#{msg['formaPagamento.label']}" required="false">
+										<f:selectItem itemValue="" itemLabel=""/>
+										<f:selectItems value="#{utilBean.getValues('FormaPagamento')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['FormaPagamento.'.concat(fp).concat('.label')]}"/>
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<div class="row row-filtro">
+							<div class="col-sm-6 col-sm-offset-6 noMarginBottom">
+								<div style="float: right;">
+									<div class="form-group" style="float: left;">
+										<b:commandButton value="#{msg['buscar.label']}" styleClass="btn btn-primary btn-md" ajax="true" update="orcamento-list-id"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-sm-12">
 						<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml" style="float: right;" styleClass="btn btn-primary btn-lg" rendered="#{menuBean.podeCadastrar()}">
@@ -24,7 +71,7 @@
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
-						<p:dataTable var="orcamento" value="#{orcamentoListBean.dataModel}" rows="20" paginator="true" lazy="true"
+						<p:dataTable id="orcamento-list-id" var="orcamento" value="#{orcamentoListBean.dataModel}" rows="20" paginator="true" lazy="true"
 									 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 									 currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 									 paginatorPosition="bottom">
@@ -51,22 +98,18 @@
 								<h:outputText value="#{msg['StatusNotaFiscal.'.concat(orcamento.notaFiscal.statusNotaFiscal).concat('.label')]}" />
 							</p:column>
 							<p:column style="width: 120px; text-align: center" sortable="false" rendered="#{menuBean.podeEditar()}">
-								<div class="form-group">
-									<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}"
-											styleClass="btn btn-warning btn-editar"
-											rendered="#{menuBean.podeEditar()}">
-										<h:outputText value="#{msg['editar.label']}"/>
-									</h:link>
-								</div>
-								<div class="form-group">
-									<p:commandLink value="#{msg['excluir.label']}"
-												   onclick="openModal('excluir-orcamento-modal', 'form-orcamento-list:excluir-btn')"
-												   class="btn btn-danger btn-excluir"
-												   rendered="#{menuBean.podeExcluir()}">
-										<f:setPropertyActionListener target="#{orcamentoListBean.orcamentoId}"
-																	 value="#{orcamento.id}"/>
-									</p:commandLink>
-								</div>
+								<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}"
+										styleClass="btn btn-warning btn-editar"
+										rendered="#{menuBean.podeEditar()}">
+									<h:outputText value="#{msg['editar.label']}"/>
+								</h:link>
+								<p:commandLink value="#{msg['excluir.label']}"
+											   onclick="openModal('excluir-orcamento-modal', 'form-orcamento-list:excluir-btn')"
+											   class="btn btn-danger btn-excluir"
+											   rendered="#{menuBean.podeExcluir()}">
+									<f:setPropertyActionListener target="#{orcamentoListBean.orcamentoId}"
+																 value="#{orcamento.id}"/>
+								</p:commandLink>
 							</p:column>
 						</p:dataTable>
 					</div>
