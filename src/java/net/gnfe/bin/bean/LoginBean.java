@@ -2,6 +2,7 @@ package net.gnfe.bin.bean;
 
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.service.UsuarioService;
+import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.MessageKeyException;
 import net.gnfe.util.faces.AbstractBean;
 import net.gnfe.util.other.Criptografia;
@@ -143,8 +144,8 @@ public class LoginBean extends AbstractBean {
 		return login;
 	}
 
-	public void setLogin(String email) {
-		this.login = email;
+	public void setLogin(String login) {
+		this.login = DummyUtils.getCpfCnpjDesformatado(login);
 	}
 
 	public String getSenha() {

@@ -19,22 +19,17 @@
 						<div class="row">
 							<div class="col-sm-6 noMarginBottom" >
 								<div class="form-group">
-									<b:inputText value="#{usuarioListBean.filtro.nome}" label="#{msg['nome.label']}"/>
+									<b:inputText value="#{usuarioListBean.filtro.cpfCnpj}" label="#{msg['cpfCnpj.label']}"
+												 styleClass="mask-cpf-cnpj"/>
 								</div>
-						 	</div>							
+							</div>
 							<div class="col-sm-6 noMarginBottom" >
 								<div class="form-group">
-									<b:inputText value="#{usuarioListBean.filtro.login}" label="#{msg['login.label']}"/>
+									<b:inputText value="#{usuarioListBean.filtro.nome}" label="#{msg['nome.label']}"/>
 								</div>
 						 	</div>
 					   	</div>
 						<div class="row">
-							<div class="col-sm-6 noMarginBottom" >
-								<div class="form-group">
-									<b:inputText value="#{usuarioListBean.filtro.cpfCnpj}" label="#{msg['cpfCnpj.label']}"
-									styleClass="mask-cpf-cnpj"/>
-								</div>
-							</div>
 							<div class="col-sm-6 noMarginBottom" >
 								<div class="form-group">
 									<b:inputText id="emailId" value="#{usuarioListBean.filtro.email}"
@@ -46,8 +41,6 @@
 									<b:message/>
 								</div>
 							</div>
-						</div>
-						<div class="row">
 							<div class="col-sm-6 noMarginBottom" >
 								<div class="form-group">
 									<h:outputLabel value="#{msg['roleGNFE.label']}" styleClass="bf-no-message"/>
@@ -56,10 +49,6 @@
 										<f:selectItem itemValue="" itemLabel=""/>
 										<f:selectItems value="#{utilBean.getValues('RoleGNFE')}" var="role" itemValue="#{role}" itemLabel="#{msg['RoleGNFE.'.concat(role).concat('.label')]}"/>
 									</h:selectOneMenu>
-								</div>
-							</div>
-							<div class="col-sm-6 noMarginBottom" >
-								<div class="form-group">
 								</div>
 							</div>
 						</div>
@@ -90,13 +79,13 @@
 								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 								paginatorPosition="bottom" >
-							<p:column headerText="#{msg['login.label']}" style="text-align: center; width: 100px;">
-								<h:outputText value="#{usuario.login}" />
+							<p:column headerText="#{msg['cpfCnpj.label']}" style="text-align: center;">
+								<h:outputText value="#{utilBean.getCpfCnpj(usuario.login)}" />
 							</p:column>
 							<p:column headerText="#{msg['nome.label']}" style="text-align: center;">
 								<h:outputText value="#{usuario.nome}" />
 							</p:column>
-							<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center; width: 120px;">
+							<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center;">
 								<h:outputText value="#{msg['RoleGNFE.'.concat(usuario.roleGNFE).concat('.label')]}" />
 							</p:column>
 							<p:column style="width: 128px;" sortable="false">
@@ -137,8 +126,8 @@
 									paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 									currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 									paginatorPosition="bottom">
-								<p:column headerText="#{msg['login.label']}" style="text-align: center; width: 120px;">
-									<h:outputText value="#{usuario.login}" />
+								<p:column headerText="#{msg['cpfCnpj.label']}" style="text-align: center;">
+									<h:outputText value="#{utilBean.getCpfCnpj(usuario.login)}" />
 								</p:column>
 								<p:column headerText="#{msg['nome.label']}" style="text-align: center;">
 									<h:outputText value="#{usuario.nome}" />
@@ -146,7 +135,7 @@
 								<p:column headerText="#{msg['motivoBloqueio.label']}" style="text-align: center;">
 									<h:outputText value="#{msg['MotivoBloqueioUsuario.'.concat(usuario.motivoBloqueio).concat('.label')]}" />
 								</p:column>
-								<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center; width: 120px;">
+								<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center;">
 									<h:outputText value="#{msg['RoleGNFE.'.concat(usuario.roleGNFE).concat('.label')]}" />
 								</p:column>
 								<p:column style="width: 128px;" sortable="false" rendered="#{menuBean.podeEditar()}">
@@ -185,8 +174,8 @@
 									paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 									currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 									paginatorPosition="bottom">
-								<p:column headerText="#{msg['login.label']}" style="text-align: center; width: 120px;">
-									<h:outputText value="#{usuario.login}" />
+								<p:column headerText="#{msg['cpfCnpj.label']}" style="text-align: center;">
+									<h:outputText value="#{utilBean.getCpfCnpj(usuario.login)}" />
 								</p:column>
 								<p:column headerText="#{msg['nome.label']}" style="text-align: center;">
 									<h:outputText value="#{usuario.nome}" />
@@ -194,7 +183,7 @@
 								<p:column headerText="#{msg['motivoDesativacao.label']}" style="text-align: center;">
 									<h:outputText value="#{msg['MotivoDesativacaoUsuario.'.concat(usuario.motivoDesativacao).concat('.label')]}" />
 								</p:column>
-								<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center; width: 120px;">
+								<p:column headerText="#{msg['roleGNFE.label']}" style="text-align: center;">
 									<h:outputText value="#{msg['RoleGNFE.'.concat(usuario.roleGNFE).concat('.label')]}" />
 								</p:column>
 								<p:column style="width: 128px;" sortable="false" rendered="#{menuBean.podeEditar()}">
@@ -213,7 +202,7 @@
 				    <p><h4 class="msg-confirm"><h:outputText value="#{msg['registroExcluir.confirm']}"/> </h4></p>
 				    <f:facet name="footer">
 				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-				        <p:commandButton id="excluir-btn" value="#{msg['excluir.label']}" actionListener="#{usuarioListBean.excluir()}" update="content-pg-id" styleClass="btn btn-danger" oncomplete="closeModal('excluir-usuario-modal')"/>	
+				        <p:commandButton id="excluir-btn" value="#{msg['excluir.label']}" actionListener="#{usuarioListBean.excluir()}" update="content-pg-id" styleClass="btn btn-danger" oncomplete="closeModal('excluir-usuario-modal')"/>
 				    </f:facet>
 				</b:modal>
 			</h:form>

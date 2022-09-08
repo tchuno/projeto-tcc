@@ -1,5 +1,6 @@
 package net.gnfe.bin.domain.entity;
 
+import net.gnfe.bin.domain.enumeration.Bandeira;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 	private Usuario autor;
 	private Usuario cliente;
 	private FormaPagamento formaPagamento;
+	private Bandeira bandeira;
 	private NotaFiscal notaFiscal;
 
 	private Set<OrcamentoProduto> orcamentoProdutos = new HashSet<OrcamentoProduto>(0);
@@ -58,6 +60,16 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="BANDEIRA")
+	public Bandeira getBandeira() {
+		return bandeira;
+	}
+
+	public void setBandeira(Bandeira banddeira) {
+		this.bandeira = banddeira;
 	}
 
 	@OneToOne(fetch=FetchType.LAZY, mappedBy="orcamento", cascade=CascadeType.ALL, orphanRemoval=true)

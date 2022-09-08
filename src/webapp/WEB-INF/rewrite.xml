@@ -15,5 +15,7 @@
 		<join path="/cadastros/orcamentos/" view="/cadastros/orcamentos/orcamento-list.xhtml"/>
 		<join path="/cadastros/orcamentos/edit/" view="/cadastros/orcamentos/orcamento-edit.xhtml"/>
 		<join path="/cadastros/orcamentos/edit/{id}" view="/cadastros/orcamentos/orcamento-edit.xhtml"/>
+
+		<join path="/admin/relatorios/exemplo/" view="/admin/relatorios/relatorio-exemplo.xhtml"/>
 	</joins>
 </rewrite>

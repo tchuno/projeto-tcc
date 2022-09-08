@@ -54,20 +54,31 @@
 							<h4 class="tituloForm"><h:outputText value="#{msg['usuarioForm.label']}"/></h4>
 							<div class="row">
 								<div class="col-sm-8">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<b:inputText value="#{usuarioEditBean.usuario.cpfCnpj}" required="true"
+															 label="#{msg['cpfCnpj.label']}" renderLabel="true"
+															 disabled="#{usuarioEditBean.id ne null}"
+															 styleClass="mask-cpf-cnpj"/>
+												<b:message/>
+											</div>
+										</div>
+									</div>
+
 									<div class="form-group">
-										<b:inputText value="#{usuarioEditBean.usuario.nome}" 
-												label="#{msg['nome.label']}" renderLabel="true" required="true"
-												maxlength="40"  />
-										<b:message/>
+										<div class="row">
+											<div class="col-md-8">
+												<b:inputText value="#{usuarioEditBean.usuario.nome}"
+															 label="#{msg['nome.label']}" renderLabel="true"
+															 required="true"
+															 maxlength="40"/>
+												<b:message/>
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
 										<div class="row">
-											<div class="col-md-4">
-												<b:inputText id="loginId" value="#{usuarioEditBean.usuario.login}" required="true"
-														label="#{msg['login.label']}" renderLabel="true" maxlength="100" style="text-transform: lowercase;" >
-												</b:inputText>
-												<b:message/>
-											</div>
 											<div class="col-md-8">
 												<b:inputText id="emailId" value="#{usuarioEditBean.usuario.email}" 
 														label="#{msg['email.label']}" renderLabel="true"
@@ -95,16 +106,6 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<b:inputText value="#{usuarioEditBean.usuario.cpfCnpj}"
-															 label="#{msg['cpfCnpj.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
-															 styleClass="mask-cpf-cnpj" />
-												<b:message/>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
 												<b:inputText value="#{usuarioEditBean.usuario.telefone}" 
 													label="#{msg['telefone.label']}" renderLabel="true"
 													maxlength="15"
@@ -118,7 +119,7 @@
 											<div class="form-group">
 												<b:inputText value="#{usuarioEditBean.usuario.cep}"
 															 label="#{msg['cep.label']}" renderLabel="true"
-															 maxlength="15" id="cep"
+															 maxlength="15" id="cep" required="true"
 															 styleClass="mask-cep" />
 												<b:message/>
 											</div>

@@ -3,6 +3,7 @@ package net.gnfe.bin.bean.datamodel;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -16,7 +17,7 @@ public class UsuarioDataModel extends LazyDataModel<Usuario> {
 	private UsuarioFiltro filtro;
 
 	@Override
-	public List<Usuario> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+	public List<Usuario> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {
 
 		int count = usuarioService.countByFiltro(filtro);
 		setRowCount(count);

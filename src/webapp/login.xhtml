@@ -49,8 +49,8 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<div class="form-group">
-												<b:inputText value="#{loginBean.login}" placeholder="#{msg['login.label']}"
-													label="#{msg['login.label']}" renderLabel="true" maxlength="100" required="true"/>
+												<b:inputText value="#{loginBean.login}" placeholder="#{msg['cpfCnpj.label']}" styleClass="mask-cpf-cnpj"
+													label="#{msg['cpfCnpj.label']}" renderLabel="true" maxlength="100" required="true"/>
 												<b:message/>
 											</div>
 											<div class="form-group">
@@ -59,7 +59,7 @@
 												<b:message/>
 											</div>
 											<div style="float: left;">
-												<a href="#{request.contextPath}/cadastrar/" class="esqueci-senha">Cadastrar</a>
+												<a href="#{request.contextPath}/cadastrar/" class="esqueci-senha">Novo Usuário</a>
 											</div>
 											<div style="text-align: center; padding: 30px 0px 20px 0px;">
 												<b:commandButton value="#{msg['entrar.label']}" actionListener="#{loginBean.login()}" styleClass="btn btn-primary" style="width:130px" ajax="true" update="content-pg-id"/>
@@ -75,6 +75,13 @@
 		</h:panelGroup>
 	</div>
 	<script type="text/javascript">
+
+	</script>
+	<script type="text/javascript">
+		jQuery(function($) {
+			configurarMascaras();
+		});
+
 		$('input:visible,select:visible,textarea:visible').eq(0).focus();
 	</script>
 </h:body>

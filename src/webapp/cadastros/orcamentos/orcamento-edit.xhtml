@@ -23,10 +23,9 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<b:inputText value="#{orcamentoEditBean.usuarioNovo.nome}"
-																 label="#{msg['nome.label']}" renderLabel="true"
-																 required="true"
-																 maxlength="40"/>
+													<b:inputText value="#{orcamentoEditBean.usuarioNovo.cpfCnpj}"
+																 label="#{msg['cpfCnpj.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
+																 styleClass="mask-cpf-cnpj" required="true" />
 													<b:message/>
 												</div>
 											</div>
@@ -34,12 +33,10 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<b:inputText id="loginId"
-																 value="#{orcamentoEditBean.usuarioNovo.login}"
+													<b:inputText value="#{orcamentoEditBean.usuarioNovo.nome}"
+																 label="#{msg['nome.label']}" renderLabel="true"
 																 required="true"
-																 label="#{msg['login.label']}" renderLabel="true"
-																 maxlength="100" style="text-transform: lowercase;">
-													</b:inputText>
+																 maxlength="40"/>
 													<b:message/>
 												</div>
 											</div>
@@ -53,16 +50,6 @@
 																 validatorMessage="#{msg['emailInvalido.error']}" >
 														<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 													</b:inputText>
-													<b:message/>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<b:inputText value="#{orcamentoEditBean.usuarioNovo.cpfCnpj}"
-																 label="#{msg['cpfCnpj.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
-																 styleClass="mask-cpf-cnpj" required="true" />
 													<b:message/>
 												</div>
 											</div>
@@ -93,7 +80,7 @@
 											<div class="col-md-12">
 												<div class="form-group">
 													<b:inputText value="#{orcamentoEditBean.usuarioNovo.endereco}" id="rua"
-																 label="#{msg['endereco.label']}" renderLabel="true" disabled="true"/>
+																 label="#{msg['endereco.label']}" renderLabel="true"/>
 													<b:message/>
 												</div>
 											</div>
@@ -111,7 +98,7 @@
 											<div class="col-md-12">
 												<div class="form-group">
 													<b:inputText value="#{orcamentoEditBean.usuarioNovo.bairro}" id="bairro"
-																 label="#{msg['bairro.label']}" renderLabel="true" disabled="true"/>
+																 label="#{msg['bairro.label']}" renderLabel="true" />
 													<b:message/>
 												</div>
 											</div>
@@ -120,7 +107,7 @@
 											<div class="col-md-12">
 												<div class="form-group">
 													<b:inputText value="#{orcamentoEditBean.usuarioNovo.cidade}" id="cidade"
-																 label="#{msg['cidade.label']}" renderLabel="true" disabled="true"/>
+																 label="#{msg['cidade.label']}" renderLabel="true" />
 													<b:message/>
 												</div>
 											</div>
@@ -129,7 +116,7 @@
 											<div class="col-md-12">
 												<div class="form-group">
 													<b:inputText value="#{orcamentoEditBean.usuarioNovo.estado}" id="estado"
-																 label="#{msg['estado.label']}" renderLabel="true" disabled="true"/>
+																 label="#{msg['estado.label']}" renderLabel="true" />
 													<b:message/>
 												</div>
 											</div>
@@ -159,7 +146,7 @@
 							<b:messages globalOnly="true" showSummary="true"/>
 							<div class="form-group">
 								<h:outputLabel value="#{msg['produto.label']} *" for="produtos-id"/><br/>
-								<p:selectOneMenu id="produtos-id" style="height: 40px; width: auto;" value="#{orcamentoEditBean.orcamentoProduto.produto}" label="#{msg['produto.label']}" required="true"
+								<p:selectOneMenu id="produtos-id" style="height: 40px; width: auto; z-index: 9999;" value="#{orcamentoEditBean.orcamentoProduto.produto}" label="#{msg['produto.label']}" required="true"
 												 filter="true" filterMatchMode="contains" appendTo="@this" rendered="true" styleClass="form-control bf-no-message has-success" converter="entity">
 									<f:selectItem itemValue="#{null}" itemLabel="#{msg['selecione.label']}"/>
 									<f:selectItems value="#{orcamentoEditBean.produtos}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome}"/>
@@ -199,18 +186,21 @@
 				<div class="col-sm-12">
 					<h4 class="tituloForm"><h:outputText value="#{msg['orcamentoForm.label']} / #{msg['statusNotaFiscal.label']}
 					#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? msg['StatusNotaFiscal.'.concat(orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal).concat('.label')] : 'Novo'}"/></h4>
-
-
 					<div class="row">
 						<div class="col-sm-11">
 							<div class="form-group">
-								<h:outputLabel value="#{msg['cliente.label']} *" for="cliente-id"/><br/>
-								<p:selectOneMenu id="cliente-id" style="height: 40px; width: auto;" value="#{orcamentoEditBean.orcamento.cliente}" label="#{msg['cliente.label']}" required="true"
-												 filter="true" filterMatchMode="contains" appendTo="@this" rendered="true" styleClass="form-control bf-no-message has-success" converter="entity">
-									<f:selectItem itemValue="#{null}" itemLabel="#{msg['selecione.label']}"/>
-									<f:selectItems value="#{orcamentoEditBean.clientes}" var="usu" itemValue="#{usu}" itemLabel="#{usu.nome}"/>
-								</p:selectOneMenu>
-								<b:message/>
+								<h:outputLabel value="#{msg['cliente.label']}" for="cliente-id"/>
+								<p:autoComplete id="cliente-id" multiple="false" converter="entity"
+												value="#{orcamentoEditBean.orcamento.cliente}" var="usuario" label="#{msg['cliente.label']}"
+												styleClass="form-control bf-no-message has-success" style="height: 40px; width: auto;" emptyMessage="#{msg['emptyMessage.label']}"
+												itemLabel="#{utilBean.getCpfCnpj(usuario.cpfCnpj)} #{usuario.nome}" itemValue="#{usuario}" effect="fade"
+												dropdown="true" scrollHeight="300" completeMethod="#{orcamentoEditBean.findClienteAutoComplete}" maxResults="10"
+												minQueryLength="2" >
+									<p:column>
+										<h:outputText value="#{usuario.cpfCnpj} - #{usuario.nome}" />
+									</p:column>
+								</p:autoComplete>
+								<b:message />
 							</div>
 						</div>
 						<div class="col-sm-1">
@@ -264,12 +254,7 @@
 									<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency" />
 								</h:outputText>
 							</p:column>
-							<p:column headerText="#{msg['total.label']}:" style="width: 150px; text-align: center;">
-								<h:outputText value="#{product.produto.valorUnidade * product.quantidade}" style="font-weight: 700">
-									<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency" />
-								</h:outputText>
-							</p:column>
-							<p:column style="width: 80px; text-align: center">
+							<p:column headerText="#{msg['quantidade.label']}:" style="width: 80px; text-align: center">
 								<div class="form-group">
 								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, 1))}">
 									<i class="fa fa-arrow-up" style="color: white"></i>
@@ -287,6 +272,11 @@
 									<i class="fa fa-arrow-down" style="color: white"></i>
 								</p:commandLink>
 								</div>
+							</p:column>
+							<p:column headerText="#{msg['total.label']}:" style="width: 150px; text-align: center;">
+								<h:outputText value="#{product.produto.valorUnidade * product.quantidade}" style="font-weight: 700">
+									<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency" />
+								</h:outputText>
 							</p:column>
 							<p:column style="width: 80px;">
 								<p:commandLink class="btn btn-danger" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{orcamentoEditBean.deleteProduct(product)}">
@@ -308,13 +298,24 @@
 					</div>
 
 					<div class="form-group">
-						<h:outputLabel value="#{msg['formaPagamento.label']}" styleClass="bf-no-message"/>
-						<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoEditBean.orcamento.formaPagamento}" label="#{msg['formaPagamento.label']}" required="false">
-							<f:selectItem itemValue="" itemLabel=""/>
+						<h:outputLabel value="#{msg['formaPagamento.label']} *" styleClass="bf-no-message"/>
+						<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoEditBean.orcamento.formaPagamento}" label="#{msg['formaPagamento.label']}" required="true">
 							<f:selectItems value="#{utilBean.getValues('FormaPagamento')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['FormaPagamento.'.concat(fp).concat('.label')]}"/>
+							<f:ajax event="change" execute="form-bandeira-id" render="form-bandeira-id"/>
 						</h:selectOneMenu>
 						<b:message/>
 					</div>
+
+					<h:panelGroup id="form-bandeira-id">
+						<div class="form-group">
+							<h:outputLabel value="#{msg['bandeira.label']}" styleClass="bf-no-message" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}"/>
+							<h:selectOneMenu styleClass="form-control bf-no-message" id="bandeira-id" value="#{orcamentoEditBean.orcamento.bandeira}" label="#{msg['bandeira.label']}" required="false" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}">
+								<f:selectItem itemValue="" itemLabel=""/>
+								<f:selectItems value="#{utilBean.getValues('Bandeira')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['Bandeira.'.concat(fp).concat('.label')]}"/>
+							</h:selectOneMenu>
+							<b:message/>
+						</div>
+					</h:panelGroup>
 
 					<div class="row">
 						<div class="col-sm-12">

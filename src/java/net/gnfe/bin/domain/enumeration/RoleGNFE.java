@@ -3,6 +3,7 @@ package net.gnfe.bin.domain.enumeration;
 public enum RoleGNFE {
 
 	ADMIN,//ADMIN
-	FORNECEDOR, //FUNCIONARIO
+	FUNCIONARIO, //FUNCIONARIO
+	FORNECEDOR, //FORNECEDOR
 	CLIENTE, //PESSOA
 }

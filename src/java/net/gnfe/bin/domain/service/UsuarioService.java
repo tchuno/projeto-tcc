@@ -50,7 +50,7 @@ public class UsuarioService {
 
 		boolean isNew = usuario.getId() == null;
 
-		String login = usuario.getLogin().trim();
+		String login = usuario.getCpfCnpj().trim();
 		Date agora = new Date();
 		usuario.setDataAtualizacao(agora);
 		usuario.setUsuarioUltimaAtualizacao(usuarioLogado);
@@ -181,9 +181,9 @@ public class UsuarioService {
 	}
 
 	@Transactional(rollbackFor=Exception.class)
-	public Usuario login(String email) throws MessageKeyException {
+	public Usuario login(String cpf) throws MessageKeyException {
 
-		Usuario usuario = usuarioRepository.getByLogin(email);
+		Usuario usuario = usuarioRepository.getByLogin(cpf);
 
 		if(usuario == null) {
 			return null;
@@ -398,5 +398,9 @@ public class UsuarioService {
 		}
 		
 		return true;
+	}
+
+	public List<Usuario> findClienteAutoComplete(String search) {
+		return usuarioRepository.findClienteAutoComplete(search);
 	}
 }

@@ -83,7 +83,10 @@ create table produto
     nome            varchar(300),
     tempo_reposicao integer,
     unidade_medida  varchar(10),
-    valor_unidade   bigint
+    valor_unidade   bigint,
+    valor_compra   bigint,
+    nome_imagem varchar(300),
+    imagem_base64 text
 );
 
 create table orcamento
@@ -99,7 +102,8 @@ create table orcamento
         constraint orcamento_fk2
             references usuario
             on delete set null,
-    forma_pagamento varchar(50)
+    forma_pagamento varchar(50),
+    bandeira varchar(50)
 );
 
 create table orcamento_produto

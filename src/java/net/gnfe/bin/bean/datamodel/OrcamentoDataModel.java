@@ -3,6 +3,7 @@ package net.gnfe.bin.bean.datamodel;
 import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.service.OrcamentoService;
 import net.gnfe.bin.domain.vo.filtro.OrcamentoFiltro;
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -16,7 +17,7 @@ public class OrcamentoDataModel extends LazyDataModel<Orcamento> {
 	private OrcamentoFiltro filtro;
 
 	@Override
-	public List<Orcamento> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+	public List<Orcamento> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {
 
 		int count = orcamentoService.countByFiltro(filtro);
 		setRowCount(count);

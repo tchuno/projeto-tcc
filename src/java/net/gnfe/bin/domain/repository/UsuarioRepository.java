@@ -6,6 +6,7 @@ import net.gnfe.bin.domain.enumeration.MotivoDesativacaoUsuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.enumeration.StatusUsuario;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
+import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.HibernateRepository;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
@@ -211,4 +212,24 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 
 		return (Usuario) query.uniqueResult();
 	}
+
+    public List<Usuario> findClienteAutoComplete(String search) {
+
+		StringBuilder hql = new StringBuilder();
+		Map<String, Object> params = new HashMap<>();
+
+		hql.append( "select u from ").append(clazz.getName());
+		hql.append(" u ");
+		hql.append(" where 1=1 ");
+		hql.append(" and upper(u.nome) like :nome or u.cpfCnpj like :cpfCnpj ");
+		hql.append("order by u.nome");
+
+		params.put("nome", "%" + search.toUpperCase().trim() + "%");
+		params.put("cpfCnpj", "%" + DummyUtils.getCpfCnpjDesformatado(search.trim()) + "%");
+
+		Query query = createQuery(hql.toString(), params);
+		query.setMaxResults(10);
+
+		return query.list();
+    }
 }

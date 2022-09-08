@@ -80,10 +80,9 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <b:inputText value="#{usuarioEditBean.usuario.nome}"
-                                                                     label="#{msg['nome.label']}" renderLabel="true"
-                                                                     required="true"
-                                                                     maxlength="40"/>
+                                                        <b:inputText value="#{usuarioEditBean.usuario.cpfCnpj}"
+                                                                     label="#{msg['cpfCnpj.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
+                                                                     styleClass="mask-cpf-cnpj" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -91,12 +90,10 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <b:inputText id="loginId"
-                                                                     value="#{usuarioEditBean.usuario.login}"
+                                                        <b:inputText value="#{usuarioEditBean.usuario.nome}"
+                                                                     label="#{msg['nome.label']}" renderLabel="true"
                                                                      required="true"
-                                                                     label="#{msg['login.label']}" renderLabel="true"
-                                                                     maxlength="100" style="text-transform: lowercase;">
-                                                        </b:inputText>
+                                                                     maxlength="40"/>
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -110,16 +107,6 @@
                                                                      validatorMessage="#{msg['emailInvalido.error']}" >
                                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                         </b:inputText>
-                                                        <b:message/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <b:inputText value="#{usuarioEditBean.usuario.cpfCnpj}"
-                                                                     label="#{msg['cpfCnpj.label']}" renderLabel="true" disabled="#{usuarioEditBean.id ne null}"
-                                                                     styleClass="mask-cpf-cnpj" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>

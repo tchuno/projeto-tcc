@@ -73,6 +73,11 @@
 								<b:message/>
 							</div>
 							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.valorCompra}" placeholder="#{msg['valorCompra.label']}"
+											 label="#{msg['valorCompra.label']}" renderLabel="true" styleClass="mask-money" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.cst}" placeholder="#{msg['estoqueAtual.label']}"
 											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="false" />
 								<b:message/>
@@ -85,6 +90,18 @@
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.tempoReposicao}" placeholder="#{msg['tempoReposicao.label']}"
 											 label="#{msg['tempoReposicao.label']}" renderLabel="true" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<h:outputLabel value="#{msg['nome.label']}: #{produtoCrudBean.produto.nomeImagem}" id="nome-imagem-id"/>
+								<p:fileUpload
+										label="Escolher Arquivo"
+										mode="advanced" auto="true"
+										multiple="false"
+										allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+										sizeLimit="10000000"
+										update="@this nome-imagem-id"
+										listener="#{produtoCrudBean.carregarImagemProduto}"/>
 								<b:message/>
 							</div>
 
@@ -172,17 +189,23 @@
 								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
 								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
 								paginatorPosition="bottom">
-							<p:column headerText="#{msg['nome.label']}" style="text-align: center;" sortBy="#{produto.nome}">
-								<h:outputText value="#{produto.nome}" />
-							</p:column>
 							<p:column headerText="#{msg['codigo.label']}" style="text-align: center;" sortBy="#{produto.cod}">
 								<h:outputText value="#{produto.cod}" />
+							</p:column>
+							<p:column headerText="#{msg['nome.label']}" style="text-align: center;" sortBy="#{produto.nome}">
+								<h:outputText value="#{produto.nome}" />
 							</p:column>
 							<p:column headerText="#{msg['descricao.label']}" style="text-align: center;" sortBy="#{produto.descricao}">
 								<h:outputText value="#{produto.descricao}" />
 							</p:column>
 							<p:column headerText="#{msg['valorUnidade.label']}" style="text-align: center;" sortBy="#{produto.valorUnidade}">
 								<h:outputText value="#{produto.valorUnidade}" />
+							</p:column>
+							<p:column headerText="#{msg['valorCompra.label']}" style="text-align: center;" sortBy="#{produto.valorCompra}">
+								<h:outputText value="#{produto.valorCompra}" />
+							</p:column>
+							<p:column headerText="#{msg['estoqueAtual.label']}" style="text-align: center;" sortBy="#{produto.estoqueAtual}">
+								<h:outputText value="#{produto.estoqueAtual}" />
 							</p:column>
 							<p:column style="width: 120px;" sortable="false" rendered="#{menuBean.podeEditar()}">
 								<p:commandLink id="adicionar-id" value="#{msg['editar.label']}" onclick="openModal('adicionar-modal')" class="btn btn-warning btn-editar" update="form-produto:adicionar-modal-content-id">

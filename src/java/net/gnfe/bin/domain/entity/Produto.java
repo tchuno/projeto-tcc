@@ -22,8 +22,11 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	private Integer estoqueAtual;
 	private UnidadeMedida unidadeMedida;
 	private BigDecimal valorUnidade;
+	private BigDecimal valorCompra;
 	private Integer tempoReposicao;
 	private Integer estoqueMinimo;
+	private String nomeImagem;
+	private String imagemBase64;
 
 	@Id
 	@Override
@@ -147,6 +150,15 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 		this.valorUnidade = valorUnidade;
 	}
 
+	@Column(name="VALOR_COMPRA")
+	public BigDecimal getValorCompra() {
+		return valorCompra;
+	}
+
+	public void setValorCompra(BigDecimal valorCompra) {
+		this.valorCompra = valorCompra;
+	}
+
 	@Column(name="TEMPO_REPOSICAO")
 	public Integer getTempoReposicao() {
 		return tempoReposicao;
@@ -163,5 +175,23 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 
 	public void setEstoqueMinimo(Integer estoqueMinimo) {
 		this.estoqueMinimo = estoqueMinimo;
+	}
+
+	@Column(name="NOME_IMAGEM")
+	public String getNomeImagem() {
+		return nomeImagem;
+	}
+
+	public void setNomeImagem(String nomeImagem) {
+		this.nomeImagem = nomeImagem;
+	}
+
+	@Column(name="IMAGEM_BASE64")
+	public String getImagemBase64() {
+		return imagemBase64;
+	}
+
+	public void setImagemBase64(String imagemBase64) {
+		this.imagemBase64 = imagemBase64;
 	}
 }

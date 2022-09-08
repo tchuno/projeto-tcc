@@ -112,4 +112,7 @@ public class UtilBean extends AbstractBean {
 		return DummyUtils.totalGeral(orcamentoProduto);
 	}
 
+	public String getCpfCnpj(String cpf) {
+		return DummyUtils.getCpfCnpj(cpf);
+	}
 }

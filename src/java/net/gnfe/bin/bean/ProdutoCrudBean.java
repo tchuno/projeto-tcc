@@ -1,5 +1,6 @@
 package net.gnfe.bin.bean;
 
+import net.gnfe.bin.GNFEConstants;
 import net.gnfe.bin.bean.datamodel.ProdutoDataModel;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
@@ -12,13 +13,14 @@ import net.gnfe.util.DummyUtils;
 import net.gnfe.util.faces.AbstractBean;
 import org.apache.commons.io.FileUtils;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.List;
 
 @ManagedBean
@@ -39,7 +41,7 @@ public class ProdutoCrudBean extends AbstractBean {
         dataModel.setFiltro(filtro);
 
         UsuarioFiltro filtro = new UsuarioFiltro();
-        filtro.setRoleGNFE(RoleGNFE.FORNECEDOR);
+        filtro.setRoleGNFE(RoleGNFE.FUNCIONARIO);
         fornecedores = usuarioService.findByFiltro(filtro);
     }
 
@@ -83,7 +85,7 @@ public class ProdutoCrudBean extends AbstractBean {
                     return;
                 }
 
-                InputStream inputstream = updateFile.getInputstream();
+                InputStream inputstream = updateFile.getInputStream();
                 String tempDirectoryPath = FileUtils.getTempDirectoryPath();
                 File dir = new File(tempDirectoryPath);
                 File fileDestino = DummyUtils.getFileDestino(dir, fileName);
@@ -93,6 +95,38 @@ public class ProdutoCrudBean extends AbstractBean {
                 Usuario usuario = getUsuarioLogado();
 
                 service.iniciarProcessamentoDoArquivo(fileDestino, usuario, fileName);
+
+                addMessage("importacao.sucesso");
+            }
+            catch (Exception e) {
+                addMessageError(e);
+            }
+        }
+    }
+
+    public void carregarImagemProduto(FileUploadEvent event) {
+
+        UploadedFile updateFile = event.getFile();
+        if(updateFile != null) {
+
+            try {
+                String fileName = updateFile.getFileName();
+                String extensao = DummyUtils.getExtensao(fileName);
+                if(!GNFEConstants.IMAGEM_EXTENSOES.contains(extensao)) {
+                    addMessageError("importacao.arquivoInvalido.error");
+                    return;
+                }
+
+                InputStream inputstream = updateFile.getInputStream();
+                File fileDestino = File.createTempFile("uploadedImagePrint_", "."+ extensao);;
+                FileUtils.copyInputStreamToFile(inputstream, fileDestino);
+
+                byte[] bytes = FileUtils.readFileToByteArray(fileDestino);
+                Base64.Encoder encoder = Base64.getEncoder();
+                String fileBase64 = encoder.encodeToString(bytes);
+
+                produto.setNomeImagem(fileName);
+                produto.setImagemBase64(fileBase64);
 
                 addMessage("importacao.sucesso");
             }

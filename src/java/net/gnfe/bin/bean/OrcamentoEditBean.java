@@ -195,4 +195,8 @@ public class OrcamentoEditBean extends AbstractBean {
         }
         this.usuarioNovo = usuarioNovo;
     }
+
+    public List<Usuario> findClienteAutoComplete(String search) {
+        return usuarioService.findClienteAutoComplete(search);
+    }
 }

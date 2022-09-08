@@ -1670,6 +1670,7 @@ st
     color: #555;
     width: 100%;
     padding: 0 6px;
+    border: none;
 }
 .ui-autocomplete-multiple-container {
 	border: 1px solid #ccc;
