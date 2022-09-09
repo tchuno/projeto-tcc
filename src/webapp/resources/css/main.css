@@ -1993,3 +1993,23 @@ label {
     -webkit-box-shadow:none;
     box-shadow: none;
 }
+
+.mytooltip .tooltip-content {
+    position: absolute;
+    display: none;
+    opacity: 0;
+}
+
+.mytooltip .tooltip-content img {
+    max-height: 360px;
+    height: auto;
+}
+
+.mytooltip:hover .tooltip-content {
+    opacity: 1;
+    position: absolute;
+    max-height: 360px;
+    height: auto;
+    display: block;
+    box-shadow: 5px 5px 15px rgba(48, 54, 61, 0.2);
+}

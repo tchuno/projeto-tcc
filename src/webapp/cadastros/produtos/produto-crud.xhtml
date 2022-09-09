@@ -13,6 +13,33 @@
 	<ui:composition template="/templates/navegacao.xhtml">
 		<ui:define name="tituloPagina">#{msg['produtoCrud.titulo']}</ui:define>
 		<ui:define name="conteudo">
+			<style>
+				.tooltip {
+					position: relative;
+					display: inline-block;
+					border-bottom: 1px dotted black;
+				}
+
+				.tooltip .tooltiptext {
+					visibility: hidden;
+					width: 120px;
+					background-color: black;
+					color: #fff;
+					text-align: center;
+					border-radius: 6px;
+					padding: 5px 0;
+
+					/* Position the tooltip */
+					position: absolute;
+					z-index: 1;
+				}
+
+				.tooltip:hover .tooltiptext {
+					visibility: visible;
+				}
+				.size_of_img{
+					width:90px}
+			</style>
 			<gnfe:excluirModal id="excluirModal" metodoExcluir="#{produtoCrudBean.excluir()}"/>
 			<h:form id="form-produto">
 				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
@@ -115,7 +142,7 @@
 
 				    <f:facet name="footer">
 				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="adicionar-modal-content-id form-produto-list" styleClass="btn"/>
+				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" oncomplete="closeModal('adicionar-modal')" update="form-produto-list content-pg-id" styleClass="btn"/>
 				    </f:facet>
 				</b:modal>
 			</h:form>
@@ -193,7 +220,12 @@
 								<h:outputText value="#{produto.cod}" />
 							</p:column>
 							<p:column headerText="#{msg['nome.label']}" style="text-align: center;" sortBy="#{produto.nome}">
-								<h:outputText value="#{produto.nome}" />
+								<span class="mytooltip ">
+									<span class="tooltip-item"><h:outputText value="#{produto.nome}" /></span>
+									<span class="tooltip-content">
+										<img src="data:image/#{produto.nomeImagem == null ? 'png' : utilBean.getExtensao(produto.nomeImagem)};base64,#{produto.nomeImagem == null ? utilBean.getSemImagem() : produto.imagemBase64}" alt="#{produto.nomeImagem}" />
+									</span>
+								</span>
 							</p:column>
 							<p:column headerText="#{msg['descricao.label']}" style="text-align: center;" sortBy="#{produto.descricao}">
 								<h:outputText value="#{produto.descricao}" />

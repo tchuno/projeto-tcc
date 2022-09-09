@@ -104,7 +104,7 @@
 									<h:outputText value="#{msg['editar.label']}"/>
 								</h:link>
 								<p:commandLink value="#{msg['excluir.label']}"
-											   onclick="openModal('excluir-orcamento-modal', 'form-orcamento-list:excluir-btn')"
+											   onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')"
 											   class="btn btn-danger btn-excluir"
 											   rendered="#{menuBean.podeExcluir()}">
 									<f:setPropertyActionListener target="#{orcamentoListBean.orcamentoId}"
@@ -114,13 +114,6 @@
 						</p:dataTable>
 					</div>
 				</div>
-				<b:modal title="#{msg['confirmarExclusaoTitulo.label']}" styleClass="confirmar-modal excluir-orcamento-modal" rendered="#{menuBean.podeExcluir()}">
-					<p><h4 class="msg-confirm"><h:outputText value="#{msg['registroExcluir.confirm']}"/> </h4></p>
-					<f:facet name="footer">
-						<b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-						<p:commandButton id="excluir-btn" value="#{msg['excluir.label']}" actionListener="#{orcamentoListBean.excluir()}" update="content-pg-id" styleClass="btn btn-danger" oncomplete="closeModal('excluir-orcamento-modal')"/>
-					</f:facet>
-				</b:modal>
 			</h:form>
 		</ui:define>
 	</ui:composition>

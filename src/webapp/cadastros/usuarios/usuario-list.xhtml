@@ -5,13 +5,15 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:b="http://bootsfaces.net/ui">
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:gnfe="http://java.sun.com/jsf/composite/gnfe">
 	<f:metadata>
 		<f:viewAction action="#{usuarioListBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
 	</f:metadata>
 	<ui:composition template="/templates/navegacao.xhtml">
 		<ui:define name="tituloPagina">#{msg['usuarioList.titulo']}</ui:define>
 		<ui:define name="conteudo">
+			<gnfe:excluirModal id="excluirModal" metodoExcluir="#{usuarioListBean.excluir()}"/>
 			<h:form id="form-usuario">
 				<div class="row default-form">
 					<div class="col-sm-10 col-sm-offset-1">
@@ -45,7 +47,7 @@
 								<div class="form-group">
 									<h:outputLabel value="#{msg['roleGNFE.label']}" styleClass="bf-no-message"/>
 									<h:selectOneMenu styleClass="form-control bf-no-message" id="roleBf-id" value="#{usuarioListBean.filtro.roleGNFE}" label="#{msg['roleGNFE.label']}"
-													 converter="enumConverter" required="true">
+													 converter="enumConverter">
 										<f:selectItem itemValue="" itemLabel=""/>
 										<f:selectItems value="#{utilBean.getValues('RoleGNFE')}" var="role" itemValue="#{role}" itemLabel="#{msg['RoleGNFE.'.concat(role).concat('.label')]}"/>
 									</h:selectOneMenu>
@@ -95,7 +97,11 @@
 								<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
 									<h:outputText value="#{msg['editar.label']}"/>
 								</h:link>
-								<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-usuario-modal', 'form-usuario:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}" disabled="#{usuarioListBean.usuarioLogado.id.equals(usuario.id)}">
+								<p:commandLink value="#{msg['excluir.label']}"
+											   onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')"
+											   class="btn btn-danger btn-excluir"
+											   disabled="#{usuarioListBean.usuarioLogado.id.equals(usuario.id)}"
+											   rendered="#{menuBean.podeExcluir()}">
 									<f:setPropertyActionListener target="#{usuarioListBean.usuarioId}" value="#{usuario.id}" />
 								</p:commandLink>
 							</p:column>
@@ -142,7 +148,11 @@
 									<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
 										<h:outputText value="#{msg['editar.label']}"/>
 									</h:link>
-									<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-usuario-modal', 'form-usuario:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
+									<p:commandLink value="#{msg['excluir.label']}"
+												   onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')"
+												   class="btn btn-danger btn-excluir"
+												   disabled="#{usuarioListBean.usuarioLogado.id.equals(usuario.id)}"
+												   rendered="#{menuBean.podeExcluir()}">
 										<f:setPropertyActionListener target="#{usuarioListBean.usuarioId}" value="#{usuario.id}" />
 									</p:commandLink>
 								</p:column>
@@ -190,7 +200,11 @@
 									<h:link outcome="/cadastros/usuarios/usuario-edit.xhtml?id=#{usuario.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeEditar()}">
 										<h:outputText value="#{msg['editar.label']}"/>
 									</h:link>
-									<p:commandLink value="#{msg['excluir.label']}" onclick="openModal('excluir-usuario-modal', 'form-usuario:excluir-btn')" class="btn btn-danger btn-excluir" rendered="#{menuBean.podeExcluir()}">
+									<p:commandLink value="#{msg['excluir.label']}"
+												   onclick="openModal('excluir-modal', 'excluirModal:form-exclusao:excluir-btn')"
+												   class="btn btn-danger btn-excluir"
+												   disabled="#{usuarioListBean.usuarioLogado.id.equals(usuario.id)}"
+												   rendered="#{menuBean.podeExcluir()}">
 										<f:setPropertyActionListener target="#{usuarioListBean.usuarioId}" value="#{usuario.id}" />
 									</p:commandLink>
 								</p:column>
@@ -198,13 +212,6 @@
 						</h:panelGroup>
 					</div>
 				</b:row>
-				<b:modal title="#{msg['confirmarExclusaoTitulo.label']}" styleClass="confirmar-modal excluir-usuario-modal" rendered="#{menuBean.podeExcluir()}">
-				    <p><h4 class="msg-confirm"><h:outputText value="#{msg['registroExcluir.confirm']}"/> </h4></p>
-				    <f:facet name="footer">
-				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-				        <p:commandButton id="excluir-btn" value="#{msg['excluir.label']}" actionListener="#{usuarioListBean.excluir()}" update="content-pg-id" styleClass="btn btn-danger" oncomplete="closeModal('excluir-usuario-modal')"/>
-				    </f:facet>
-				</b:modal>
 			</h:form>
 		</ui:define>
 	</ui:composition>

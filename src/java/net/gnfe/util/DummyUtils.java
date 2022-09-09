@@ -583,5 +583,4 @@ public abstract class DummyUtils {
 		}
 		return totalGeral;
 	}
-
 }

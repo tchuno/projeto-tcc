@@ -18,12 +18,12 @@
 	<link href="#{request.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
 	<link href="#{request.contextPath}/resources/css/animate.css" rel="stylesheet"/>
 	<link href="#{request.contextPath}/resources/datepicker/css/datepicker.css" rel="stylesheet"/>
-	<script src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
-	<script src="#{request.contextPath}/resources/js/jquery.mask.min.js"></script>
-	<script src="#{request.contextPath}/resources/js/moment/moment.js"></script>
-	<script src="#{request.contextPath}/resources/datepicker/js/bootstrap-datepicker.js"></script>
-	<script src="#{request.contextPath}/resources/datepicker/js/bootstrap-datepicker.pt-BR.js"></script>
-	<script src="#{request.contextPath}/resources/js/main.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.mask.min.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/resources/js/moment/moment.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/resources/datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/resources/datepicker/js/bootstrap-datepicker.pt-BR.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/resources/js/main.js"></script>
 	<script type="text/javascript">
 		var contextPath = '#{request.contextPath}';
 	</script>
@@ -68,7 +68,7 @@
 				</div>
 			</section>
 		</div>
-		<h:panelGroup id="content-pg-id" rendered="#{utilBean.securityOk}">
+		<h:panelGroup id="content-pg-id" styleClass="content-pg-id" rendered="#{utilBean.securityOk}">
 			<div id="content">
 				<section class="container">
 					<h:panelGroup id="mensagensGlobaisGroup">

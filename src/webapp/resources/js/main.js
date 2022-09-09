@@ -168,12 +168,11 @@ function bloquearCampos(podeEditar) {
 }
 
 function hideAlertInfo() {
-	$('.alert-info').slideUp(200);
+	$('.alert-info').slideUp(300);
 }
 
 function hideMessage(timeout) {
-	
-	if($('div', '.bf-messages').size() > 0) {
+	if($('.bf-messages').length > 0) {
 		setTimeout(hideAlertInfo, timeout);
 	}
 }

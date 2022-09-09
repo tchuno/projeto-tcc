@@ -1,10 +1,10 @@
 package net.gnfe.bin.bean;
 
 import net.gnfe.bin.bean.datamodel.UsuarioDataModel;
-import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.StatusUsuario;
 import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
+import net.gnfe.util.ddd.MessageKeyException;
 import net.gnfe.util.faces.AbstractBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,9 +55,6 @@ public class UsuarioListBean extends AbstractBean {
 	}
 	
 	public void excluir() {
-
-		Usuario usuarioLogado = getUsuarioLogado();
-
 		try {
 			usuarioService.excluir(usuarioId);
 
@@ -66,7 +63,7 @@ public class UsuarioListBean extends AbstractBean {
 
 			addMessage("registroExcluido.sucesso");
 		}
-		catch (Exception e) {
+		catch (MessageKeyException e) {
 			addMessageError(e);
 		}
 	}

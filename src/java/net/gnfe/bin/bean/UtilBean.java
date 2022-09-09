@@ -115,4 +115,12 @@ public class UtilBean extends AbstractBean {
 	public String getCpfCnpj(String cpf) {
 		return DummyUtils.getCpfCnpj(cpf);
 	}
+
+	public String getExtensao(String extensao) {
+		return DummyUtils.getExtensao(extensao);
+	}
+
+	public String getSemImagem() {
+		return GNFEConstants.SEM_IMAGEM_BASE64;
+	}
 }
