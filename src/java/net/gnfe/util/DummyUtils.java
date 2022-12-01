@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Random;
 import java.util.Set;
 
 import static net.gnfe.bin.GNFEConstants.LOCALE_PT_BR;
@@ -582,5 +583,14 @@ public abstract class DummyUtils {
 			totalGeral = totalGeral.add(valorUnidade);
 		}
 		return totalGeral;
+	}
+
+	public static String gerarDigitosAleatorios(int digitos) {
+		StringBuilder text = new StringBuilder();
+		Random random = new Random();
+		for (int i = 0; i < digitos; i++) {
+			text.append(random.nextInt(10)); // gerar um número aleatório entre 0 e 9
+		}
+		return text.toString();
 	}
 }
