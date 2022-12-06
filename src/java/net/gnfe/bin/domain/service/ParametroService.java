@@ -26,10 +26,30 @@ public class ParametroService {
 		COR_FONTE_TITULO_BARRA,
 		COR_FONTE_MENU,
 		COR_FONTE_MENU_SELECIONADO,
-		TITULO
+		TITULO,
+		CNPJ,
+		EMAIL,
+		CONTATO,
+		TELEFONE,
+		AMBIENTE,
+		SENHA,
+		CAMINHO_SCHEMAS,
+		CAMINHO_CERTIFICADO,
+		LOGRADOURO,
+		NUMERO,
+		BAIRRO,
+		COD_MUNICIPIO,
+		MUNICIPIO,
+		CEP,
+		COD_PAIS,
+		PAIS,
+		TELEFONE_EMITENTE,
+		INSCRICAO_ESTADUAL
 	}
 
-	private static List<P> CUSTOMIZACAO_TELA = Arrays.asList(P.COR_BARRA, P.COR_FONTE_TITULO_BARRA, P.COR_MENU, P.COR_FONTE_MENU, P.COR_FONTE_MENU_SELECIONADO, P.TITULO);
+	private static List<P> CUSTOMIZACAO = Arrays.asList(P.COR_BARRA, P.COR_FONTE_TITULO_BARRA, P.COR_MENU, P.COR_FONTE_MENU, P.COR_FONTE_MENU_SELECIONADO, P.TITULO, P.CNPJ, P.EMAIL, P.CONTATO,
+			P.TELEFONE, P.AMBIENTE, P.SENHA, P.CAMINHO_SCHEMAS, P.CAMINHO_CERTIFICADO, P.LOGRADOURO, P.NUMERO, P.BAIRRO, P.COD_MUNICIPIO, P.MUNICIPIO, P.CEP, P.COD_PAIS, P.PAIS, P.TELEFONE_EMITENTE,
+			P.INSCRICAO_ESTADUAL);
 
 	@Autowired private ParametroRepository parametroRepository;
 
@@ -74,7 +94,7 @@ public class ParametroService {
 	public Map<String, String> getCustomizacao () {
 
 		Map<String, String> map = new HashMap<>();
-		for (P p : CUSTOMIZACAO_TELA) {
+		for (P p : CUSTOMIZACAO) {
 			String valor = getValorCache(p);
 			map.put(p.name(), valor);
 		}
@@ -92,6 +112,7 @@ public class ParametroService {
 		map.put(P.COR_FONTE_MENU.name(), "9d9d9d");
 		map.put(P.COR_FONTE_MENU_SELECIONADO.name(), "fff");
 		map.put(P.TITULO.name(), "GNFE");
+		map.put(P.TITULO.name(), "GNFE");
 
 		salvarCustomizacao(map);
 	}
@@ -99,7 +120,7 @@ public class ParametroService {
 	@Transactional(rollbackFor=Exception.class)
 	public void salvarCustomizacao(Map<String, String> map) throws IOException {
 
-		for (P p : CUSTOMIZACAO_TELA) {
+		for (P p : CUSTOMIZACAO) {
 			String valor = map.get(p.name());
 			setValor(p, valor);
 		}

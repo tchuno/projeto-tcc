@@ -16,11 +16,10 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<h4 class="tituloForm"><h:outputText value="#{msg['cores.label']}"/></h4>
-					<div class="col-sm-4"></div>
+					<div class="col-sm-3"></div>
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label>#{msg['titulo.label']}</label><br/>
-							<p:inputText value="#{customizacaoEditBean.map['TITULO']}"
+							<b:inputText value="#{customizacaoEditBean.map['TITULO']}"
 										   required="true" label="#{msg['titulo.label']}"/>
 							<b:message/>
 						</div>
@@ -52,6 +51,126 @@
 							<label>#{msg['corFonteMenuSelecionado.label']}</label><br/>
 							<p:colorPicker value="#{customizacaoEditBean.map['COR_FONTE_MENU_SELECIONADO']}"
 										   styleClass="colorPicker"/>
+							<b:message/>
+						</div>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+				<div class="col-sm-12">
+					<h4 class="tituloForm"><h:outputText value="#{msg['dadosSefaz.label']}"/></h4>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<h:outputLabel value="#{msg['ambiente.label']}" for="ambiente-id"/>
+							<h:selectOneRadio id="ambiente-id" value="#{customizacaoEditBean.map['AMBIENTE']}"
+											  styleClass="radio-default" required="true" >
+								<f:selectItem itemValue="PROD" itemLabel="#{msg['producao.label']}"/>
+								<f:selectItem itemValue="HML" itemLabel="#{msg['homologacao.label']}"/>
+							</h:selectOneRadio>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputSecret value="#{customizacaoEditBean.map['SENHA']}"
+										   required="true" label="#{msg['senhaCertificado.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['CAMINHO_SCHEMAS']}"
+										 required="true" label="#{msg['caminhoShemas.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['CAMINHO_CERTIFICADO']}"
+										 required="true" label="#{msg['caminhoCertificado.label']}"/>
+							<b:message/>
+						</div>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+				<div class="col-sm-12">
+					<h4 class="tituloForm"><h:outputText value="#{msg['dadosEmitente.label']}"/></h4>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['CNPJ']}"
+										 styleClass="mask-cnpj"  required="true" label="#{msg['cnpj.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['INSCRICAO_ESTADUAL']}"
+										 styleClass="mask-number"  required="true" label="#{msg['inscricaoEstadual.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['LOGRADOURO']}"
+										 required="true" label="#{msg['logradouro.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['NUMERO']}"
+										 required="true" label="#{msg['numero.label']}" styleClass="mask-number"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['BAIRRO']}"
+										 required="true" label="#{msg['bairro.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['MUNICIPIO']}"
+										 required="true" label="#{msg['municipio.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['COD_MUNICIPIO']}"
+										 required="true" label="#{msg['codMunicipio.label']}" styleClass="mask-number"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['CEP']}"
+										 required="true" label="#{msg['cep.label']}" styleClass="mask-cep"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['PAIS']}"
+										 required="true" label="#{msg['pais.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['COD_PAIS']}"
+										 required="true" label="#{msg['codPais.label']}" styleClass="mask-number"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['TELEFONE_EMITENTE']}" maxlength="100"
+										 required="true" label="#{msg['telefoneEmitente.label']}"/>
+							<b:message/>
+						</div>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+				<div class="col-sm-12">
+					<h4 class="tituloForm"><h:outputText value="#{msg['dadosRespTec.label']}"/></h4>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['EMAIL']}" maxlength="100"
+										 required="true" label="#{msg['emailContatoRespTec.label']}"
+										 validatorMessage="#{msg['emailInvalido.error']}">
+								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</b:inputText>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['CONTATO']}" maxlength="100"
+										 required="true" label="#{msg['nomeContatoRespTec.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['TELEFONE']}"
+										 required="true" label="#{msg['telefoneContatoRespTec.label']}"
+										 maxlength="15"
+										 styleClass="mask-phone" />
 							<b:message/>
 						</div>
 					</div>
