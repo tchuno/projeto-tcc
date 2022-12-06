@@ -7,6 +7,7 @@ import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
+import net.gnfe.bin.domain.service.NotaFiscalService;
 import net.gnfe.bin.domain.service.OrcamentoService;
 import net.gnfe.bin.domain.service.ProdutoService;
 import net.gnfe.bin.domain.service.UsuarioService;
@@ -32,6 +33,7 @@ public class OrcamentoEditBean extends AbstractBean {
     @Autowired private OrcamentoService service;
     @Autowired private ProdutoService produtoService;
     @Autowired private UsuarioService usuarioService;
+    @Autowired private NotaFiscalService notaFiscalService;
 
     private Long id;
     private Orcamento orcamento;
@@ -182,6 +184,18 @@ public class OrcamentoEditBean extends AbstractBean {
         }
         catch (Exception e1) {
             addMessageError(e1);
+        }
+    }
+
+    public void enviarNotaFiscal() {
+
+        try {
+            NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+            notaFiscalService.enviarNotaFiscal(notaFiscal);
+        }
+        catch (Exception e1) {
+            String message = e1.getMessage();
+            addMessageError("erroInesperado.error", message);
         }
     }
 
