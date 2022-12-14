@@ -192,6 +192,8 @@ public class OrcamentoEditBean extends AbstractBean {
         try {
             NotaFiscal notaFiscal = orcamento.getNotaFiscal();
             notaFiscalService.enviarNotaFiscal(notaFiscal);
+
+            addMessage("notaEmitida.sucesso");
         }
         catch (Exception e1) {
             String message = e1.getMessage();

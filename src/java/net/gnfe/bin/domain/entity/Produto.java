@@ -40,7 +40,7 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 		this.id = id;
 	}
 
-	@Column(name="ID_PRODUTO", nullable=false, length=100)
+	@Column(name="ID_PRODUTO", length=100)
 	public String getIdProduto() {
 		return idProduto;
 	}

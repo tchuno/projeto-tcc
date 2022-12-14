@@ -16,6 +16,7 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 	private Date dataEnvio;
 	private StatusNotaFiscal statusNotaFiscal;
 	private String chaveAcesso;
+	private String protocolo;
 	private String xml;
 
 	@Id
@@ -77,6 +78,15 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 
 	public void setChaveAcesso(String chaveAcesso) {
 		this.chaveAcesso = chaveAcesso;
+	}
+
+	@Column(name="PROTOCOLO")
+	public String getProtocolo() {
+		return protocolo;
+	}
+
+	public void setProtocolo(String protocolo) {
+		this.protocolo = protocolo;
 	}
 
 	@Column(name="XML")

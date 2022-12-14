@@ -199,16 +199,19 @@ function carregarCep() {
 				$("#input_form-usuario\\:bairro").val("...");
 				$("#input_form-usuario\\:cidade").val("...");
 				$("#input_form-usuario\\:estado").val("...");
+				$("#input_form-usuario\\:ibge").val("...");
 
 				//Consulta o webservice viacep.com.br/
 				$.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
 
 					if (!("erro" in dados)) {
+
 						//Atualiza os campos com os valores da consulta.
 						$("#input_form-usuario\\:rua").val(dados.logradouro);
 						$("#input_form-usuario\\:bairro").val(dados.bairro);
 						$("#input_form-usuario\\:cidade").val(dados.localidade);
 						$("#input_form-usuario\\:estado").val(dados.uf);
+						$("#input_form-usuario\\:ibge").val(dados.ibge);
 					} //end if.
 					else {
 						//CEP pesquisado não foi encontrado.
@@ -236,4 +239,5 @@ function limpa_formulario_cep() {
 	$("#input_form-usuario\\:bairro").val("");
 	$("#input_form-usuario\\:cidade").val("");
 	$("#input_form-usuario\\:estado").val("");
+	$("#input_form-usuario\\:ibge").val("");
 }

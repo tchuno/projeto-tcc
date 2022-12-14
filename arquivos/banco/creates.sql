@@ -17,6 +17,7 @@ create table usuario
     bairro varchar(150),
     cep varchar(9),
     cidade varchar(150),
+    cod_ibge varchar(10),
     estado varchar(150),
     status                             varchar(20)          not null,
     data_expiracao_senha               timestamp            not null,
@@ -131,7 +132,8 @@ create table nota_fiscal
             references orcamento
             on delete set null,
     data_criacao       timestamp,
-    chave_acesso       varchar(1000),
+    chave_acesso       varchar(44),
+    protocolo varchar(30),
     xml                text,
     status_nota_fiscal varchar(15),
     data_envio         timestamp

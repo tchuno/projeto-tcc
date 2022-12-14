@@ -513,6 +513,21 @@ public abstract class DummyUtils {
 		return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 	}
 
+	public static String removerTracosPontosEspacoParentesesAspas(String str) {
+
+		if(StringUtils.isBlank(str)) {
+			return str;
+		}
+
+		str = str.replace("-", "");
+		str = str.replace(".", "");
+		str = str.replace(" ", "");
+		str = str.replace("(", "");
+		str = str.replace(")", "");
+
+		return str;
+	}
+
 	public static String htmlToString(String html) {
 
 		html = Jsoup.parse(html).wholeText();

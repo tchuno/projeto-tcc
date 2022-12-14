@@ -36,6 +36,7 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 	private String bairro;
 	private String cep;
 	private String cidade;
+	private String codIbge;
 	private String estado;
 	private StatusUsuario status;
 	private Date dataExpiracaoSenha;
@@ -173,6 +174,14 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 		this.cidade = cidade;
 	}
 
+	@Column(name="COD_IBGE", length=10)
+	public String getCodIbge() {
+		return codIbge;
+	}
+
+	public void setCodIbge(String codIbge) {
+		this.codIbge = codIbge;
+	}
 
 	@Column(name="ESTADO", length=150)
 	public String getEstado() {

@@ -92,6 +92,11 @@
 					<div class="col-sm-3"></div>
 					<div class="col-sm-6">
 						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['NOME']}"
+										 required="true" maxlength="80" label="#{msg['nome.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
 							<b:inputText value="#{customizacaoEditBean.map['CNPJ']}"
 										 styleClass="mask-cnpj"  required="true" label="#{msg['cnpj.label']}"/>
 							<b:message/>
@@ -99,6 +104,11 @@
 						<div class="form-group">
 							<b:inputText value="#{customizacaoEditBean.map['INSCRICAO_ESTADUAL']}"
 										 styleClass="mask-number"  required="true" label="#{msg['inscricaoEstadual.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['NAT_OP']}" maxlength="100"
+										 required="true" label="#{msg['natOp.label']}"/>
 							<b:message/>
 						</div>
 						<div class="form-group">
@@ -132,6 +142,11 @@
 							<b:message/>
 						</div>
 						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['ESTADO']}"
+										 required="true" maxlength="2" label="#{msg['estado.label']}"/>
+							<b:message/>
+						</div>
+						<div class="form-group">
 							<b:inputText value="#{customizacaoEditBean.map['PAIS']}"
 										 required="true" label="#{msg['pais.label']}"/>
 							<b:message/>
@@ -153,6 +168,11 @@
 					<h4 class="tituloForm"><h:outputText value="#{msg['dadosRespTec.label']}"/></h4>
 					<div class="col-sm-3"></div>
 					<div class="col-sm-6">
+						<div class="form-group">
+							<b:inputText value="#{customizacaoEditBean.map['CNPJ_RESP_TEC']}"
+										 styleClass="mask-cnpj"  required="true" label="#{msg['cnpjContatoRespTec.label']}"/>
+							<b:message/>
+						</div>
 						<div class="form-group">
 							<b:inputText value="#{customizacaoEditBean.map['EMAIL']}" maxlength="100"
 										 required="true" label="#{msg['emailContatoRespTec.label']}"

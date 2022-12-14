@@ -186,6 +186,8 @@
 			<div class="col-sm-12">
 				<h4 class="tituloForm"><h:outputText value="#{msg['orcamentoForm.label']} / #{msg['statusNotaFiscal.label']}
 					#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? msg['StatusNotaFiscal.'.concat(orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal).concat('.label')] : 'Novo'}"/></h4>
+				<h5 class="tituloForm"><h:outputText value="#{msg['chaveAcesso.label']}:
+					#{orcamentoEditBean.orcamento.notaFiscal.chaveAcesso}" rendered="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' : false}"/></h5>
 				<div class="row">
 					<div class="col-sm-11">
 						<div class="form-group">

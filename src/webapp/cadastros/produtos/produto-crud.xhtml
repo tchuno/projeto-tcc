@@ -77,6 +77,11 @@
 								<b:message/>
 							</div>
 							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.cest}" placeholder="#{msg['cest.label']}"
+											 label="#{msg['cest.label']}" renderLabel="true" maxlength="10" styleClass="mask-number" required="false" />
+								<b:message/>
+							</div>
+							<div class="form-group">
 								<h:outputLabel value="#{msg['fornecedores.label']}" styleClass="bf-no-message"/>
 								<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{produtoCrudBean.produto.fornecedor}" label="#{msg['fornecedores.label']}"
 												 converter="entity" required="false">
@@ -120,7 +125,7 @@
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<h:outputLabel value="#{msg['nome.label']}: #{produtoCrudBean.produto.nomeImagem}" id="nome-imagem-id"/>
+								<h:outputLabel value="#{msg['nome.label']}: #{produtoCrudBean.produto.nomeImagem == null ? 'Nenhuma Imagem Carregada' : produtoCrudBean.produto.nomeImagem}" id="nome-imagem-id"/>
 								<p:fileUpload
 										label="Escolher Arquivo"
 										mode="advanced" auto="true"

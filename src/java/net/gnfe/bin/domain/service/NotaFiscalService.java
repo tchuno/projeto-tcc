@@ -106,7 +106,7 @@ public class NotaFiscalService {
 			int numeroNfeInt = numeroNfe.intValue();
 			String cnpj = DummyUtils.getCpfCnpjDesformatado(customizacao.get(ParametroService.P.CNPJ.name()));
 			LocalDateTime dataEmissao = LocalDateTime.now();
-			String cnf = ChaveUtil.completarComZerosAEsquerda(String.valueOf(numeroNfeInt), 4);
+			String cnf = DummyUtils.gerarDigitosAleatorios(8);
 
 			String modelo = DocumentoEnum.NFE.getModelo();
 			//TODO VERITIFCAR SE numeroNfe para gerar numero de serie de acordo com a divisão de ID por 9999;
@@ -129,10 +129,10 @@ public class NotaFiscalService {
 			TNFe.InfNFe.Ide ide = new TNFe.InfNFe.Ide();
 			ide.setCUF(config.getEstado().getCodigoUF());
 			ide.setCNF(cnf);
-			ide.setNatOp("NOTA FISCAL CONSUMIDOR ELETRONICA");
+			ide.setNatOp(customizacao.get(ParametroService.P.NAT_OP.name()));
 			ide.setMod(modelo);
 			ide.setSerie(String.valueOf(serie));
-			ide.setNNF(String.valueOf(numeroNfe));
+			ide.setNNF(String.valueOf(numeroNfeInt));
 			ide.setDhEmi(XmlNfeUtil.dataNfe(dataEmissao));
 			ide.setTpNF("1");
 			ide.setIdDest("1");
@@ -151,7 +151,7 @@ public class NotaFiscalService {
 			//Preenche Emitente
 			TNFe.InfNFe.Emit emit = new TNFe.InfNFe.Emit();
 			emit.setCNPJ(cnpj);
-			emit.setXNome("PHSV DISTRIBUIDORA DE MATERIAIS DE CONSTRUCAO E FERRAGENS LT");
+			emit.setXNome(customizacao.get(ParametroService.P.NOME.name()));
 			emit.setIE(customizacao.get(ParametroService.P.INSCRICAO_ESTADUAL.name()));
 			emit.setCRT("3");
 
@@ -162,10 +162,10 @@ public class NotaFiscalService {
 			enderEmit.setCMun(customizacao.get(ParametroService.P.COD_MUNICIPIO.name()));
 			enderEmit.setXMun(customizacao.get(ParametroService.P.MUNICIPIO.name()));
 			enderEmit.setUF(TUfEmi.valueOf(config.getEstado().toString()));
-			enderEmit.setCEP(customizacao.get(ParametroService.P.CEP.name()));
+			enderEmit.setCEP(DummyUtils.removerTracosPontosEspacoParentesesAspas(customizacao.get(ParametroService.P.CEP.name())));
 			enderEmit.setCPais(customizacao.get(ParametroService.P.COD_PAIS.name()));
 			enderEmit.setXPais(customizacao.get(ParametroService.P.PAIS.name()));
-			enderEmit.setFone(customizacao.get(ParametroService.P.TELEFONE_EMITENTE.name()));
+			enderEmit.setFone(DummyUtils.removerTracosPontosEspacoParentesesAspas(customizacao.get(ParametroService.P.TELEFONE_EMITENTE.name())));
 			emit.setEnderEmit(enderEmit);
 
 			infNFe.setEmit(emit);
@@ -186,21 +186,23 @@ public class NotaFiscalService {
 			String endereco = cliente.getEndereco();
 			Integer numero = cliente.getNumero();
 			String bairro = cliente.getBairro();
+			String codIbge = cliente.getCodIbge();
 			String cidade = cliente.getCidade();
 			String cep = cliente.getCep();
+			String estado = cliente.getEstado();
 			String telefone = cliente.getTelefone();
 
 			TEndereco enderDest = new TEndereco();
 			enderDest.setXLgr(endereco);
 			enderDest.setNro(String.valueOf(numero));
 			enderDest.setXBairro(bairro);
-			enderDest.setCMun("4106902");
+			enderDest.setCMun(codIbge);
 			enderDest.setXMun(cidade);
-			enderDest.setUF(TUf.valueOf("PR"));
-			enderDest.setCEP(cep);
+			enderDest.setUF(TUf.valueOf(estado));
+			enderDest.setCEP(DummyUtils.removerTracosPontosEspacoParentesesAspas(cep));
 			enderDest.setCPais("1058");
 			enderDest.setXPais("Brasil");
-			enderDest.setFone(telefone);
+			enderDest.setFone(DummyUtils.removerTracosPontosEspacoParentesesAspas(telefone));
 			dest.setEnderDest(enderDest);
 
 			infNFe.setDest(dest);
@@ -221,8 +223,8 @@ public class NotaFiscalService {
 				prod.setCProd(produto.getCod());
 				prod.setCEAN("SEM GTIN");
 				prod.setXProd(produto.getNome());
-				prod.setNCM(produto.getCnm());
-				prod.setCEST(produto.getCest());
+				prod.setNCM(DummyUtils.removerTracosPontosEspacoParentesesAspas(produto.getCnm()));
+				prod.setCEST(DummyUtils.removerTracosPontosEspacoParentesesAspas(produto.getCest()));
 				prod.setCFOP("5405");
 				prod.setUCom(produto.getUnidadeMedida().name());
 				prod.setQCom("1.0000");
@@ -317,10 +319,10 @@ public class NotaFiscalService {
 
 			// Preenche Informação Responsável Técnico
 			TInfRespTec infRespTec = new TInfRespTec();
-			infRespTec.setCNPJ(cnpj);
+			infRespTec.setCNPJ(DummyUtils.getCpfCnpjDesformatado(customizacao.get(ParametroService.P.CNPJ_RESP_TEC.name())));
 			infRespTec.setEmail(customizacao.get(ParametroService.P.EMAIL.name()));
 			infRespTec.setXContato(customizacao.get(ParametroService.P.CONTATO.name()));
-			infRespTec.setFone(customizacao.get(ParametroService.P.TELEFONE.name()));
+			infRespTec.setFone(DummyUtils.removerTracosPontosEspacoParentesesAspas(customizacao.get(ParametroService.P.TELEFONE.name())));
 			infNFe.setInfRespTec(infRespTec);
 
 			TNFe nfe = new TNFe();
@@ -365,7 +367,8 @@ public class NotaFiscalService {
 				System.out.println("# Status: " + retornoNfe.getProtNFe().get(0).getInfProt().getCStat() + " - " + retornoNfe.getProtNFe().get(0).getInfProt().getXMotivo());
 				System.out.println("# Protocolo: " + retornoNfe.getProtNFe().get(0).getInfProt().getNProt());
 				System.out.println("# XML Final: " + XmlNfeUtil.criaNfeProc(enviNFe, retornoNfe.getProtNFe().get(0)));
-				notaFiscal.setChaveAcesso(retornoNfe.getProtNFe().get(0).getInfProt().getNProt());
+				notaFiscal.setProtocolo(retornoNfe.getProtNFe().get(0).getInfProt().getNProt());
+				notaFiscal.setChaveAcesso(retornoNfe.getProtNFe().get(0).getInfProt().getChNFe());
 				notaFiscal.setXml(XmlNfeUtil.criaNfeProc(enviNFe, retornoNfe.getProtNFe().get(0)));
 
 			} else {
@@ -377,12 +380,13 @@ public class NotaFiscalService {
 				System.out.println("# Status: " + retorno.getProtNFe().getInfProt().getCStat()  + " - " + retorno.getProtNFe().getInfProt().getXMotivo());
 				System.out.println("# Protocolo: " + retorno.getProtNFe().getInfProt().getNProt());
 				System.out.println("# Xml Final :" + XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe()));
-				notaFiscal.setChaveAcesso(retorno.getProtNFe().getInfProt().getNProt());
+				notaFiscal.setProtocolo(retorno.getProtNFe().getInfProt().getNProt());
+				notaFiscal.setChaveAcesso(retorno.getProtNFe().getInfProt().getChNFe());
 				notaFiscal.setXml(XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe()));
 			}
 
 			Date convertedDatetime = Date.from(dataEmissao.atZone(ZoneId.systemDefault()).toInstant());
-			notaFiscal.setDataCriacao(convertedDatetime);
+			notaFiscal.setDataEnvio(convertedDatetime);
 			notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.CONCLUIDO);
 			saveOrUpdate(notaFiscal);
 
