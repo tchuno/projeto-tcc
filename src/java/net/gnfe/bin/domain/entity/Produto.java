@@ -18,13 +18,17 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	private String cnm;
 	private String cst;
 	private String cest;
+	private String cfop;
 	private Usuario fornecedor;
 	private Integer estoqueAtual;
 	private UnidadeMedida unidadeMedida;
 	private BigDecimal valorUnidade;
-	private BigDecimal valorCompra;
 	private Integer tempoReposicao;
 	private Integer estoqueMinimo;
+	private Integer origemMercadoria;
+	private BigDecimal aliquotaICMS;
+	private BigDecimal aliquotaPIS;
+	private BigDecimal aliquotaCOFINS;
 	private String nomeImagem;
 	private String imagemBase64;
 
@@ -94,15 +98,6 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 		this.cnm = cnm;
 	}
 
-	@Column(name="CST", length=100)
-	public String getCst() {
-		return cst;
-	}
-
-	public void setCst(String cst) {
-		this.cst = cst;
-	}
-
 	@Column(name="CEST", length=100)
 	public String getCest() {
 		return cest;
@@ -110,6 +105,15 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 
 	public void setCest(String cest) {
 		this.cest = cest;
+	}
+
+	@Column(name="CFOP", length=100)
+	public String getCfop() {
+		return cfop;
+	}
+
+	public void setCfop(String cfop) {
+		this.cfop = cfop;
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -150,15 +154,6 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 		this.valorUnidade = valorUnidade;
 	}
 
-	@Column(name="VALOR_COMPRA")
-	public BigDecimal getValorCompra() {
-		return valorCompra;
-	}
-
-	public void setValorCompra(BigDecimal valorCompra) {
-		this.valorCompra = valorCompra;
-	}
-
 	@Column(name="TEMPO_REPOSICAO")
 	public Integer getTempoReposicao() {
 		return tempoReposicao;
@@ -175,6 +170,44 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 
 	public void setEstoqueMinimo(Integer estoqueMinimo) {
 		this.estoqueMinimo = estoqueMinimo;
+	}
+
+
+	@Column(name="ORIGEM_MERCADORIA")
+	public Integer getOrigemMercadoria() {
+		return origemMercadoria;
+	}
+
+	public void setOrigemMercadoria(Integer origemMercadoria) {
+		this.origemMercadoria = origemMercadoria;
+	}
+
+	@Column(name="ALIQUOTA_ICMS")
+	public BigDecimal getAliquotaICMS() {
+		return aliquotaICMS;
+	}
+
+	public void setAliquotaICMS(BigDecimal aliquotaICMS) {
+		this.aliquotaICMS = aliquotaICMS;
+	}
+
+	@Column(name="ALIQUOTA_PIS")
+	public BigDecimal getAliquotaPIS() {
+		return aliquotaPIS;
+	}
+
+	public void setAliquotaPIS(BigDecimal aliquotaPIS) {
+		this.aliquotaPIS = aliquotaPIS;
+	}
+
+
+	@Column(name="ALIQUOTA_COFINS")
+	public BigDecimal getAliquotaCOFINS() {
+		return aliquotaCOFINS;
+	}
+
+	public void setAliquotaCOFINS(BigDecimal getAliquotaCOFINS) {
+		this.aliquotaCOFINS = getAliquotaCOFINS;
 	}
 
 	@Column(name="NOME_IMAGEM")

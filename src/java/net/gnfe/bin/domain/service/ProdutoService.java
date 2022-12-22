@@ -256,7 +256,6 @@ public class ProdutoService {
 		String descricaoCurta = map.get(CamposProduto.DESC_CURTA.getNome());
 		String gtin = map.get(CamposProduto.GTIN.getNome());
 		String cnm = map.get(CamposProduto.CNM.getNome());
-		String cst = map.get(CamposProduto.CST.getNome());
 		String cest = map.get(CamposProduto.CEST.getNome());
 		String estoque = map.get(CamposProduto.ESTOQUE.getNome());
 		estoque = estoque.replace(".", "");
@@ -273,7 +272,6 @@ public class ProdutoService {
 		produto.setDescricao(descricaoCurta);
 		produto.setGtin(gtin);
 		produto.setCnm(cnm);
-		produto.setCst(cst);
 		produto.setCest(cest);
 		produto.setEstoqueAtual(StringUtils.isNotBlank(estoque) ? Integer.valueOf(estoque) : null);
 		produto.setUnidadeMedida(StringUtils.isNotBlank(unidadeMedida) ? UnidadeMedida.valueOf(unidadeMedida.toUpperCase()) : null);

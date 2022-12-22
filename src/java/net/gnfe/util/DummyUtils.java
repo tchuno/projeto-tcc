@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -607,5 +608,13 @@ public abstract class DummyUtils {
 			text.append(random.nextInt(10)); // gerar um número aleatório entre 0 e 9
 		}
 		return text.toString();
+	}
+
+	public static String formatarNumero(BigDecimal num, String pattern){
+		DecimalFormat formater = new DecimalFormat(pattern);
+		String format = formater.format(num);
+		format = format.replace(".", "");
+		format = format.replace(",", ".");
+		return format;
 	}
 }

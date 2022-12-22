@@ -72,8 +72,8 @@ create table produto
     descricao       varchar(500),
     gtin            varchar(100),
     cnm             varchar(100),
-    cst             varchar(100),
     cest            varchar(100),
+    cfop            varchar(100),
     fornecedor_id   integer
         constraint produto_fk1
             references usuario
@@ -85,7 +85,10 @@ create table produto
     tempo_reposicao integer,
     unidade_medida  varchar(10),
     valor_unidade   bigint,
-    valor_compra   bigint,
+    origem_mercadoria  integer,
+    aliquota_icms   bigint,
+    aliquota_pis   bigint,
+    aliquota_cofins   bigint,
     nome_imagem varchar(300),
     imagem_base64 text
 );

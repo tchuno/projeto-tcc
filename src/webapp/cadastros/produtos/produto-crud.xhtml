@@ -13,33 +13,6 @@
 	<ui:composition template="/templates/navegacao.xhtml">
 		<ui:define name="tituloPagina">#{msg['produtoCrud.titulo']}</ui:define>
 		<ui:define name="conteudo">
-			<style>
-				.tooltip {
-					position: relative;
-					display: inline-block;
-					border-bottom: 1px dotted black;
-				}
-
-				.tooltip .tooltiptext {
-					visibility: hidden;
-					width: 120px;
-					background-color: black;
-					color: #fff;
-					text-align: center;
-					border-radius: 6px;
-					padding: 5px 0;
-
-					/* Position the tooltip */
-					position: absolute;
-					z-index: 1;
-				}
-
-				.tooltip:hover .tooltiptext {
-					visibility: visible;
-				}
-				.size_of_img{
-					width:90px}
-			</style>
 			<gnfe:excluirModal id="excluirModal" metodoExcluir="#{produtoCrudBean.excluir()}"/>
 			<h:form id="form-produto">
 				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
@@ -68,17 +41,17 @@
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.cnm}" placeholder="#{msg['cnm.label']}"
-											 label="#{msg['cnm.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="false" />
-								<b:message/>
-							</div>
-							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.cst}" placeholder="#{msg['cst.label']}"
-											 label="#{msg['cst.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="false" />
+											 label="#{msg['cnm.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.cest}" placeholder="#{msg['cest.label']}"
-											 label="#{msg['cest.label']}" renderLabel="true" maxlength="10" styleClass="mask-number" required="false" />
+											 label="#{msg['cest.label']}" renderLabel="true" maxlength="10" styleClass="mask-number" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.cfop}" placeholder="#{msg['cfop.label']}"
+											 label="#{msg['cfop.label']}" renderLabel="true" maxlength="10" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
@@ -91,7 +64,7 @@
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<h:outputLabel value="#{msg['unidadeMedida.label']}" styleClass="bf-no-message"/>
+								<h:outputLabel value="#{msg['unidadeMedida.label']} *" styleClass="bf-no-message"/>
 								<h:selectOneMenu styleClass="form-control bf-no-message" id="unidade-medida-id" value="#{produtoCrudBean.produto.unidadeMedida}" label="#{msg['unidadeMedida.label']}"
 												 converter="enumConverter" required="true">
 									<f:selectItem itemValue="" itemLabel=""/>
@@ -101,22 +74,37 @@
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.valorUnidade}" placeholder="#{msg['valorUnidade.label']}"
-											 label="#{msg['valorUnidade.label']}" renderLabel="true" styleClass="mask-money" required="false" />
+											 label="#{msg['valorUnidade.label']}" renderLabel="true" styleClass="mask-money" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.valorCompra}" placeholder="#{msg['valorCompra.label']}"
-											 label="#{msg['valorCompra.label']}" renderLabel="true" styleClass="mask-money" required="false" />
-								<b:message/>
-							</div>
-							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.cst}" placeholder="#{msg['estoqueAtual.label']}"
-											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="false" />
+								<b:inputText value="#{produtoCrudBean.produto.estoqueAtual}" placeholder="#{msg['estoqueAtual.label']}"
+											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.estoqueMinimo}" placeholder="#{msg['estoqueMinimo.label']}"
-											 label="#{msg['estoqueMinimo.label']}" renderLabel="true" styleClass="mask-number" required="false" />
+											 label="#{msg['estoqueMinimo.label']}" renderLabel="true" styleClass="mask-number" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.origemMercadoria}" placeholder="#{msg['origemMercadoria.label']}"
+											 label="#{msg['origemMercadoria.label']}" renderLabel="true" maxlength="1" styleClass="mask-number" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.aliquotaICMS}" placeholder="#{msg['aliquotaICMS.label']}"
+											 label="#{msg['aliquotaICMS.label']}" renderLabel="true" styleClass="mask-number" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.aliquotaPIS}" placeholder="#{msg['aliquotaPIS.label']}"
+											 label="#{msg['aliquotaPIS.label']}" renderLabel="true" styleClass="mask-number" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.aliquotaCOFINS}" placeholder="#{msg['aliquotaCOFINS.label']}"
+											 label="#{msg['aliquotaCOFINS.label']}" renderLabel="true" styleClass="mask-number" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
@@ -147,7 +135,7 @@
 
 				    <f:facet name="footer">
 				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" oncomplete="closeModal('adicionar-modal')" update="form-produto-list content-pg-id" styleClass="btn"/>
+				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="form-produto-list adicionar-modal-content-id" styleClass="btn"/>
 				    </f:facet>
 				</b:modal>
 			</h:form>
@@ -237,9 +225,6 @@
 							</p:column>
 							<p:column headerText="#{msg['valorUnidade.label']}" style="text-align: center;" sortBy="#{produto.valorUnidade}">
 								<h:outputText value="#{produto.valorUnidade}" />
-							</p:column>
-							<p:column headerText="#{msg['valorCompra.label']}" style="text-align: center;" sortBy="#{produto.valorCompra}">
-								<h:outputText value="#{produto.valorCompra}" />
 							</p:column>
 							<p:column headerText="#{msg['estoqueAtual.label']}" style="text-align: center;" sortBy="#{produto.estoqueAtual}">
 								<h:outputText value="#{produto.estoqueAtual}" />
