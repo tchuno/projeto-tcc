@@ -3,14 +3,13 @@ package net.gnfe.bin.rest.response.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import net.gnfe.bin.rest.request.vo.SuperVo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @ApiModel(value = "ListaUsuarioResponse")
-public class ListaUsuarioResponse extends SuperVo {
+public class ListaUsuarioResponse {
 
     @ApiModelProperty(notes = "Lista de usuários ativos.")
     private List<FiltroUsuarioResponse> usuariosAtivos;

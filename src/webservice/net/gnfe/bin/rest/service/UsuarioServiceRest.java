@@ -39,11 +39,19 @@ public class UsuarioServiceRest extends SuperServiceRest {
     }
 
     private Usuario saveOrUpdate(Usuario usuarioLogado, RequestCadastrarUsuario requestCadastrarUsuario, Usuario usuarioNovo) {
+        usuarioNovo.setCpfCnpj(requestCadastrarUsuario.getCpfCnpj());
         usuarioNovo.setNome(requestCadastrarUsuario.getNome());
-        usuarioNovo.setLogin(requestCadastrarUsuario.getLogin());
         usuarioNovo.setEmail(requestCadastrarUsuario.getEmail());
+        usuarioNovo.setLogin(requestCadastrarUsuario.getLogin());
         usuarioNovo.setRoleGNFE(requestCadastrarUsuario.getRoleGD());
         usuarioNovo.setTelefone(requestCadastrarUsuario.getTelefone());
+        usuarioNovo.setCep(requestCadastrarUsuario.getCep());
+        usuarioNovo.setEndereco(requestCadastrarUsuario.getEndereco());
+        usuarioNovo.setNumero(requestCadastrarUsuario.getNumero());
+        usuarioNovo.setBairro(requestCadastrarUsuario.getBairro());
+        usuarioNovo.setCidade(requestCadastrarUsuario.getCidade());
+        usuarioNovo.setCodIbge(requestCadastrarUsuario.getCodigoIBGE());
+        usuarioNovo.setEstado(requestCadastrarUsuario.getEstado());
 
         usuarioService.saveOrUpdate(usuarioNovo, usuarioLogado);
         return usuarioNovo;

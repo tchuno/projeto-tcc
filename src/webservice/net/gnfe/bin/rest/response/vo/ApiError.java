@@ -3,13 +3,12 @@ package net.gnfe.bin.rest.response.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import net.gnfe.bin.rest.request.vo.SuperVo;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
 @ApiModel(value = "ApiError")
-public class ApiError extends SuperVo {
+public class ApiError {
 
     @ApiModelProperty(notes = "Timestamp de quando ocorreu o erro.")
     private Date timestamp;

@@ -5,11 +5,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
-import net.gnfe.bin.rest.request.vo.SuperVo;
 
 
 @ApiModel(value = "FiltroUsuarioResponse")
-public class FiltroUsuarioResponse extends SuperVo {
+public class FiltroUsuarioResponse {
 
     @ApiModelProperty(notes = "ID.")
     private Long id;
@@ -17,17 +16,11 @@ public class FiltroUsuarioResponse extends SuperVo {
     @ApiModelProperty(notes = "Nome.")
     private String nome;
 
-    @ApiModelProperty(notes = "Login.")
-    private String login;
+    @ApiModelProperty(notes = "Cpf ou CNPJ.")
+    private String cpfCnpj;
 
     @ApiModelProperty(notes = "RoleGNFE.")
     private RoleGNFE roleGNFE;
-
-    @ApiModelProperty(notes = "Nome do Subperfil.")
-    private String subperfil;
-
-    @ApiModelProperty(notes = "Área.")
-    private String area;
 
     public FiltroUsuarioResponse() {
     }
@@ -35,7 +28,7 @@ public class FiltroUsuarioResponse extends SuperVo {
     public FiltroUsuarioResponse(Usuario usuario) {
         this.id = usuario.getId();
         this.nome = usuario.getNome();
-        this.login = usuario.getLogin();
+        this.cpfCnpj = usuario.getCpfCnpj();
         this.roleGNFE = usuario.getRoleGNFE();
     }
 
@@ -55,12 +48,12 @@ public class FiltroUsuarioResponse extends SuperVo {
         this.nome = nome;
     }
 
-    public String getLogin() {
-        return login;
+    public String getCpfCnpj() {
+        return cpfCnpj;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setCpfCnpj(String cpfCnpj) {
+        this.cpfCnpj = cpfCnpj;
     }
 
     public RoleGNFE getRoleGNFE() {
@@ -69,13 +62,5 @@ public class FiltroUsuarioResponse extends SuperVo {
 
     public void setRoleGNFE(RoleGNFE roleGNFE) {
         this.roleGNFE = roleGNFE;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
     }
 }

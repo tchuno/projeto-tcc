@@ -16,7 +16,6 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	private String descricao;
 	private String gtin;
 	private String cnm;
-	private String cst;
 	private String cest;
 	private String cfop;
 	private Usuario fornecedor;

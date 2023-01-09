@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
 
 @ApiModel(value = "RequestFiltroUsuario")
-public class RequestFiltroUsuario extends SuperVo {
+public class RequestFiltroUsuario {
 
     @ApiModelProperty(notes = "Nome.")
     private String nome;

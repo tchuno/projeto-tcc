@@ -6,12 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 import net.gnfe.bin.domain.entity.SessaoHttpRequest;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
-import net.gnfe.bin.rest.request.vo.SuperVo;
 
 import java.util.Date;
 
 @ApiModel(value="LoginResponse")
-public class LoginResponse extends SuperVo {
+public class LoginResponse{
 
     @ApiModelProperty(notes = "Nome do usuário logado")
     private String nome;

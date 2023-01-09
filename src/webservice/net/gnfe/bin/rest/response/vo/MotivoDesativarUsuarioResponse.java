@@ -4,11 +4,10 @@ package net.gnfe.bin.rest.response.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import net.gnfe.bin.domain.enumeration.MotivoDesativacaoUsuario;
-import net.gnfe.bin.rest.request.vo.SuperVo;
 
 
 @ApiModel(value = "MotivoDesativarUsuarioResponse")
-public class MotivoDesativarUsuarioResponse extends SuperVo {
+public class MotivoDesativarUsuarioResponse {
 
     @ApiModelProperty(value = "Motivo")
     private MotivoDesativacaoUsuario motivo;
