@@ -80,7 +80,7 @@ public class TrocaSenhaBean extends AbstractBean {
 			if(usuario.isAdminRole()) {
 				redirect("/cadastros/usuarios/");
 				return;
-			} else if (usuario.isCopRole()) {
+			} else if (usuario.isFuncionarioRole()) {
 				redirect("/consultas/dashboard/");
 				return;
 			} else {
@@ -112,10 +112,10 @@ public class TrocaSenhaBean extends AbstractBean {
 			Usuario usuarioLogado = getUsuarioLogado();
 			if(usuarioLogado.isAdminRole()) {
 				redirect( "/cadastros/usuarios/");
-			} else if (usuarioLogado.isCopRole()) {
-				redirect("/cadastros/usuarios/");
+			} else if (usuarioLogado.isFuncionarioRole()) {
+				redirect("/cadastros/orcamentos/");
 			} else {
-				redirect( "/consultas/veiculos/");
+				redirect( "/cadastros/orcamentos/");
 			}
 		}
 		catch (Exception e) {

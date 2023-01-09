@@ -23,6 +23,7 @@ import javax.faces.bean.ViewScoped;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -214,5 +215,12 @@ public class OrcamentoEditBean extends AbstractBean {
 
     public List<Usuario> findClienteAutoComplete(String search) {
         return usuarioService.findClienteAutoComplete(search);
+    }
+
+    public boolean podeEnviarNotaFiscal (StatusNotaFiscal statusNotaFiscal) {
+        if(Arrays.asList(StatusNotaFiscal.CONCLUIDO, StatusNotaFiscal.PROCESSANDO, StatusNotaFiscal.CANCELADO).contains(statusNotaFiscal)){
+            return false;
+        }
+        return true;
     }
 }

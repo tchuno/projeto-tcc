@@ -10,7 +10,7 @@ create table usuario
             unique,
     email                              varchar(100)         not null,
     telefone                           varchar(15),
-    cpf                           varchar(11),
+    cpf_cnpj                           varchar(14),
     rg                           varchar(15),
     endereco varchar(250),
     numero integer,

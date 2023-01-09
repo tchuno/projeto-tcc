@@ -1,10 +1,8 @@
 package net.gnfe.bin.domain.service;
 
-import net.gnfe.bin.domain.entity.Orcamento;
-import net.gnfe.bin.domain.entity.OrcamentoProduto;
-import net.gnfe.bin.domain.entity.Produto;
-import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.entity.*;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
+import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
 import net.gnfe.bin.domain.repository.OrcamentoRepository;
 import net.gnfe.bin.domain.vo.ProdutoVO;
@@ -83,6 +81,9 @@ public class OrcamentoService {
 		Long clienteId = cliente.getId();
 		cliente = usuarioService.get(clienteId);
 		FormaPagamento formaPagamento = orcamento.getFormaPagamento();
+		NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+		StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
+		String chaveAcesso = notaFiscal.getChaveAcesso();
 		List<ProdutoVO> vos = new ArrayList<>();
 		Set<OrcamentoProduto> orcamentoProdutos = orcamento.getOrcamentoProdutos();
 		for(OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
@@ -119,6 +120,8 @@ public class OrcamentoService {
 		model.put("garantia", DummyUtils.formatDate(DateUtils.addDays(date, 3)));
 		model.put("formaPagamento", StringEscapeUtils.escapeHtml4(messageService.getValue("FormaPagamento." + formaPagamento.name() + ".label")));
 		model.put("totalGeral", "R$ "+ DummyUtils.formatCurrency(DummyUtils.totalGeral(orcamentoProdutos)));
+		model.put("statusNotaFiscal", StringEscapeUtils.escapeHtml4(messageService.getValue("StatusNotaFiscal." + statusNotaFiscal.name() + ".label")));
+		model.put("chaveAcesso", chaveAcesso);
 
 		PDFCreator pdfCreator = new PDFCreator("/net/gnfe/pdf/orcamento.htm", model);
 		pdfCreator.setPortrait(true);
