@@ -14,6 +14,67 @@
 		<ui:define name="tituloPagina">#{msg['produtoCrud.titulo']}</ui:define>
 		<ui:define name="conteudo">
 			<gnfe:excluirModal id="excluirModal" metodoExcluir="#{produtoCrudBean.excluir()}"/>
+			<h:form id="form-movimentacao-produto">
+				<b:modal id="movimentacao-modal-id" title="#{msg['movimentarProduto.label']}" styleClass="movimentacao-modal" rendered="#{menuBean.podeEditar()}">
+					<b:row id="movimentacao-modal-content-id">
+						<div class="col-sm-12">
+							<b:messages globalOnly="true" showSummary="true"/>
+							<div class="form-group">
+								<h:outputLabel value="#{msg['produto.label']} *" for="produtos-id"/><br/>
+								<p:selectOneMenu id="produtos-id" style="height: 40px; width: auto; z-index: 9999;" value="#{produtoCrudBean.movimentacaoProdutoVO.produto}" label="#{msg['produto.label']}" required="true"
+												 filter="true" filterMatchMode="contains" appendTo="@this" rendered="true" styleClass="form-control bf-no-message has-success" converter="entity">
+									<f:selectItem itemValue="#{null}" itemLabel="#{msg['selecione.label']}"/>
+									<f:selectItems value="#{produtoCrudBean.produtos}" var="prod" itemValue="#{prod}" itemLabel="#{prod.nome}"/>
+									<f:ajax event="change" execute="produtos-id" render="produto-id"/>
+								</p:selectOneMenu>
+								<b:message/>
+							</div>
+							<div class="form-group">
+								<p:panelGrid columns="2" id="produto-id" class="col-sm-12">
+									<f:facet name="header">
+										#{msg['descricao.label']}
+									</f:facet>
+
+									<h:outputText value="#{msg['nome.label']}:"/>
+									<h:outputText value="#{produtoCrudBean.movimentacaoProdutoVO.produto.nome}"/>
+
+									<h:outputText value="#{msg['valorUnidade.label']}:"/>
+									<h:outputText value="#{produtoCrudBean.movimentacaoProdutoVO.produto.valorUnidade}" style="font-weight: 700">
+										<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg['quantidadeEmEstoque.label']}:"/>
+									<h:outputText value="#{produtoCrudBean.movimentacaoProdutoVO.produto.estoqueAtual}"/>
+								</p:panelGrid>
+							</div>
+							<div class="form-group">
+								<h:outputLabel value="#{msg['isEntrada.label']} *" for="entrada-id"/>
+								<h:selectOneRadio id="entrada-id" value="#{produtoCrudBean.movimentacaoProdutoVO.entrada}"
+												  styleClass="radio-default" requiredMessage="true">
+									<f:selectItem itemValue="#{true}" itemLabel="#{msg['entrada.label']}"/>
+									<f:selectItem itemValue="#{false}" itemLabel="#{msg['saida.label']}"/>
+								</h:selectOneRadio>
+							</div>
+							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.movimentacaoProdutoVO.quantidade}" placeholder="#{msg['quantidade.label']}"
+											 label="#{msg['quantidade.label']}" renderLabel="true" styleClass="mask-number" required="true" />
+								<b:message/>
+							</div>
+						</div>
+						<h:panelGroup rendered="#{fecharModal}">
+							<script type="text/javascript">
+								$('.movimentacao-modal').modal('hide');
+							</script>
+						</h:panelGroup>
+					</b:row>
+
+					<f:facet name="footer">
+						<b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+						<p:commandButton value="#{msg['movimentarProduto.label']}" actionListener="#{produtoCrudBean.movimentarProduto()}"
+										 update="form-produto-list movimentacao-modal-content-id mensagensGlobaisGroup" styleClass="btn"/>
+					</f:facet>
+				</b:modal>
+			</h:form>
 			<h:form id="form-produto">
 				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
 					<b:row id="adicionar-modal-content-id">
@@ -196,6 +257,9 @@
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
+						<p:commandLink value="#{msg['movimentarProduto.label']}" onclick="openModal('movimentacao-modal')" class="btn btn-primary btn-lg" style="float: left;" update="form-movimentacao-produto:movimentacao-modal-content-id" rendered="#{menuBean.podeEditar()}">
+							<f:setPropertyActionListener target="#{produtoCrudBean.movimentacaoProdutoVO}" value="#{null}" />
+						</p:commandLink>
 						<p:commandLink value="#{msg['adicionarProduto.label']}" onclick="openModal('adicionar-modal')" class="btn btn-primary btn-lg" style="float: right;" update="form-produto:adicionar-modal-content-id" rendered="#{menuBean.podeEditar()}">
 							<f:setPropertyActionListener target="#{produtoCrudBean.produto}" value="#{null}" />
 						</p:commandLink>

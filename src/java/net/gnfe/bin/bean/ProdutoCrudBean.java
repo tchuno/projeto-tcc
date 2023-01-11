@@ -16,11 +16,13 @@ import net.gnfe.util.DummyUtils;
 import net.gnfe.util.faces.AbstractBean;
 import org.apache.commons.io.FileUtils;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.SortOrder;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionListener;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Base64;
@@ -39,6 +41,8 @@ public class ProdutoCrudBean extends AbstractBean {
     private ProdutoFiltro filtro = new ProdutoFiltro();
     private Produto produto = new Produto();
     private List<Usuario> fornecedores;
+    private List<Produto> produtos;
+    private MovimentacaoProdutoVO movimentacaoProdutoVO;
 
     public void initBean() {
         dataModel = new ProdutoDataModel();
@@ -48,6 +52,14 @@ public class ProdutoCrudBean extends AbstractBean {
         UsuarioFiltro filtro = new UsuarioFiltro();
         filtro.setRoleGNFE(RoleGNFE.FUNCIONARIO);
         fornecedores = usuarioService.findByFiltro(filtro);
+
+        carregarProdutos();
+    }
+
+    private void carregarProdutos() {
+        ProdutoFiltro produtoFiltro = new ProdutoFiltro();
+        produtoFiltro.setOrdenar("produto.nome", SortOrder.ASCENDING);
+        produtos = service.findByFiltro(produtoFiltro);
     }
 
     public void salvar() {
@@ -66,6 +78,8 @@ public class ProdutoCrudBean extends AbstractBean {
                 movimentacaoProdutoService.movimentarProduto(vo);
             }
 
+            carregarProdutos();
+
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
         }
         catch (Exception e) {
@@ -79,6 +93,8 @@ public class ProdutoCrudBean extends AbstractBean {
 
         try {
             service.excluir(produtoId);
+
+            carregarProdutos();
 
             addMessage("registroExcluido.sucesso");
         }
@@ -151,6 +167,12 @@ public class ProdutoCrudBean extends AbstractBean {
         }
     }
 
+    public void movimentarProduto() {
+        movimentacaoProdutoService.movimentarProduto(movimentacaoProdutoVO);
+        setRequestAttribute("fecharModal", true);
+        addMessage("movimentacao.sucesso");
+    }
+
     public ProdutoDataModel getDataModel() {
         return dataModel;
     }
@@ -182,5 +204,23 @@ public class ProdutoCrudBean extends AbstractBean {
 
     public void setFornecedores(List<Usuario> fornecedores) {
         this.fornecedores = fornecedores;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public MovimentacaoProdutoVO getMovimentacaoProdutoVO() {
+        return movimentacaoProdutoVO;
+    }
+
+    public void setMovimentacaoProdutoVO(MovimentacaoProdutoVO movimentacaoProdutoVO) {
+        if(movimentacaoProdutoVO == null) {
+            movimentacaoProdutoVO = new MovimentacaoProdutoVO();
+            movimentacaoProdutoVO.setData(new Date());
+            movimentacaoProdutoVO.setMotivoMovimentacao(MotivoMovimentacao.MOVIMENTACAO_ESTOQUE);
+        }
+
+        this.movimentacaoProdutoVO = movimentacaoProdutoVO;
     }
 }
