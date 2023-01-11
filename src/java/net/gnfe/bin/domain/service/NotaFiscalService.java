@@ -21,8 +21,10 @@ import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
 import net.gnfe.bin.domain.repository.NotaFiscalRepository;
+import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.TotalNotaFiscalVO;
 import net.gnfe.bin.domain.vo.filtro.NotaFiscalFiltro;
 import net.gnfe.util.DummyUtils;
@@ -48,6 +50,7 @@ public class NotaFiscalService {
 
 	@Autowired private ParametroService parametroService;
 	@Autowired private NotaFiscalRepository notaFiscalRepository;
+	@Autowired private MovimentacaoProdutoService movimentacaoProdutoService;
 
 	public NotaFiscal get(Long id) {
 		return notaFiscalRepository.get(id);
@@ -209,6 +212,13 @@ public class NotaFiscalService {
 			notaFiscal.setDataEnvio(convertedDatetime);
 			notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.CONCLUIDO);
 			saveOrUpdate(notaFiscal);
+
+			MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
+			vo.setData(convertedDatetime);
+			vo.setOrcamento(orcamento);
+			vo.setMotivoMovimentacao(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA);
+			vo.setValorTotal(totalNotaFiscalVO.getValorTotal());
+			movimentacaoProdutoService.movimentarProduto(vo);
 
 		} catch (Exception e) {
 			notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.ERRO);

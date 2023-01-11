@@ -18,6 +18,7 @@
 		<mapping class="net.gnfe.bin.domain.entity.OrcamentoProduto" />
 		<mapping class="net.gnfe.bin.domain.entity.NotaFiscal" />
 		<mapping class="net.gnfe.bin.domain.entity.SessaoHttpRequest" />
+		<mapping class="net.gnfe.bin.domain.entity.MovimentacaoProduto" />
 
 	</session-factory>
 </hibernate-configuration>

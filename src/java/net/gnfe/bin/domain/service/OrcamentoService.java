@@ -81,10 +81,10 @@ public class OrcamentoService {
 		Long clienteId = cliente.getId();
 		cliente = usuarioService.get(clienteId);
 		FormaPagamento formaPagamento = orcamento.getFormaPagamento();
+		List<ProdutoVO> vos = new ArrayList<>();
 		NotaFiscal notaFiscal = orcamento.getNotaFiscal();
 		StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
 		String chaveAcesso = notaFiscal.getChaveAcesso();
-		List<ProdutoVO> vos = new ArrayList<>();
 		Set<OrcamentoProduto> orcamentoProdutos = orcamento.getOrcamentoProdutos();
 		for(OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
 			Produto produto = orcamentoProduto.getProduto();

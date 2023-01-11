@@ -157,8 +157,10 @@
 							<b:message/>
 						</div>
 						<div class="form-group">
-							<b:inputText value="#{customizacaoEditBean.map['TELEFONE_EMITENTE']}" maxlength="100"
-										 required="true" label="#{msg['telefoneEmitente.label']}"/>
+							<b:inputText value="#{customizacaoEditBean.map['TELEFONE_EMITENTE']}"
+										 required="true" label="#{msg['telefoneEmitente.label']}"
+										 maxlength="15"
+										 styleClass="mask-phone"/>
 							<b:message/>
 						</div>
 					</div>
@@ -201,7 +203,7 @@
 				<div class="col-sm-3"></div>
 				<div class="col-sm-6">
 					<div class="form-group" style="float: right; margin-left: 6px">
-						<p:commandButton value="#{msg['salvar.label']}" ajax="true" process="form" styleClass="btn" action="#{customizacaoEditBean.salvar}" />
+						<p:commandButton value="#{msg['salvar.label']}" ajax="true" process="form" update="form" styleClass="btn" action="#{customizacaoEditBean.salvar}" />
 					</div>
 					<div class="form-group" style="float: right;">
 						<p:commandButton value="#{msg['restaurarPadrao.label']}" styleClass="btn" action="#{customizacaoEditBean.restaurarPadrao}" />

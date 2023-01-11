@@ -11,7 +11,6 @@ create table usuario
     email                              varchar(100)         not null,
     telefone                           varchar(15),
     cpf_cnpj                           varchar(14),
-    rg                           varchar(15),
     endereco varchar(250),
     numero integer,
     bairro varchar(150),
@@ -29,7 +28,7 @@ create table usuario
     motivo_desativacao                 varchar(20),
     data_expiracao_bloqueio            timestamp,
     data_atualizacao                   timestamp            not null,
-	usuario_ultima_atualizacao_id      integer   
+    usuario_ultima_atualizacao_id      integer
         constraint usuario_fk1
             references usuario
             on delete set null
@@ -52,7 +51,7 @@ create table role
 
 create index role_idx1
     on role (usuario_id);
-	
+
 create table parametro
 (
     id    serial        not null
@@ -69,6 +68,7 @@ create table produto
             primary key,
     id_produto      varchar(100),
     cod             varchar(100),
+    nome            varchar(300),
     descricao       varchar(500),
     gtin            varchar(100),
     cnm             varchar(100),
@@ -78,10 +78,8 @@ create table produto
         constraint produto_fk1
             references usuario
             on delete set null,
-    unidade_medica  varchar(50),
-    estoque_minimo  integer,
     estoque_atual   integer,
-    nome            varchar(300),
+    estoque_minimo  integer,
     tempo_reposicao integer,
     unidade_medida  varchar(10),
     valor_unidade   bigint,
@@ -122,7 +120,8 @@ create table orcamento_produto
     produto_id integer
         constraint orcamento_produto_fk2
             references produto
-            on delete set null
+            on delete set null,
+    quantidade integer
 );
 
 create table nota_fiscal
@@ -153,3 +152,24 @@ create table sessao_http_request
     data       timestamp not null,
     ativa      boolean   not null
 );
+
+create table movimentacao_produto
+(
+    id            serial
+        constraint movimentacao_produto_pk
+            primary key,
+    data          timestamp,
+    orcamento_id  integer
+        constraint movimentacao_produto_fk1
+            references orcamento,
+    produto_id    integer
+        constraint movimentacao_produto_fk2
+            references produto,
+    quantidade    integer,
+    is_entrada    boolean not null,
+    motivo_movimentacao        varchar(50),
+    estoque_atual integer,
+    valor_total   numeric(15, 2)
+);
+
+insert into parametro (chave, valor) values ('COR_BARRA','e60008'), ('COR_FONTE_TITULO_BARRA','6b6b6b'), ('COR_MENU','ffffff'), ('COR_FONTE_MENU','ffffff'), ('COR_FONTE_MENU_SELECIONADO','000000'), ('TITULO','EGY');

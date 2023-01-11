@@ -37,8 +37,8 @@
 			<header class="navbar navbar-inverse navbar-fixed-top wet-asphalt" role="banner">
 				<div class="container containerLogo">
 					<div class="navbar-header">
-						<a class="navbar-brand logo2" href="#{request.contextPath}">
-							<IMG src="#{request.contextPath}/resources/images/logo-gnfe-transparent.png" style="opacity: 0.7;"/>
+						<a href="#{request.contextPath}/" class="link-logo">
+							#{utilBean.customizacao['TITULO']}
 						</a>
 					</div>
 				</div>
@@ -57,7 +57,18 @@
 		<h:panelGroup id="content-pg-id">
 			<div id="content">
 				<section class="container">
-					<b:messages globalOnly="true" showSummary="false"/>
+					<b:messages globalOnly="true" showSummary="true" id="mensagensGlobais"/>
+					<script type="text/javascript">
+						jQuery(function($) {
+							hideMessage(4000);
+							var mensagensGlobais = $('#mensagensGlobais');
+							if(mensagensGlobais.html()) {
+								$('html,body').animate({
+									scrollTop: mensagensGlobais.offset().top - 80
+								}, 500);
+							}
+						});
+					</script>
 					<section id="trocar-senha-page" class="container">
 						<div class="row">
 							<div class="col-sm-12">
@@ -71,7 +82,7 @@
 													#{trocaSenhaBean.login}
 												</div>
 												<div class="form-group">
-                                                	<b:alert severity="info">
+                                                	<b:alert severity="warning">
                                                   	  Sua senha deve ser composta por no mínimo 8 caracteres e conter ao menos 3 dos 4 itens abaixo:
                                                     	<ul>
                                                         	<li>letras maiúsculas</li>
@@ -93,8 +104,7 @@
 												<b:inputSecret value="#{trocaSenhaBean.senhaConfirm}" placeholder="#{msg['senhaConfirm.label']}"
 													label="#{msg['senhaConfirm.label']}" renderLabel="true"
 													maxlength="20"
-													required="true"
-													binding="#{trocaSenhaBean.senhaConfirmComponent}"/>
+													required="true"/>
 												<b:message/>
 											</div>
 											<div class="form-group" style="vertical-align: bottom;">

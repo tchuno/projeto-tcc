@@ -22,8 +22,6 @@ public class TrocaSenhaBean extends AbstractBean {
 	private String login;
 	private String novaSenha;
 	private String senhaConfirm;
-	private boolean emailEnviado;
-	private UIComponent senhaConfirmComponent;
 
 	public void securityCheck() { }
 
@@ -61,7 +59,7 @@ public class TrocaSenhaBean extends AbstractBean {
 			Date agora = new Date();
 			if(dataExpiracaoSenha == null || dataExpiracaoSenha.before(agora)) {
 
-				addMessageError("senhasExpiraca.error");
+				addMessage("senhasExpiraca.error");
 			}
 		}
 	}
@@ -81,10 +79,10 @@ public class TrocaSenhaBean extends AbstractBean {
 				redirect("/cadastros/usuarios/");
 				return;
 			} else if (usuario.isFuncionarioRole()) {
-				redirect("/consultas/dashboard/");
+				redirect("/cadastros/orcamentos/");
 				return;
 			} else {
-				redirect("/consultas/pagamento-multas/");
+				redirect( "/cadastros/orcamentos/");
 				return;
 			}
 		}
@@ -96,7 +94,7 @@ public class TrocaSenhaBean extends AbstractBean {
 
 		if(!StringUtils.equals(novaSenha, senhaConfirm)) {
 
-			addMessageErrorToComponent("senhasInconsistentes.error", senhaConfirmComponent.getClientId());
+			addMessageError("senhasInconsistentes.error");
 			return;
 		}
 
@@ -117,20 +115,6 @@ public class TrocaSenhaBean extends AbstractBean {
 			} else {
 				redirect( "/cadastros/orcamentos/");
 			}
-		}
-		catch (Exception e) {
-			addMessageError(e);
-		}
-	}
-
-	public void enviarRedefinicaoSenha() {
-
-		try {
-			Usuario usuario = usuarioService.enviarRedefinicaoSenha(login);
-			String email = usuario.getEmail();
-			setRequestAttribute("emailDestino", email);
-
-			emailEnviado = true;
 		}
 		catch (Exception e) {
 			addMessageError(e);
@@ -167,17 +151,5 @@ public class TrocaSenhaBean extends AbstractBean {
 
 	public void setSenhaConfirm(String senhaConfirm) {
 		this.senhaConfirm = senhaConfirm;
-	}
-
-	public boolean getEmailEnviado() {
-		return emailEnviado;
-	}
-
-	public UIComponent getSenhaConfirmComponent() {
-		return senhaConfirmComponent;
-	}
-
-	public void setSenhaConfirmComponent(UIComponent senhaConfirmComponent) {
-		this.senhaConfirmComponent = senhaConfirmComponent;
 	}
 }

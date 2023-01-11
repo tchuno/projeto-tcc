@@ -39,7 +39,6 @@ public class OrcamentoEditBean extends AbstractBean {
     private Long id;
     private Orcamento orcamento;
     private Usuario usuarioNovo;
-    private List<Usuario> clientes;
     private List<Produto> produtos;
     private OrcamentoProduto orcamentoProduto;
     private List<OrcamentoProduto> produtosSelecionados = new ArrayList<>();
@@ -58,10 +57,6 @@ public class OrcamentoEditBean extends AbstractBean {
         }
 
         usuarioNovo = new Usuario();
-
-        UsuarioFiltro filtro = new UsuarioFiltro();
-        filtro.setRoleGNFE(RoleGNFE.CLIENTE);
-        clientes = usuarioService.findByFiltro(filtro);
 
         ProdutoFiltro produtoFiltro = new ProdutoFiltro();
         produtoFiltro.setOrdenar("produto.nome", SortOrder.ASCENDING);
@@ -112,9 +107,7 @@ public class OrcamentoEditBean extends AbstractBean {
         Usuario usuarioLogado = getUsuarioLogado();
         usuarioNovo.setRoleGNFE(RoleGNFE.CLIENTE);
         usuarioService.saveOrUpdate(usuarioNovo, usuarioLogado);
-        UsuarioFiltro filtro = new UsuarioFiltro();
-        filtro.setRoleGNFE(RoleGNFE.CLIENTE);
-        clientes = usuarioService.findByFiltro(filtro);
+
         orcamento.setCliente(usuarioNovo);
     }
 
@@ -142,14 +135,6 @@ public class OrcamentoEditBean extends AbstractBean {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Usuario> getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(List<Usuario> clientes) {
-        this.clientes = clientes;
     }
 
     public List<Produto> getProdutos() {
@@ -191,6 +176,12 @@ public class OrcamentoEditBean extends AbstractBean {
     public void enviarNotaFiscal() {
 
         try {
+            boolean insert = isInsert(orcamento);
+            if(insert) {
+                addMessageWarn("salvarAntesEmitirNota.label");
+                return;
+            }
+
             NotaFiscal notaFiscal = orcamento.getNotaFiscal();
             notaFiscalService.enviarNotaFiscal(notaFiscal);
 
@@ -217,8 +208,10 @@ public class OrcamentoEditBean extends AbstractBean {
         return usuarioService.findClienteAutoComplete(search);
     }
 
-    public boolean podeEnviarNotaFiscal (StatusNotaFiscal statusNotaFiscal) {
-        if(Arrays.asList(StatusNotaFiscal.CONCLUIDO, StatusNotaFiscal.PROCESSANDO, StatusNotaFiscal.CANCELADO).contains(statusNotaFiscal)){
+    public boolean podeEnviarNotaFiscal() {
+        NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+        StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
+        if(Arrays.asList(StatusNotaFiscal.CONCLUIDO, StatusNotaFiscal.CANCELADO, StatusNotaFiscal.PROCESSANDO).contains(statusNotaFiscal)) {
             return false;
         }
         return true;

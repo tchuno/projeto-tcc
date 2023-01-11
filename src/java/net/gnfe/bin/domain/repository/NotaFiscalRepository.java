@@ -86,7 +86,7 @@ public class NotaFiscalRepository extends HibernateRepository<NotaFiscal> {
 		}
 
 		if(orcamentoId != null) {
-			hql.append(" and u.orcamento.id > :orcamentoId ");
+			hql.append(" and u.orcamento.id = :orcamentoId ");
 			params.put("orcamentoId", orcamentoId);
 		}
 

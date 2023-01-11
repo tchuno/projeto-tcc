@@ -30,7 +30,6 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 	private String email;
 	private String telefone;
 	private String cpfCnpj;
-	private String rg;
 	private String endereco;
 	private Integer numero;
 	private String bairro;
@@ -118,15 +117,6 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 
 	public void setCpfCnpj(String cpfCnpj) {
 		this.cpfCnpj = DummyUtils.getCpfCnpjDesformatado(cpfCnpj);
-	}
-
-	@Column(name="RG", length=15)
-	public String getRg() {
-		return rg;
-	}
-
-	public void setRg(String rg) {
-		this.rg = rg;
 	}
 
 	@Column(name="ENDERECO", length=250)
@@ -478,7 +468,7 @@ public class Usuario extends net.gnfe.util.ddd.Entity implements HttpSessionBind
 	}
 
 	@Transient
-	public boolean isCondutorRole() {
+	public boolean isClienteRole() {
 		RoleGNFE roleGNFE = getRoleGNFE();
 		return RoleGNFE.CLIENTE.equals(roleGNFE);
 	}

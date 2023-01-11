@@ -177,17 +177,17 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		}
 
 		if(valorUnidade != null) {
-			hql.append(" and u.valorUnidade => :valorUnidade ");
+			hql.append(" and u.valorUnidade >= :valorUnidade ");
 			params.put("valorUnidade", valorUnidade);
 		}
 
 		if(tempoReposicao != null) {
-			hql.append(" and u.tempoReposicao => :tempoReposicao ");
+			hql.append(" and u.tempoReposicao >= :tempoReposicao ");
 			params.put("tempoReposicao", tempoReposicao);
 		}
 
 		if(valorUnidade != null) {
-			hql.append(" and u.estoqueMinimo => :estoqueMinimo ");
+			hql.append(" and u.estoqueMinimo >= :estoqueMinimo ");
 			params.put("estoqueMinimo", estoqueMinimo);
 		}
 
