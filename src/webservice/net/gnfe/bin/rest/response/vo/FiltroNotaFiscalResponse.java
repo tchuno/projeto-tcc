@@ -33,6 +33,15 @@ public class FiltroNotaFiscalResponse {
     @ApiModelProperty(notes = "XML Completo.")
     private String xml;
 
+    @ApiModelProperty(notes = "Data de Cancelamento.")
+    private Date dataCancelamento;
+
+    @ApiModelProperty(notes = "Protocolo de Cancelamento.")
+    private String protocoloCancelamento;
+
+    @ApiModelProperty(notes = "XML Completo Cancelamento.")
+    private String xmlCancelamento;
+
     public FiltroNotaFiscalResponse() {
     }
 
@@ -44,6 +53,9 @@ public class FiltroNotaFiscalResponse {
         this.chaveAcesso = notaFiscal.getChaveAcesso();
         this.protocolo = notaFiscal.getProtocolo();
         this.xml = notaFiscal.getXml();
+        this.dataCancelamento = notaFiscal.getDataCancelamento();
+        this.protocoloCancelamento = notaFiscal.getProtocoloCancelamento();
+        this.xmlCancelamento = notaFiscal.getXmlCancelamento();
     }
 
     public Long getId() {
@@ -72,5 +84,17 @@ public class FiltroNotaFiscalResponse {
 
     public String getXml() {
         return xml;
+    }
+
+    public Date getDataCancelamento() {
+        return dataCancelamento;
+    }
+
+    public String getProtocoloCancelamento() {
+        return protocoloCancelamento;
+    }
+
+    public String getXmlCancelamento() {
+        return xmlCancelamento;
     }
 }

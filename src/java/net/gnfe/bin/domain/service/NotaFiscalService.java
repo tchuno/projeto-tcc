@@ -544,7 +544,7 @@ public class NotaFiscalService {
 			MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
 
 			Orcamento orcamento = notaFiscal.getOrcamento();
-			Date dataTypeDate = Date.from(data.toInstant(ZoneOffset.UTC));
+			Date dataTypeDate = Date.from(data.atZone(ZoneId.systemDefault()).toInstant());
 
 			vo.setData(dataTypeDate);
 			vo.setOrcamento(orcamento);

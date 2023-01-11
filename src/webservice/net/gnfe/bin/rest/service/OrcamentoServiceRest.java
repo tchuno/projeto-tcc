@@ -94,10 +94,20 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         return orcamentoNovo;
     }
 
-    public FiltroNotaFiscalResponse emitirNotaFiscal(Usuario usuario, Long notaFiscalId) throws Exception {
+    public FiltroNotaFiscalResponse emitirNotaFiscal(Usuario usuario, Long orcamentoId) throws Exception {
 
-        NotaFiscal notaFiscal = notaFiscalService.get(notaFiscalId);
+        Orcamento orcamento = orcamentoService.get(orcamentoId);
+        NotaFiscal notaFiscal = orcamento.getNotaFiscal();
         notaFiscalService.enviarNotaFiscal(notaFiscal);
+
+        return new FiltroNotaFiscalResponse(notaFiscal);
+    }
+
+    public FiltroNotaFiscalResponse cancelarNotaFiscal(Usuario usuario, Long orcamentoId) throws Exception {
+
+        Orcamento orcamento = orcamentoService.get(orcamentoId);
+        NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+        notaFiscalService.cancelarNotaFiscal(notaFiscal);
 
         return new FiltroNotaFiscalResponse(notaFiscal);
     }

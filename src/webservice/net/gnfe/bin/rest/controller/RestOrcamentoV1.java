@@ -60,16 +60,30 @@ public class RestOrcamentoV1 extends SuperController {
     }
 
     @RequestMapping(
-            path = "/emitir-nota-fiscal/{notaFiscalId}",
+            path = "/enviar-nota-fiscal/{orcamentoId}",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(
             value = "Solicitação de emissão de nota fiscal.",
             response = FiltroNotaFiscalResponse.class
     )
-    public ResponseEntity emitirNotaFiscal(HttpServletRequest request, @PathVariable Long notaFiscalId) throws Exception {
+    public ResponseEntity enviarNotaFiscal(HttpServletRequest request, @PathVariable Long orcamentoId) throws Exception {
         SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
-        FiltroNotaFiscalResponse filtroNotaFiscalResponse = orcamentoServiceRest.emitirNotaFiscal(sessaoHttpRequest.getUsuario(), notaFiscalId);
+        FiltroNotaFiscalResponse filtroNotaFiscalResponse = orcamentoServiceRest.emitirNotaFiscal(sessaoHttpRequest.getUsuario(), orcamentoId);
+        return new ResponseEntity(filtroNotaFiscalResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            path = "/cancelar-nota-fiscal/{orcamentoId}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(
+            value = "Solicitação de emissão de nota fiscal.",
+            response = FiltroNotaFiscalResponse.class
+    )
+    public ResponseEntity cancelarNotaFiscal(HttpServletRequest request, @PathVariable Long orcamentoId) throws Exception {
+        SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
+        FiltroNotaFiscalResponse filtroNotaFiscalResponse = orcamentoServiceRest.cancelarNotaFiscal(sessaoHttpRequest.getUsuario(), orcamentoId);
         return new ResponseEntity(filtroNotaFiscalResponse, HttpStatus.OK);
     }
 }
