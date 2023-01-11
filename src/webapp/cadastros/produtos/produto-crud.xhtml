@@ -79,7 +79,7 @@
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.estoqueAtual}" placeholder="#{msg['estoqueAtual.label']}"
-											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="true" />
+											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="true" disabled="#{produtoCrudBean.produto.id ne null}" />
 								<b:message/>
 							</div>
 							<div class="form-group">

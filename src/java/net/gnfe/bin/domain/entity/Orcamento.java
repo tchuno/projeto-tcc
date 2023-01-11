@@ -4,6 +4,7 @@ import net.gnfe.bin.domain.enumeration.Bandeira;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,6 +60,9 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 	}
 
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		if(!Arrays.asList(FormaPagamento.CARTAO_CREDITO, FormaPagamento.CARTAO_DEBITO).contains(formaPagamento)) {
+			this.bandeira = null;
+		}
 		this.formaPagamento = formaPagamento;
 	}
 

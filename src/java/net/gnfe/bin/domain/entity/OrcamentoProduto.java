@@ -52,6 +52,14 @@ public class OrcamentoProduto extends net.gnfe.util.ddd.Entity {
 		if(quantidade == null || quantidade == 0) {
 			quantidade = 1;
 		}
+
+		if(produto != null) {
+			Integer estoqueAtual = produto.getEstoqueAtual();
+			if (estoqueAtual != null && quantidade > estoqueAtual) {
+				quantidade = estoqueAtual;
+			}
+		}
+
 		this.quantidade = quantidade;
 	}
 }

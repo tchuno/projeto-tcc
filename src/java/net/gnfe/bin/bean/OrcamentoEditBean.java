@@ -72,11 +72,6 @@ public class OrcamentoEditBean extends AbstractBean {
             Usuario usuarioLogado = getUsuarioLogado();
             orcamento.setAutor(usuarioLogado);
 
-            FormaPagamento formaPagamento = orcamento.getFormaPagamento();
-            if(!Arrays.asList(FormaPagamento.CARTAO_CREDITO, FormaPagamento.CARTAO_DEBITO).contains(formaPagamento)) {
-                orcamento.setFormaPagamento(null);
-            }
-
             service.saveOrUpdate(orcamento);
 
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
@@ -172,7 +167,7 @@ public class OrcamentoEditBean extends AbstractBean {
         File file = service.gerarOrcamento(orcamento);
         try {
             FileInputStream fis = new FileInputStream(file);
-            Faces.sendFile(fis, "nota-fiscal.pdf", false);
+            Faces.sendFile(fis, "orcamento.pdf", false);
         }
         catch (Exception e1) {
             addMessageError(e1);
@@ -232,18 +227,12 @@ public class OrcamentoEditBean extends AbstractBean {
     public boolean podeEnviarNotaFiscal() {
         NotaFiscal notaFiscal = orcamento.getNotaFiscal();
         StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
-        if(Arrays.asList(StatusNotaFiscal.CONCLUIDO, StatusNotaFiscal.CANCELADO, StatusNotaFiscal.PROCESSANDO).contains(statusNotaFiscal)) {
-            return false;
-        }
-        return true;
+        return !Arrays.asList(StatusNotaFiscal.CONCLUIDO, StatusNotaFiscal.CANCELADO, StatusNotaFiscal.PROCESSANDO).contains(statusNotaFiscal);
     }
 
-    public boolean podeCancelar() {
+    public boolean podeCancelarNotaFiscal() {
         NotaFiscal notaFiscal = orcamento.getNotaFiscal();
         StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
-        if(StatusNotaFiscal.CONCLUIDO.equals(statusNotaFiscal)) {
-            return true;
-        }
-        return false;
+        return StatusNotaFiscal.CONCLUIDO.equals(statusNotaFiscal);
     }
 }

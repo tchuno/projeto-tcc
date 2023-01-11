@@ -113,6 +113,8 @@ public class MovimentacaoProdutoService {
 			}
 
 			saveOrUpdate(movimentacaoProduto);
+		} else {
+			saveOrUpdate(movimentacaoProduto);
 		}
 
 	}
@@ -136,6 +138,7 @@ public class MovimentacaoProdutoService {
 		movimentacao.setQuantidade(quantidade);
 		movimentacao.setMotivoMovimentacao(MotivoMovimentacao.MOVIMENTACAO_ESTOQUE);
 		movimentacao.setEstoqueAtual(estoqueAtual);
+		movimentacao.setProduto(produto);
 		saveOrUpdate(movimentacao);
 	}
 

@@ -134,11 +134,12 @@ create table nota_fiscal
             references orcamento
             on delete set null,
     data_criacao       timestamp,
-    status_nota_fiscal varchar(15),
     data_envio         timestamp,
+    status_nota_fiscal varchar(15),
     chave_acesso       varchar(44),
     protocolo varchar(30),
     xml                text,
+    data_cancelamento      timestamp,
     protocolo_cancelamento varchar(30),
     xml_cancelamento    text
 );

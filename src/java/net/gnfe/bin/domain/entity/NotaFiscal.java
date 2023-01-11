@@ -18,6 +18,7 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 	private String chaveAcesso;
 	private String protocolo;
 	private String xml;
+	private Date dataCancelamento;
 	private String protocoloCancelamento;
 	private String xmlCancelamento;
 
@@ -98,6 +99,16 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 
 	public void setXml(String xml) {
 		this.xml = xml;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="DATA_CANCELAMENTO")
+	public Date getDataCancelamento() {
+		return dataCancelamento;
+	}
+
+	public void setDataCancelamento(Date dataCancelamento) {
+		this.dataCancelamento = dataCancelamento;
 	}
 
 	@Column(name="PROTOCOLO_CANCELAMENTO")

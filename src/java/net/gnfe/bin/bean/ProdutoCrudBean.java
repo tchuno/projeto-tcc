@@ -4,9 +4,12 @@ import net.gnfe.bin.GNFEConstants;
 import net.gnfe.bin.bean.datamodel.ProdutoDataModel;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
+import net.gnfe.bin.domain.service.MovimentacaoProdutoService;
 import net.gnfe.bin.domain.service.ProdutoService;
 import net.gnfe.bin.domain.service.UsuarioService;
+import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
 import net.gnfe.util.DummyUtils;
@@ -21,6 +24,7 @@ import javax.faces.bean.ViewScoped;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean
@@ -28,6 +32,7 @@ import java.util.List;
 public class ProdutoCrudBean extends AbstractBean {
 
     @Autowired private ProdutoService service;
+    @Autowired private MovimentacaoProdutoService movimentacaoProdutoService;
     @Autowired private UsuarioService usuarioService;
 
     private ProdutoDataModel dataModel;
@@ -50,6 +55,16 @@ public class ProdutoCrudBean extends AbstractBean {
         try {
             boolean insert = isInsert(produto);
             service.saveOrUpdate(produto);
+
+            if(insert) {
+                MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
+                vo.setData(new Date());
+                vo.setMotivoMovimentacao(MotivoMovimentacao.CRIACAO_PRODUTO);
+                vo.setEntrada(true);
+                vo.setProduto(produto);
+                vo.setQuantidade(produto.getEstoqueAtual());
+                movimentacaoProdutoService.movimentarProduto(vo);
+            }
 
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
         }

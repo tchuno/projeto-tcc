@@ -196,7 +196,7 @@
 				<h4 class="tituloForm"><h:outputText value="#{msg['orcamentoForm.label']} / #{msg['statusNotaFiscal.label']}
 					#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? msg['StatusNotaFiscal.'.concat(orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal).concat('.label')] : 'Novo'}"/></h4>
 				<h5 class="tituloForm"><h:outputText value="#{msg['chaveAcesso.label']}:
-					#{orcamentoEditBean.orcamento.notaFiscal.chaveAcesso} / #{msg['dataEnvio.label']}: #{UtilBean.getDateTimeStr(orcamentoEditBean.orcamento.notaFiscal.dataEnvio)}" rendered="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' : false}"/></h5>
+					#{orcamentoEditBean.orcamento.notaFiscal.chaveAcesso} / #{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' ? msg['dataEnvio.label'] : msg['dataCancelamento.label']}: #{utilBean.getDateTimeStr(orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' ? orcamentoEditBean.orcamento.notaFiscal.dataEnvio : orcamentoEditBean.orcamento.notaFiscal.dataCancelamento)}" rendered="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal != null ? orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO' : false}"/></h5>
 				<div class="row">
 					<div class="col-sm-11">
 						<div class="form-group">
@@ -333,7 +333,7 @@
 						<div class="form-group">
 							<b:commandButton value="#{msg['salvar.label']}" style="float:left;" styleClass="btn btn-primary btn-lg" actionListener="#{orcamentoEditBean.salvar()}" ajax="true" update="content-pg-id" rendered="#{menuBean.podeEditar() and orcamentoEditBean.podeEnviarNotaFiscal()}"/>
 							<b:commandButton value="#{msg['enviarNotaFiscal.label']}" style="float:right; margin-left: 10px;"  styleClass="btn btn-primary btn-lg" update="content-pg-id" action="#{orcamentoEditBean.enviarNotaFiscal()}" rendered="#{menuBean.podeEditar() and orcamentoEditBean.podeEnviarNotaFiscal()}"/>
-							<b:commandButton value="#{msg['cancelarNotaFiscal.label']}" style="float:right; margin-left: 10px;"  styleClass="btn btn-primary btn-lg" update="content-pg-id" action="#{orcamentoEditBean.cancelarNotaFiscal()}" rendered="#{menuBean.podeEditar() and orcamentoEditBean.podeCancelar()}"/>
+							<b:commandButton value="#{msg['cancelarNotaFiscal.label']}" style="float:right; margin-left: 10px;"  styleClass="btn btn-primary btn-lg" update="content-pg-id" action="#{orcamentoEditBean.cancelarNotaFiscal()}" rendered="#{menuBean.podeEditar() and orcamentoEditBean.podeCancelarNotaFiscal()}"/>
 							<b:commandButton value="#{msg['gerarOrcamento.label']}" style="float:right;"  styleClass="btn btn-primary btn-lg" action="#{orcamentoEditBean.gerarOrcamento()}" rendered="#{menuBean.podeEditar()}"/>
 						</div>
 					</div>

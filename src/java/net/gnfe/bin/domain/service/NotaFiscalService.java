@@ -544,8 +544,9 @@ public class NotaFiscalService {
 			MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
 
 			Orcamento orcamento = notaFiscal.getOrcamento();
+			Date dataTypeDate = Date.from(data.toInstant(ZoneOffset.UTC));
 
-			vo.setData(Date.from(data.toInstant(ZoneOffset.UTC)));
+			vo.setData(dataTypeDate);
 			vo.setOrcamento(orcamento);
 			vo.setMotivoMovimentacao(MotivoMovimentacao.NOTA_FISCAL_CANCELADA);
 			vo.setEntrada(true);
@@ -553,6 +554,7 @@ public class NotaFiscalService {
 
 			notaFiscal.setXmlCancelamento(proc);
 			notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.CANCELADO);
+			notaFiscal.setDataCancelamento(dataTypeDate);
 			saveOrUpdate(notaFiscal);
 
 		} catch (Exception e) {
