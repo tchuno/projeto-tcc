@@ -134,11 +134,13 @@ create table nota_fiscal
             references orcamento
             on delete set null,
     data_criacao       timestamp,
+    status_nota_fiscal varchar(15),
+    data_envio         timestamp,
     chave_acesso       varchar(44),
     protocolo varchar(30),
     xml                text,
-    status_nota_fiscal varchar(15),
-    data_envio         timestamp
+    protocolo_cancelamento varchar(30),
+    xml_cancelamento    text
 );
 
 create unique index nota_fiscal_orcamento_id_uindex

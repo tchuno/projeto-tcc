@@ -5,12 +5,16 @@ import br.com.swconsultoria.certificado.CertificadoService;
 import br.com.swconsultoria.certificado.exception.CertificadoException;
 import br.com.swconsultoria.nfe.Nfe;
 import br.com.swconsultoria.nfe.dom.ConfiguracoesNfe;
+import br.com.swconsultoria.nfe.dom.Evento;
 import br.com.swconsultoria.nfe.dom.enuns.AmbienteEnum;
 import br.com.swconsultoria.nfe.dom.enuns.DocumentoEnum;
 import br.com.swconsultoria.nfe.dom.enuns.EstadosEnum;
 import br.com.swconsultoria.nfe.dom.enuns.StatusEnum;
 import br.com.swconsultoria.nfe.exception.NfeException;
+import br.com.swconsultoria.nfe.schema.envEventoCancNFe.TEnvEvento;
+import br.com.swconsultoria.nfe.schema.envEventoCancNFe.TRetEnvEvento;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.*;
+import br.com.swconsultoria.nfe.util.CancelamentoUtil;
 import br.com.swconsultoria.nfe.util.ChaveUtil;
 import br.com.swconsultoria.nfe.util.ConstantesUtil;
 import br.com.swconsultoria.nfe.util.RetornoUtil;
@@ -39,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,24 +94,30 @@ public class NotaFiscalService {
 		return notaFiscalRepository.countByFiltro(filtro);
 	}
 
+	private ConfiguracoesNfe iniciaConfiguracoes() throws FileNotFoundException, CertificadoException {
+		Map<String, String> customizacao = parametroService.getCustomizacao();
+
+		String caminhoCertificado = customizacao.get(ParametroService.P.CAMINHO_CERTIFICADO.name());
+		String senha = customizacao.get(ParametroService.P.SENHA.name());
+		String caminhoSchemas = customizacao.get(ParametroService.P.CAMINHO_SCHEMAS.name());
+		String ambiente = customizacao.get(ParametroService.P.AMBIENTE.name());
+
+		AmbienteEnum ambienteEnum = AmbienteEnum.HOMOLOGACAO;
+		if(ambiente.equals("PROD")){
+			ambienteEnum = AmbienteEnum.PRODUCAO;
+		}
+
+		Certificado certificado = CertificadoService.certificadoPfx(caminhoCertificado, senha);
+
+		return ConfiguracoesNfe.criarConfiguracoes(EstadosEnum.PR, ambienteEnum, certificado, caminhoSchemas);
+	}
+
 	public void enviarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
 
 		try {
 			Map<String, String> customizacao = parametroService.getCustomizacao();
 
-			String caminhoCertificado = customizacao.get(ParametroService.P.CAMINHO_CERTIFICADO.name());
-			String senha = customizacao.get(ParametroService.P.SENHA.name());
-			String caminhoSchemas = customizacao.get(ParametroService.P.CAMINHO_SCHEMAS.name());
-			String ambiente = customizacao.get(ParametroService.P.AMBIENTE.name());
-
-			AmbienteEnum ambienteEnum = AmbienteEnum.HOMOLOGACAO;
-			if(ambiente.equals("PROD")){
-				ambienteEnum = AmbienteEnum.PRODUCAO;
-			}
-
-			Certificado certificado = CertificadoService.certificadoPfx(caminhoCertificado, senha);
-
-			ConfiguracoesNfe config = ConfiguracoesNfe.criarConfiguracoes(EstadosEnum.PR, ambienteEnum, certificado, caminhoSchemas);
+			ConfiguracoesNfe config = iniciaConfiguracoes();
 
 			Long numeroNfe = notaFiscal.getId();
 			int numeroNfeInt = numeroNfe.intValue();
@@ -136,7 +147,7 @@ public class NotaFiscalService {
 			preencheEmitente(customizacao, config, cnpj, infNFe);
 
 			Orcamento orcamento = notaFiscal.getOrcamento();
-			preencheDestinatario(ambienteEnum, infNFe, orcamento);
+			preencheDestinatario(config.getAmbiente(), infNFe, orcamento);
 
 			TotalNotaFiscalVO totalNotaFiscalVO = preencheProdutos(infNFe, orcamento);
 
@@ -218,6 +229,7 @@ public class NotaFiscalService {
 			vo.setOrcamento(orcamento);
 			vo.setMotivoMovimentacao(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA);
 			vo.setValorTotal(totalNotaFiscalVO.getValorTotal());
+			vo.setEntrada(false);
 			movimentacaoProdutoService.movimentarProduto(vo);
 
 		} catch (Exception e) {
@@ -478,4 +490,75 @@ public class NotaFiscalService {
 		infNFe.setInfRespTec(infRespTec);
 	}
 
+	public void cancelarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException {
+
+		try {
+
+			Map<String, String> customizacao = parametroService.getCustomizacao();
+
+			ConfiguracoesNfe config = iniciaConfiguracoes();
+
+			String chaveAcesso = notaFiscal.getChaveAcesso();
+			String protocolo = notaFiscal.getProtocolo();
+			String cnpj = customizacao.get(ParametroService.P.CNPJ.name());
+			LocalDateTime data = LocalDateTime.now();
+
+			//Agora o evento pode aceitar uma lista de cancelaemntos para envio em Lote.
+			//Para isso Foi criado o Objeto Cancela
+			Evento cancela = new Evento();
+			//Informe a chave da Nota a ser Cancelada
+			cancela.setChave(chaveAcesso);
+			//Informe o protocolo da Nota a ser Cancelada
+			cancela.setProtocolo(protocolo);
+			//Informe o CNPJ do emitente
+			cancela.setCnpj(DummyUtils.getCpfCnpjDesformatado(cnpj));
+			//Informe o Motivo do Cancelamento
+			cancela.setMotivo(MotivoMovimentacao.NOTA_FISCAL_CANCELADA.name());
+			//Informe a data do Cancelamento
+			cancela.setDataEvento(data);
+
+			//Monta o Evento de Cancelamento
+			TEnvEvento enviEvento = CancelamentoUtil.montaCancelamento(cancela, config);
+
+			//Envia o Evento de Cancelamento
+			TRetEnvEvento retorno = Nfe.cancelarNfe(config, enviEvento, true, DocumentoEnum.NFE);
+
+			//Valida o Retorno do Cancelamento
+			RetornoUtil.validaCancelamento(retorno);
+
+			//Resultado
+			System.out.println();
+			retorno.getRetEvento().forEach( resultado -> {
+				String protocoloCancelamento = resultado.getInfEvento().getNProt();
+				String statusCancelamento = resultado.getInfEvento().getCStat() + " - " + resultado.getInfEvento().getXMotivo();
+				System.out.println("# Chave: " + resultado.getInfEvento().getChNFe());
+				System.out.println("# Status: " + statusCancelamento);
+				System.out.println("# Protocolo: " + protocoloCancelamento);
+				notaFiscal.setProtocoloCancelamento(protocoloCancelamento);
+			});
+
+			//Cria ProcEvento de Cancelamento
+			String proc = CancelamentoUtil.criaProcEventoCancelamento(config, enviEvento, retorno.getRetEvento().get(0));
+			System.out.println("# ProcEvento : " + proc);
+
+			MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
+
+			Orcamento orcamento = notaFiscal.getOrcamento();
+
+			vo.setData(Date.from(data.toInstant(ZoneOffset.UTC)));
+			vo.setOrcamento(orcamento);
+			vo.setMotivoMovimentacao(MotivoMovimentacao.NOTA_FISCAL_CANCELADA);
+			vo.setEntrada(true);
+			movimentacaoProdutoService.movimentarProduto(vo);
+
+			notaFiscal.setXmlCancelamento(proc);
+			notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.CANCELADO);
+			saveOrUpdate(notaFiscal);
+
+		} catch (Exception e) {
+			System.err.println();
+			System.err.println("# Erro: "+e.getMessage());
+			throw e;
+		}
+	}
 }

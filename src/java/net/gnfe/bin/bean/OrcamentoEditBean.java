@@ -5,6 +5,7 @@ import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.enumeration.FormaPagamento;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
 import net.gnfe.bin.domain.service.NotaFiscalService;
@@ -12,7 +13,6 @@ import net.gnfe.bin.domain.service.OrcamentoService;
 import net.gnfe.bin.domain.service.ProdutoService;
 import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
-import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
 import net.gnfe.util.faces.AbstractBean;
 import org.omnifaces.util.Faces;
 import org.primefaces.model.SortOrder;
@@ -71,6 +71,12 @@ public class OrcamentoEditBean extends AbstractBean {
 
             Usuario usuarioLogado = getUsuarioLogado();
             orcamento.setAutor(usuarioLogado);
+
+            FormaPagamento formaPagamento = orcamento.getFormaPagamento();
+            if(!Arrays.asList(FormaPagamento.CARTAO_CREDITO, FormaPagamento.CARTAO_DEBITO).contains(formaPagamento)) {
+                orcamento.setFormaPagamento(null);
+            }
+
             service.saveOrUpdate(orcamento);
 
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
@@ -193,6 +199,21 @@ public class OrcamentoEditBean extends AbstractBean {
         }
     }
 
+    public void cancelarNotaFiscal() {
+
+        try {
+
+            NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+            notaFiscalService.cancelarNotaFiscal(notaFiscal);
+
+            addMessage("notaCancelada.sucesso");
+        }
+        catch (Exception e1) {
+            String message = e1.getMessage();
+            addMessageError("erroInesperado.error", message);
+        }
+    }
+
     public Usuario getUsuarioNovo() {
         return usuarioNovo;
     }
@@ -215,5 +236,14 @@ public class OrcamentoEditBean extends AbstractBean {
             return false;
         }
         return true;
+    }
+
+    public boolean podeCancelar() {
+        NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+        StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
+        if(StatusNotaFiscal.CONCLUIDO.equals(statusNotaFiscal)) {
+            return true;
+        }
+        return false;
     }
 }

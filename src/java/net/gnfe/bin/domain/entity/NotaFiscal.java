@@ -18,6 +18,8 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 	private String chaveAcesso;
 	private String protocolo;
 	private String xml;
+	private String protocoloCancelamento;
+	private String xmlCancelamento;
 
 	@Id
 	@Override
@@ -96,5 +98,23 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 
 	public void setXml(String xml) {
 		this.xml = xml;
+	}
+
+	@Column(name="PROTOCOLO_CANCELAMENTO")
+	public String getProtocoloCancelamento() {
+		return protocoloCancelamento;
+	}
+
+	public void setProtocoloCancelamento(String protocoloCancelamento) {
+		this.protocoloCancelamento = protocoloCancelamento;
+	}
+
+	@Column(name="XML_CANCELAMENTO")
+	public String getXmlCancelamento() {
+		return xmlCancelamento;
+	}
+
+	public void setXmlCancelamento(String xmlCancelamento) {
+		this.xmlCancelamento = xmlCancelamento;
 	}
 }

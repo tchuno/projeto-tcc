@@ -8,7 +8,6 @@ import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 import net.gnfe.bin.domain.repository.MovimentacaoProdutoRepository;
 import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
-import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.HibernateRepository;
 import net.gnfe.util.ddd.MessageKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,20 +74,26 @@ public class MovimentacaoProdutoService {
 			Set<OrcamentoProduto> orcamentoProdutos = orcamento.getOrcamentoProdutos();
 			for (OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
 				movimentarProduto(movimentacaoProduto, orcamentoProduto);
-
 			}
 
 
 		} else if (MotivoMovimentacao.NOTA_FISCAL_CANCELADA.equals(motivoMovimentacao)) {
 
-			saveOrUpdate(movimentacaoProduto);
-
+			BigDecimal valorTotal = new BigDecimal(0);
 			Orcamento orcamento = vo.getOrcamento();
 			Set<OrcamentoProduto> orcamentoProdutos = orcamento.getOrcamentoProdutos();
 			for (OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
+				Integer quantidade = orcamentoProduto.getQuantidade();
+				Produto produto = orcamentoProduto.getProduto();
+				BigDecimal valorUnidade = produto.getValorUnidade();
+				BigDecimal vProd = valorUnidade.multiply(new BigDecimal(quantidade));
+				valorTotal = valorTotal.add(vProd);
 				movimentarProduto(movimentacaoProduto, orcamentoProduto);
-				somarProdutoDoEstoque(orcamentoProduto);
 			}
+
+			movimentacaoProduto.setValorTotal(valorTotal);
+
+			saveOrUpdate(movimentacaoProduto);
 
 		} else if (MotivoMovimentacao.MOVIMENTACAO_ESTOQUE.equals(motivoMovimentacao)) {
 			boolean isEntrada = vo.isEntrada();
@@ -122,9 +127,9 @@ public class MovimentacaoProdutoService {
 
 		Integer estoqueAtual;
 		if(movimentacao.isEntrada()) {
-			estoqueAtual = subtrairProdutoDoEstoque(orcamentoProduto);
-		} else {
 			estoqueAtual = somarProdutoDoEstoque(orcamentoProduto);
+		} else {
+			estoqueAtual = subtrairProdutoDoEstoque(orcamentoProduto);
 		}
 
 		movimentacao.setValorTotal(vProd);
