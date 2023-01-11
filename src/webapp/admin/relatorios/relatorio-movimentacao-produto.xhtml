@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui">
+	<f:metadata>
+		<f:viewAction action="#{movimentacaoProdutoBean.init}" onPostback="false" if="#{utilBean.securityOk}"/>
+	</f:metadata>
+	<ui:composition template="/templates/navegacao.xhtml">
+		<ui:define name="tituloPagina">#{msg['movimentacaoProduto.titulo']}</ui:define>
+		<ui:define name="conteudo">
+			<h:form id="form">
+				<div class="row default-form">
+					<div class="col-sm-12">
+						<h4 class="tituloForm"><h:outputText value="#{msg['filtroForm.label']}"/></h4>
+						<div class="row">
+							<div class="col-sm-1" ></div>
+							<div class="col-sm-5">
+								<div class="form-group">
+									<h:outputLabel value="#{msg['periodo.label']}"/>
+									<b:panelGrid colSpans="1,5,1,5" style="margin-bottom: -20px; margin-left: 5px;">
+										<h:outputText value="#{msg['de.label']}"/>
+										<b:inputText id="dataInicioId" value="#{movimentacaoProdutoBean.filtro.dataInicio}" placeholder="dd/mm/aaaa" styleClass="mask-date"
+												label="#{msg['dataInicial.label']}" renderLabel="false" required="true">
+											<f:convertDateTime pattern="dd/MM/yyyy"/>
+											<f:facet name="append">
+												<i class="fa fa-calendar-o fa-12x14" />
+											</f:facet>
+										</b:inputText>
+										<h:outputText value="#{msg['ate.label']}"/>
+										<b:inputText id="dataFimId" value="#{movimentacaoProdutoBean.filtro.dataFim}" placeholder="dd/mm/aaaa" styleClass="mask-date"
+												label="#{msg['dataFinal.label']}" renderLabel="false" required="true">
+											<f:convertDateTime pattern="dd/MM/yyyy"/>
+											<f:facet name="append">
+												<i class="fa fa-calendar-o fa-12x14" />
+											</f:facet>
+										</b:inputText>
+									</b:panelGrid>
+									<b:message for="dataInicioId" showSummary="false"/>
+									<b:message for="dataFimId" showSummary="false"/>
+								</div>
+							</div>
+							<div class="col-sm-1"></div>
+						 </div>
+						 <div class="row">
+							<div class="col-sm-1"></div>
+							<div class="col-sm-10">
+								<div class="form-group" style="float: right;">
+									<b:commandButton id="buscarId" value="#{msg['buscar.label']}" styleClass="btn btn-primary btn-md"
+													 update="tabela-ID"/>
+									<b:commandButton id="exportarId" value="#{msg['exportar.label']}" styleClass="btn btn-primary btn-md"
+											style="margin-left: 10px" onclick="exportarInicio()" type="button" />
+								</div>
+							</div>
+							<div class="col-sm-1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row" >
+					<div class="col-sm-12">
+						<p:dataTable id="tabela-ID" var="mp" value="#{movimentacaoProdutoBean.dataModel}" rows="10" paginator="true" lazy="true"
+								paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
+								currentPageReportTemplate="Total: {totalRecords}" scrollable="false" emptyMessage="#{msg['emptyMessage.label']}"
+								paginatorPosition="bottom">
+							<p:column headerText="#{msg['registroId.label']}" style="text-align: center; width: 120px;">
+								<h:outputText value="#{mp.id}" />
+							</p:column>
+							<p:column headerText="#{msg['data.label']}" style="text-align: center; width: 120px;">
+								<h:outputText value="#{utilBean.getDateTimeStr(mp.data)}" />
+							</p:column>
+							<p:column headerText="#{msg['motivoMovimentacao.label']}" style="text-align: center; width: 120px;">
+								<h:outputText value="#{msg['MotivoMovimentacao.'.concat(mp.motivoMovimentacao.name()).concat('.label')]}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<p:remoteCommand name="exportar" actionListener="#{movimentacaoProdutoBean.exportar()}" oncomplete="verificarNoBean()" />
+				<p:remoteCommand name="verificarNoBean" actionListener="#{movimentacaoProdutoBean.verificar()}" oncomplete="verificar()"/>
+				<b:commandButton id="baixarId" value="#{msg['baixar.label']}" style="display:none" action="#{movimentacaoProdutoBean.baixar}"/>
+			</h:form>
+			<script type="text/javascript">
+
+				function exportarInicio() {
+					document.getElementById('form:buscarId').disabled = true;
+					document.getElementById('form:exportarId').disabled = true;
+					this.disabled = true;
+					waitingDialog.show('Aguarde...');
+					exportar();
+				}
+
+				function baixar() {
+					document.getElementById('form:baixarId').click();
+					document.getElementById('form:buscarId').disabled = false;
+					document.getElementById('form:exportarId').disabled = false;
+					waitingDialog.hide();
+				}
+
+				function verificar() {
+
+					var data = OmniFaces.Ajax.data;
+					var terminou = data.terminou;
+
+					if(terminou) {
+						baixar();
+					}
+					else if (terminou == false) {
+						setTimeout(verificarNoBean, 2000);
+					}
+				}
+
+			</script>
+		</ui:define>
+	</ui:composition>
+</html>

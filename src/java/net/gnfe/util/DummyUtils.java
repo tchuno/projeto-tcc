@@ -617,4 +617,14 @@ public abstract class DummyUtils {
 		format = format.replace(",", ".");
 		return format;
 	}
+
+	public static String getLogMemoria() {
+
+		Runtime runtime = Runtime.getRuntime();
+		long freeMemory = runtime.freeMemory();
+		long maxMemory = runtime.maxMemory();
+		long totalMemory = runtime.totalMemory();
+
+		return "usada: " + ((totalMemory - freeMemory) / 1024 / 1024) + "MB maxMemory: " + (maxMemory / 1024 / 1024) + "MB freeMemory: " + (freeMemory / 1024 / 1024) + "MB totalMemory: " + (totalMemory / 1024 / 1024) + "MB";
+	}
 }

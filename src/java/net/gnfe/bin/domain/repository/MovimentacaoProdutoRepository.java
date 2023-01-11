@@ -1,11 +1,8 @@
 package net.gnfe.bin.domain.repository;
 
 import net.gnfe.bin.domain.entity.MovimentacaoProduto;
-import net.gnfe.bin.domain.entity.NotaFiscal;
 import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
-import net.gnfe.bin.domain.vo.filtro.NotaFiscalFiltro;
 import net.gnfe.util.ddd.HibernateRepository;
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -58,13 +55,40 @@ public class MovimentacaoProdutoRepository extends HibernateRepository<Movimenta
 		return ((Number) query.uniqueResult()).intValue();
 	}
 
+	public List<Long> findIdsByFiltro(MovimentacaoProdutoFiltro filtro) {
+
+		StringBuilder hql = new StringBuilder();
+		hql.append(" select u.id from ").append(clazz.getName()).append(" u ");
+		Map<String, Object> params = makeQuery(filtro, hql);
+		hql.append("order by u.id");
+
+		Query query = createQuery(hql.toString(), params);
+		query.setFetchSize(100);
+		return query.list();
+	}
+
+	public List<MovimentacaoProduto> findByIds(List<Long> ids) {
+		StringBuilder hql = new StringBuilder();
+		Map<String, Object> params = new HashMap<>();
+		hql.append(getStartQuery());
+
+		hql.append(" where id in ( :ids ) ");
+		params.put("ids", ids);
+		hql.append(" order by data ");
+
+		Query query = createQuery(hql.toString(), params);
+		query.setFetchSize(500);
+
+		return query.list();
+	}
+
 	private Map<String, Object> makeQuery(MovimentacaoProdutoFiltro filtro, StringBuilder hql) {
 
 		Long id = filtro.getId();
 		List<Long> ids = filtro.getIds();
 		Long orcamentoId = filtro.getOrcamentoId();
 		Long produtoId = filtro.getProdutoId();
-		Date dataIncio = filtro.getDataIncio();
+		Date dataIncio = filtro.getDataInicio();
 		Date dataFim = filtro.getDataFim();
 
 

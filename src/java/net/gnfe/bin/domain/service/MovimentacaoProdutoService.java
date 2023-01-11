@@ -8,19 +8,33 @@ import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 import net.gnfe.bin.domain.repository.MovimentacaoProdutoRepository;
 import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
+import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.HibernateRepository;
 import net.gnfe.util.ddd.MessageKeyException;
+import net.gnfe.util.excel.ExcelFormat;
+import net.gnfe.util.excel.ExcelWriter;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Service
 public class MovimentacaoProdutoService {
 
+	@Autowired private SessionFactory sessionFactory;
 	@Autowired private MovimentacaoProdutoRepository movimentacaoProdutoRepository;
 	@Autowired private ProdutoService produtoService;
 
@@ -59,6 +73,14 @@ public class MovimentacaoProdutoService {
 
 	public int countByFiltro(MovimentacaoProdutoFiltro filtro) {
 		return movimentacaoProdutoRepository.countByFiltro(filtro);
+	}
+
+	public List<MovimentacaoProduto> findByIds(List<Long> ids) {
+		return movimentacaoProdutoRepository.findByIds(ids);
+	}
+
+	public List<Long> findIdsByFiltro(MovimentacaoProdutoFiltro filtro) {
+		return movimentacaoProdutoRepository.findIdsByFiltro(filtro);
 	}
 
 	public void movimentarProduto(MovimentacaoProdutoVO vo) {
@@ -164,6 +186,89 @@ public class MovimentacaoProdutoService {
 		produtoService.saveOrUpdate(produto);
 
 		return estoqueAtual;
+	}
+
+	public File render(MovimentacaoProdutoFiltro filtro) {
+
+		System.out.println("RelatorioGeralService.render()");
+		try {
+
+			String fileOrigemNome = "relatorio-geral.xlsx";
+
+			String extensao = DummyUtils.getExtensao(fileOrigemNome);
+
+			File fileOrigem = DummyUtils.getFileFromResource("/net/gnfe/excel/" + fileOrigemNome);
+
+			File file = File.createTempFile("relatorio-geral-", "." + extensao);
+			//file.deleteOnExit();
+			FileUtils.copyFile(fileOrigem, file);
+
+			ExcelWriter ew = new ExcelWriter();
+			ew.abrirArquivo(file);
+			Workbook workbook = ew.getWorkbook();
+			ExcelFormat ef = new ExcelFormat(workbook);
+			ew.setExcelFormat(ef);
+
+			Sheet sheet = workbook.getSheet("Movimentações");
+			renderRowsMovimentacao(sheet, ew, filtro);
+
+			file.delete();
+			File fileDestino = File.createTempFile("relatorio-geral", ".xlsx");
+			System.out.println("Criado arquivo temporario no destino: " + fileDestino.getAbsolutePath());
+			System.out.println("Temp File Name: " + fileDestino.getName());
+			//fileDestino.deleteOnExit();
+
+			FileOutputStream fos = new FileOutputStream(fileDestino);
+			workbook.write(fos);
+			workbook.close();
+
+			return fileDestino;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidFormatException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void renderRowsMovimentacao(Sheet sheet, ExcelWriter ew, MovimentacaoProdutoFiltro filtro) {
+
+		final List<Long> ids = findIdsByFiltro(filtro);
+
+		if(ids.isEmpty()){
+			return;
+		}
+
+		int rowNum = 1;
+		do {
+			List<Long> ids2 = new ArrayList<Long>();
+			for (int i = 0; i < 200 && !ids.isEmpty(); i++) {
+				Long id = ids.remove(0);
+				ids2.add(id);
+			}
+
+			List<MovimentacaoProduto> list = findByIds(ids2);
+
+			for (int i = 0; i < list.size(); i++) {
+
+				MovimentacaoProduto mp = list.get(i);
+
+				ew.criaLinha(sheet, rowNum++);
+				renderBody(ew, mp);
+
+			}
+
+			Session session = sessionFactory.getCurrentSession();
+			session.clear();
+		}
+		while (!ids.isEmpty());
+	}
+
+	private void renderBody(ExcelWriter ew, MovimentacaoProduto rg) {
+
+		Long id = rg.getId();
+		ew.escrever(id);
+
+
 	}
 
 }

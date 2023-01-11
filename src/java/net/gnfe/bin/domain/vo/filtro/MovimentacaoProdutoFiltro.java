@@ -9,7 +9,7 @@ public class MovimentacaoProdutoFiltro implements Cloneable {
 	private Long id;
 	private Long orcamentoId;
 	private Long produtoId;
-	private Date dataIncio;
+	private Date dataInicio;
 	private Date dataFim;
 
 	public List<Long> getIds() {
@@ -44,12 +44,12 @@ public class MovimentacaoProdutoFiltro implements Cloneable {
 		this.produtoId = produtoId;
 	}
 
-	public Date getDataIncio() {
-		return dataIncio;
+	public Date getDataInicio() {
+		return dataInicio;
 	}
 
-	public void setDataIncio(Date dataIncio) {
-		this.dataIncio = dataIncio;
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
 	}
 
 	public Date getDataFim() {

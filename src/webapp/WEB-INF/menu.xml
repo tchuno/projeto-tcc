@@ -17,7 +17,7 @@
 			</subItens>
 		</menu-item>
 
-		<menu-item id="CUSTOMIZACAO" url="/admin/relatorios/exemplo/" labelKey="menu-relatorios.label"/>
+		<menu-item id="CUSTOMIZACAO" url="/admin/relatorios/movimentacao-produto/" labelKey="menu-relatorios.label"/>
 
 		<menu-item id="CUSTOMIZACAO" url="/admin/customizacoes/" labelKey="menu-administracao.label"/>
 
