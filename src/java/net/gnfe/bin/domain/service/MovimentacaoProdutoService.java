@@ -1,10 +1,10 @@
 package net.gnfe.bin.domain.service;
 
-import net.gnfe.bin.domain.entity.MovimentacaoProduto;
-import net.gnfe.bin.domain.entity.Orcamento;
-import net.gnfe.bin.domain.entity.OrcamentoProduto;
-import net.gnfe.bin.domain.entity.Produto;
+import net.gnfe.bin.domain.entity.*;
+import net.gnfe.bin.domain.enumeration.Bandeira;
+import net.gnfe.bin.domain.enumeration.FormaPagamento;
 import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
+import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
 import net.gnfe.bin.domain.repository.MovimentacaoProdutoRepository;
 import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
@@ -28,15 +28,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Service
 public class MovimentacaoProdutoService {
 
-	@Autowired private SessionFactory sessionFactory;
 	@Autowired private MovimentacaoProdutoRepository movimentacaoProdutoRepository;
+	@Autowired private SessionFactory sessionFactory;
 	@Autowired private ProdutoService produtoService;
+	@Autowired private MessageService messageService;
 
 	public MovimentacaoProduto get(Long id) {
 		return movimentacaoProdutoRepository.get(id);
@@ -263,12 +265,86 @@ public class MovimentacaoProdutoService {
 		while (!ids.isEmpty());
 	}
 
-	private void renderBody(ExcelWriter ew, MovimentacaoProduto rg) {
+	private void renderBody(ExcelWriter ew, MovimentacaoProduto mp) {
 
-		Long id = rg.getId();
+		Long id = mp.getId();
 		ew.escrever(id);
 
+		Orcamento orcamento = mp.getOrcamento();
+		orcamento = orcamento == null ? new Orcamento() : orcamento;
+		Long orcamentoId = orcamento.getId();
+		ew.escrever(orcamentoId);
 
+		NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+		notaFiscal = notaFiscal == null ? new NotaFiscal() : notaFiscal;
+		Long notaFiscalId = notaFiscal.getId();
+		ew.escrever(notaFiscalId);
+
+		Produto produto = mp.getProduto();
+		produto = produto == null ? new Produto() : produto;
+		Long produtoId = produto.getId();
+		ew.escrever(produtoId);
+
+		Usuario autor = orcamento.getAutor();
+		autor = autor == null ? new Usuario() : autor;
+		String nomeAutor = autor.getNome();
+		ew.escrever(nomeAutor);
+
+		Usuario cliente = orcamento.getCliente();
+		cliente = cliente == null ? new Usuario() : cliente;
+		String clienteNome = cliente.getNome();
+		ew.escrever(clienteNome);
+
+		FormaPagamento formaPagamento = orcamento.getFormaPagamento();
+		ew.escrever(messageService.getValue("FormaPagamento." + (formaPagamento != null ? formaPagamento.name() : null) + ".label"));
+
+		Bandeira bandeira = orcamento.getBandeira();
+		ew.escrever(bandeira != null ? bandeira.name() : null);
+
+		Date dataCriacao = notaFiscal.getDataCriacao();
+		ew.escrever(DummyUtils.formatDateTime(dataCriacao));
+
+		StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
+		ew.escrever(messageService.getValue("StatusNotaFiscal." + (statusNotaFiscal != null ? statusNotaFiscal.name() : null) + ".label"));
+
+		Date dataEnvio = notaFiscal.getDataEnvio();
+		ew.escrever(DummyUtils.formatDateTime(dataEnvio));
+
+		Date dataCancelamento = notaFiscal.getDataCancelamento();
+		ew.escrever(DummyUtils.formatDateTime(dataCancelamento));
+
+		String chaveAcesso = notaFiscal.getChaveAcesso();
+		ew.escrever(chaveAcesso);
+
+		String protocolo = notaFiscal.getProtocolo();
+		ew.escrever(protocolo);
+
+		String protocoloCancelamento = notaFiscal.getProtocoloCancelamento();
+		ew.escrever(protocoloCancelamento);
+
+		String nomeProduto = produto.getNome();
+		ew.escrever(nomeProduto);
+
+		BigDecimal valorUnidade = produto.getValorUnidade();
+		ew.escrever(valorUnidade != null ? "R$ " + DummyUtils.formatCurrency(valorUnidade) : null);
+
+		Integer produtoEstoqueAtual = produto.getEstoqueAtual();
+		ew.escrever(produtoEstoqueAtual);
+
+		Date dataMovimentacao = mp.getData();
+		ew.escrever(DummyUtils.formatDateTime(dataMovimentacao));
+
+		MotivoMovimentacao motivoMovimentacao = mp.getMotivoMovimentacao();
+		ew.escrever(messageService.getValue("MotivoMovimentacao." + motivoMovimentacao.name() + ".label"));
+
+		boolean entrada = mp.isEntrada();
+		ew.escrever(entrada ? messageService.getValue("entrada.label") : messageService.getValue("saida.label"));
+
+		Integer estoqueAtual = mp.getEstoqueAtual();
+		ew.escrever(estoqueAtual);
+
+		BigDecimal valorTotal = mp.getValorTotal();
+		ew.escrever(valorTotal != null ? "R$ " + DummyUtils.formatCurrency(valorTotal) : null);
 	}
 
 }

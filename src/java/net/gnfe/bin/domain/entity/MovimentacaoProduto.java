@@ -41,6 +41,9 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 		this.valorTotal = movimentacaoProduto.getValorTotal();
 	}
 
+	public MovimentacaoProduto() {
+	}
+
 	@Id
 	@Override
 	@Column(name="ID", unique=true, nullable=false)

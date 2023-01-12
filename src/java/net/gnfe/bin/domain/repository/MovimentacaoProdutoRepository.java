@@ -88,7 +88,7 @@ public class MovimentacaoProdutoRepository extends HibernateRepository<Movimenta
 		List<Long> ids = filtro.getIds();
 		Long orcamentoId = filtro.getOrcamentoId();
 		Long produtoId = filtro.getProdutoId();
-		Date dataIncio = filtro.getDataInicio();
+		Date dataInicio = filtro.getDataInicio();
 		Date dataFim = filtro.getDataFim();
 
 
@@ -116,9 +116,9 @@ public class MovimentacaoProdutoRepository extends HibernateRepository<Movimenta
 			params.put("produtoId", produtoId);
 		}
 
-		if(dataIncio != null) {
-			hql.append(" and u.data >= :dataIncio ");
-			params.put("dataIncio", dataIncio);
+		if(dataInicio != null) {
+			hql.append(" and u.data >= :dataInicio ");
+			params.put("dataInicio", dataInicio);
 		}
 
 		if(dataFim != null) {
