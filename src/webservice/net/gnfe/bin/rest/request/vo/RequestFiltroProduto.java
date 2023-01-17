@@ -3,7 +3,7 @@ package net.gnfe.bin.rest.request.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "RequestFiltroUsuario")
+@ApiModel(value = "RequestFiltroProduto")
 public class RequestFiltroProduto {
 
     @ApiModelProperty(notes = "Código do produto.")
