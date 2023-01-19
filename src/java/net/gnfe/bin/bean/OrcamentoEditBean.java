@@ -75,6 +75,10 @@ public class OrcamentoEditBean extends AbstractBean {
             service.saveOrUpdate(orcamento);
 
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
+
+            if(insert) {
+                redirect("/cadastros/orcamentos/edit/" + orcamento.getId());
+            }
         }
         catch (Exception e) {
             addMessageError(e);
