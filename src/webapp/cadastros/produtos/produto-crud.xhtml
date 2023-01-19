@@ -149,8 +149,12 @@
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<b:inputText value="#{produtoCrudBean.produto.origemMercadoria}" placeholder="#{msg['origemMercadoria.label']}"
-											 label="#{msg['origemMercadoria.label']}" renderLabel="true" maxlength="1" styleClass="mask-number" required="true" />
+								<h:outputLabel value="#{msg['origemMercadoria.label']} *" styleClass="bf-no-message"/>
+								<h:selectOneMenu styleClass="form-control bf-no-message" value="#{produtoCrudBean.produto.origemMercadoria}" label="#{msg['origemMercadoria.label']}"
+												 converter="enumConverter" required="true">
+									<f:selectItem itemValue="" itemLabel=""/>
+									<f:selectItems value="#{utilBean.getValues('OrigemMercadoria')}" var="om" itemValue="#{om}" itemLabel="#{om.nome}"/>
+								</h:selectOneMenu>
 								<b:message/>
 							</div>
 							<div class="form-group">

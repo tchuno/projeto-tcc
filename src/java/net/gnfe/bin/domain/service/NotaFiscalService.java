@@ -254,7 +254,7 @@ public class NotaFiscalService {
 		ide.setTpNF("1");
 		ide.setIdDest("1");
 		ide.setCMunFG(customizacao.get(ParametroService.P.COD_MUNICIPIO.name()));
-		ide.setTpImp("3");
+		ide.setTpImp("1");
 		ide.setTpEmis(tipoEmissao);
 		ide.setCDV(cdv);
 		ide.setTpAmb(config.getAmbiente().getCodigo());
@@ -375,7 +375,7 @@ public class NotaFiscalService {
 			TNFe.InfNFe.Det.Imposto.ICMS icms = new TNFe.InfNFe.Det.Imposto.ICMS();
 
 			TNFe.InfNFe.Det.Imposto.ICMS.ICMS00 icms00 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS00();
-			icms00.setOrig(String.valueOf(produto.getOrigemMercadoria()));
+			icms00.setOrig(produto.getOrigemMercadoria().getTipo());
 			icms00.setCST("00");
 			icms00.setModBC("0");
 			icms00.setVBC(DummyUtils.formatarNumero(vProd, GNFEConstants.DECIMAL_FORMAT));
@@ -441,7 +441,7 @@ public class NotaFiscalService {
 		TNFe.InfNFe.Total.ICMSTot icmstot = new TNFe.InfNFe.Total.ICMSTot();
 		icmstot.setVBC(DummyUtils.formatarNumero(totalNotaFiscalVO.getValorTotal(), GNFEConstants.DECIMAL_FORMAT));
 
-		BigDecimal aliquotaICMS = new BigDecimal(7.00);
+		BigDecimal aliquotaICMS = new BigDecimal(BigInteger.ZERO);
 		BigDecimal valorICMS = totalNotaFiscalVO.getValorTotal().multiply(aliquotaICMS).divide(new BigDecimal(100));
 
 		icmstot.setVICMS(DummyUtils.formatarNumero(valorICMS, GNFEConstants.DECIMAL_FORMAT));

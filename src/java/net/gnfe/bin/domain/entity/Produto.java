@@ -1,5 +1,6 @@
 package net.gnfe.bin.domain.entity;
 
+import net.gnfe.bin.domain.enumeration.OrigemMercadoria;
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	private BigDecimal valorUnidade;
 	private Integer tempoReposicao;
 	private Integer estoqueMinimo;
-	private Integer origemMercadoria;
+	private OrigemMercadoria origemMercadoria;
 	private BigDecimal aliquotaICMS;
 	private BigDecimal aliquotaPIS;
 	private BigDecimal aliquotaCOFINS;
@@ -171,13 +172,13 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 		this.estoqueMinimo = estoqueMinimo;
 	}
 
-
+	@Enumerated(EnumType.STRING)
 	@Column(name="ORIGEM_MERCADORIA")
-	public Integer getOrigemMercadoria() {
+	public OrigemMercadoria getOrigemMercadoria() {
 		return origemMercadoria;
 	}
 
-	public void setOrigemMercadoria(Integer origemMercadoria) {
+	public void setOrigemMercadoria(OrigemMercadoria origemMercadoria) {
 		this.origemMercadoria = origemMercadoria;
 	}
 

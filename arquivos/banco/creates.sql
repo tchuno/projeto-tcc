@@ -83,7 +83,7 @@ create table produto
     tempo_reposicao integer,
     unidade_medida  varchar(10),
     valor_unidade   bigint,
-    origem_mercadoria  integer,
+    origem_mercadoria  varchar(10),
     aliquota_icms   bigint,
     aliquota_pis   bigint,
     aliquota_cofins   bigint,
