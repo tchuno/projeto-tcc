@@ -41,9 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -356,7 +356,7 @@ public class NotaFiscalService {
 
 			BigDecimal valorUnidade = produto.getValorUnidade();
 			BigDecimal vProd = valorUnidade.multiply(quantidade);
-			BigDecimal totalVProd = totalNotaFiscalVO.getvProd();
+			BigDecimal totalVProd = totalNotaFiscalVO.getValorTotal();
 			totalVProd = totalVProd.add(vProd);
 			totalNotaFiscalVO.setValorTotal(totalVProd);
 
@@ -382,6 +382,7 @@ public class NotaFiscalService {
 			icms00.setPICMS(DummyUtils.formatarNumero(produto.getAliquotaICMS(), GNFEConstants.DECIMAL_FORMAT));
 
 			BigDecimal aliquotaICMS = produto.getAliquotaICMS();
+			aliquotaICMS = aliquotaICMS == null ? new BigDecimal(BigInteger.ZERO) : aliquotaICMS;
 			BigDecimal valorICMS = vProd.multiply(aliquotaICMS).divide(new BigDecimal(100));
 
 			icms00.setVICMS(DummyUtils.formatarNumero(valorICMS, GNFEConstants.DECIMAL_FORMAT));
@@ -394,6 +395,7 @@ public class NotaFiscalService {
 			pisAliq.setPPIS(DummyUtils.formatarNumero(produto.getAliquotaPIS(), GNFEConstants.DECIMAL_FORMAT));
 
 			BigDecimal aliquotaPIS = produto.getAliquotaPIS();
+			aliquotaPIS = aliquotaPIS == null ? new BigDecimal(BigInteger.ZERO) : aliquotaPIS;
 			BigDecimal valorPIS = vProd.multiply(aliquotaPIS).divide(new BigDecimal(100));
 
 			pisAliq.setVPIS(DummyUtils.formatarNumero(valorPIS, GNFEConstants.DECIMAL_FORMAT));
@@ -410,6 +412,7 @@ public class NotaFiscalService {
 			cofinsAliq.setPCOFINS(DummyUtils.formatarNumero(produto.getAliquotaCOFINS(), GNFEConstants.DECIMAL_FORMAT));
 
 			BigDecimal aliquotaCOFINS = produto.getAliquotaCOFINS();
+			aliquotaCOFINS = aliquotaCOFINS == null ? new BigDecimal(BigInteger.ZERO) : aliquotaCOFINS;
 			BigDecimal valorCOFINS = vProd.multiply(aliquotaCOFINS).divide(new BigDecimal(100));
 
 			cofinsAliq.setVCOFINS(DummyUtils.formatarNumero(valorCOFINS, GNFEConstants.DECIMAL_FORMAT));

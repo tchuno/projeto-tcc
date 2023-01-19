@@ -611,6 +611,11 @@ public abstract class DummyUtils {
 	}
 
 	public static String formatarNumero(BigDecimal num, String pattern){
+
+		if(num == null) {
+			return null;
+		}
+
 		DecimalFormat formater = new DecimalFormat(pattern);
 		String format = formater.format(num);
 		format = format.replace(".", "");

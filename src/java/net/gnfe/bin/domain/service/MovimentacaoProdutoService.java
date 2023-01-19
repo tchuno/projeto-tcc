@@ -123,6 +123,7 @@ public class MovimentacaoProdutoService {
 			boolean isEntrada = vo.isEntrada();
 			Produto produto = vo.getProduto();
 			Integer emEstoque = produto.getEstoqueAtual();
+			emEstoque = emEstoque == null ? 0 : emEstoque;
 			Integer quantidade = vo.getQuantidade();
 			if(isEntrada) {
 				Integer estoqueAtual = emEstoque + quantidade;

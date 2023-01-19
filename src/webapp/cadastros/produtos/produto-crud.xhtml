@@ -112,7 +112,7 @@
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.cfop}" placeholder="#{msg['cfop.label']}"
-											 label="#{msg['cfop.label']}" renderLabel="true" maxlength="10" required="true" />
+											 label="#{msg['cfop.label']}" renderLabel="true" maxlength="10" styleClass="mask-number" required="true" />
 								<b:message/>
 							</div>
 							<div class="form-group">
@@ -288,7 +288,7 @@
 								<h:outputText value="#{produto.descricao}" />
 							</p:column>
 							<p:column headerText="#{msg['valorUnidade.label']}" style="text-align: center;" sortBy="#{produto.valorUnidade}">
-								<h:outputText value="#{produto.valorUnidade}" />
+								<h:outputText value="#{utilBean.formatNumber(produto.valorUnidade)}" />
 							</p:column>
 							<p:column headerText="#{msg['estoqueAtual.label']}" style="text-align: center;" sortBy="#{produto.estoqueAtual}">
 								<h:outputText value="#{produto.estoqueAtual}" />
