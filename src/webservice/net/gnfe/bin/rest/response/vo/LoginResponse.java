@@ -24,6 +24,9 @@ public class LoginResponse{
     @ApiModelProperty(value = "Data de expiração da Senha")
     private Date dataExpiracaoSenha;
 
+    @ApiModelProperty(value = "Token de acesso")
+    private String token;
+
     public LoginResponse() {
     }
 
@@ -38,6 +41,7 @@ public class LoginResponse{
             this.dataExpiracaoSenha = dataExpiracaoSenha;
         }
 
+        this.token = sessaoHttpRequest.getJsessionId();
     }
 
     public String getNome() {
@@ -67,4 +71,12 @@ public class LoginResponse{
     public Date getDataExpiracaoSenha() { return dataExpiracaoSenha; }
 
     public void setDataExpiracaoSenha(Date dataExpiracaoSenha) { this.dataExpiracaoSenha = dataExpiracaoSenha; }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

@@ -10,6 +10,7 @@ import net.gnfe.bin.rest.request.vo.RequestLogin;
 import net.gnfe.util.ddd.MessageKeyException;
 import net.gnfe.util.faces.AbstractBean;
 import net.gnfe.util.other.Criptografia;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +56,12 @@ public class SessaoHttpRequestService extends SuperServiceRest {
 
 		String sessionId = request.getRequestedSessionId();
 
-		if (!request.isRequestedSessionIdValid() || !request.isRequestedSessionIdFromCookie()) {
+		String header = request.getHeader("x-access-token");
+		if(StringUtils.isNotBlank(header)) {
+			sessionId = header;
+		}
+
+		if (StringUtils.isBlank(header) && (!request.isRequestedSessionIdValid() || !request.isRequestedSessionIdFromCookie())) {
 			throw new HTTP401Exception("http401.exception");
 		}
 
