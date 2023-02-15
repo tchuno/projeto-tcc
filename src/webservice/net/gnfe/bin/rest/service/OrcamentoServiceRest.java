@@ -13,17 +13,14 @@ import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.bin.domain.vo.filtro.OrcamentoFiltro;
 import net.gnfe.bin.rest.request.vo.RequestCadastrarOrcamento;
 import net.gnfe.bin.rest.request.vo.RequestFiltroOrcamento;
-import net.gnfe.bin.rest.response.vo.FiltroNotaFiscalResponse;
-import net.gnfe.bin.rest.response.vo.FiltroProdutoResponse;
-import net.gnfe.bin.rest.response.vo.ListaOrcamentoResponse;
-import net.gnfe.bin.rest.response.vo.OrcamentoResponse;
+import net.gnfe.bin.rest.response.vo.*;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Novo service criado para centralizar as operaçõs que hoje são feitas no Bean JSF.
@@ -52,6 +49,21 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         });
 
         return new ListaOrcamentoResponse(list);
+    }
+
+    public OrcamentoResponse consultarById(Usuario usuario, Long orcamentoId) {
+
+        OrcamentoFiltro filtro = new OrcamentoFiltro();
+        filtro.setId(orcamentoId);
+
+        List<Orcamento> orcamentos = orcamentoService.findByFiltro(filtro);
+
+        if(orcamentos != null && !orcamentos.isEmpty()) {
+            Orcamento orcamento = orcamentos.iterator().next();
+            return new OrcamentoResponse(orcamento);
+        }
+
+        return null;
     }
 
     public OrcamentoResponse cadastrar(Usuario usuario, RequestCadastrarOrcamento requestCadastrarOrcamento) {
@@ -110,5 +122,22 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         notaFiscalService.cancelarNotaFiscal(notaFiscal);
 
         return new FiltroNotaFiscalResponse(notaFiscal);
+    }
+
+    public ArquivoPDFResponse gerarPDF(Usuario usuario, Long orcamentoId) throws IOException {
+
+        Orcamento orcamento = orcamentoService.get(orcamentoId);
+        File file = orcamentoService.gerarOrcamento(orcamento);
+        String fileName = file.getName();
+        byte[] bytes = FileUtils.readFileToByteArray(file);
+
+        Base64.Encoder encoder = Base64.getEncoder();
+        String fileBase64 = encoder.encodeToString(bytes);
+
+        ArquivoPDFResponse arquivoPDFResponse = new ArquivoPDFResponse();
+        arquivoPDFResponse.setNomeArquivo(fileName);
+        arquivoPDFResponse.setBase64(fileBase64);
+
+        return arquivoPDFResponse;
     }
 }

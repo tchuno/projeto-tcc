@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import net.gnfe.bin.domain.entity.SessaoHttpRequest;
 import net.gnfe.bin.rest.request.vo.RequestCadastrarOrcamento;
 import net.gnfe.bin.rest.request.vo.RequestFiltroOrcamento;
+import net.gnfe.bin.rest.response.vo.ArquivoPDFResponse;
 import net.gnfe.bin.rest.response.vo.FiltroNotaFiscalResponse;
 import net.gnfe.bin.rest.response.vo.ListaOrcamentoResponse;
 import net.gnfe.bin.rest.response.vo.OrcamentoResponse;
@@ -43,6 +44,20 @@ public class RestOrcamentoV1 extends SuperController {
         SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
         ListaOrcamentoResponse listaOrcamentoResponse = orcamentoServiceRest.consultar(sessaoHttpRequest.getUsuario(), requestFiltroOrcamento);
         return new ResponseEntity(listaOrcamentoResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            path = "/buscar/{orcamentoId}",
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(
+            value = "Buscar orçamento pelo ID.",
+            response = OrcamentoResponse.class
+    )
+    public ResponseEntity buscarById(HttpServletRequest request, @PathVariable Long orcamentoId) {
+        SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
+        OrcamentoResponse orcamentoResponse = orcamentoServiceRest.consultarById(sessaoHttpRequest.getUsuario(), orcamentoId);
+        return new ResponseEntity(orcamentoResponse, orcamentoResponse == null ? HttpStatus.NO_CONTENT : HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -85,5 +100,19 @@ public class RestOrcamentoV1 extends SuperController {
         SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
         FiltroNotaFiscalResponse filtroNotaFiscalResponse = orcamentoServiceRest.cancelarNotaFiscal(sessaoHttpRequest.getUsuario(), orcamentoId);
         return new ResponseEntity(filtroNotaFiscalResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            path = "/gerar-pdf-base64/{orcamentoId}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(
+            value = "Solicitação de emissão PDF do orçamento em base64.",
+            response = ArquivoPDFResponse.class
+    )
+    public ResponseEntity gerarPDF(HttpServletRequest request, @PathVariable Long orcamentoId) throws Exception {
+        SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
+        ArquivoPDFResponse arquivoPDFResponse = orcamentoServiceRest.gerarPDF(sessaoHttpRequest.getUsuario(), orcamentoId);
+        return new ResponseEntity(arquivoPDFResponse, HttpStatus.OK);
     }
 }
