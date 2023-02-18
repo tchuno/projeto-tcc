@@ -14,6 +14,7 @@ import net.gnfe.bin.domain.vo.filtro.OrcamentoFiltro;
 import net.gnfe.bin.rest.request.vo.RequestCadastrarOrcamento;
 import net.gnfe.bin.rest.request.vo.RequestFiltroOrcamento;
 import net.gnfe.bin.rest.response.vo.*;
+import net.gnfe.util.DummyUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,6 +138,17 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         ArquivoPDFResponse arquivoPDFResponse = new ArquivoPDFResponse();
         arquivoPDFResponse.setNomeArquivo(fileName);
         arquivoPDFResponse.setBase64(fileBase64);
+
+        NotaFiscal notaFiscal = orcamento.getNotaFiscal();
+        if(notaFiscal != null) {
+            String xml = notaFiscal.getXml();
+            String base64Xml = DummyUtils.convertStringToBase64(xml);
+            arquivoPDFResponse.setBase64Xml(base64Xml);
+
+            String xmlCancelamento = notaFiscal.getXmlCancelamento();
+            String base64XmlCancelamento = DummyUtils.convertStringToBase64(xmlCancelamento);
+            arquivoPDFResponse.setBase64XmlCancelamento(base64XmlCancelamento);
+        }
 
         return arquivoPDFResponse;
     }

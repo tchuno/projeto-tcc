@@ -1,6 +1,7 @@
 package net.gnfe.util;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import net.gnfe.bin.GNFEConstants;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.util.ddd.Entity;
@@ -12,12 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -25,10 +21,7 @@ import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static net.gnfe.bin.GNFEConstants.LOCALE_PT_BR;
 
@@ -631,5 +624,18 @@ public abstract class DummyUtils {
 		long totalMemory = runtime.totalMemory();
 
 		return "usada: " + ((totalMemory - freeMemory) / 1024 / 1024) + "MB maxMemory: " + (maxMemory / 1024 / 1024) + "MB freeMemory: " + (freeMemory / 1024 / 1024) + "MB totalMemory: " + (totalMemory / 1024 / 1024) + "MB";
+	}
+
+	public static String convertStringToBase64(String input) {
+
+		if(StringUtils.isBlank(input)) {
+			return null;
+		}
+		byte[] bytes = input.getBytes();
+
+		Base64.Encoder encoder = Base64.getEncoder();
+		String fileBase64 = encoder.encodeToString(bytes);
+
+		return fileBase64;
 	}
 }

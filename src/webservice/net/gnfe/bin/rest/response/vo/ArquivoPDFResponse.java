@@ -14,6 +14,12 @@ public class ArquivoPDFResponse {
     @ApiModelProperty(notes = "Base64 do Arquivo PDF.")
     private String base64;
 
+    @ApiModelProperty(notes = "Base64 do Arquivo XML. Comprovante da nota fiscal.")
+    private String base64Xml;
+
+    @ApiModelProperty(notes = "Base64 do Arquivo XML. Comprovante de cancelamento da nota fiscal.")
+    private String base64XmlCancelamento;
+
     public ArquivoPDFResponse() {
     }
 
@@ -31,5 +37,21 @@ public class ArquivoPDFResponse {
 
     public void setBase64(String base64) {
         this.base64 = base64;
+    }
+
+    public String getBase64Xml() {
+        return base64Xml;
+    }
+
+    public void setBase64Xml(String base64Xml) {
+        this.base64Xml = base64Xml;
+    }
+
+    public String getBase64XmlCancelamento() {
+        return base64XmlCancelamento;
+    }
+
+    public void setBase64XmlCancelamento(String base64XmlCancelamento) {
+        this.base64XmlCancelamento = base64XmlCancelamento;
     }
 }
