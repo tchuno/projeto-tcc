@@ -5,7 +5,6 @@ import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
-import net.gnfe.bin.domain.enumeration.FormaPagamento;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
 import net.gnfe.bin.domain.service.NotaFiscalService;
@@ -205,7 +204,6 @@ public class OrcamentoEditBean extends AbstractBean {
             NotaFiscal notaFiscal = orcamento.getNotaFiscal();
             notaFiscalService.cancelarNotaFiscal(notaFiscal);
 
-            addMessage("notaCancelada.sucesso");
         }
         catch (Exception e1) {
             String message = e1.getMessage();
