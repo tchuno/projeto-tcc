@@ -48,7 +48,7 @@ public class RestOrcamentoV1 extends SuperController {
 
     @RequestMapping(
             path = "/buscar/{orcamentoId}",
-            method = RequestMethod.POST,
+            method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(
             value = "Buscar orçamento pelo ID.",
