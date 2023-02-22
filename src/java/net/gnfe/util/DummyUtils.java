@@ -1,26 +1,21 @@
 package net.gnfe.util;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import net.gnfe.bin.GNFEConstants;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
-import net.gnfe.util.ddd.Entity;
 import net.gnfe.util.ddd.MessageKeyException;
-import net.gnfe.util.rest.jackson.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jsoup.Jsoup;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.Normalizer;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 
 import static net.gnfe.bin.GNFEConstants.LOCALE_PT_BR;
@@ -52,10 +47,6 @@ public abstract class DummyUtils {
 		KILOBYTE_NF.setMaximumFractionDigits(0);
 
 		MEGABYTES_NF.setMaximumFractionDigits(2);
-	}
-
-	public static String getStackTrace(Exception e) {
-		return getStackTrace(e, 10000);
 	}
 
 	public static String getStackTrace(Exception e, int limit) {
@@ -236,14 +227,6 @@ public abstract class DummyUtils {
 		return cnpj.equals(cnpj.substring(0,12) + digito1.toString() + digito2.toString());
 	}
 
-	public static String getClassName(Entity obj) {
-
-		Class<?> clazz = obj.getClass();
-		String className = clazz.getName();
-		className = getClassName(className);
-		return className;
-	}
-
 	public static String getClassName(String className) {
 
 		if(className.contains("_$$_")) {
@@ -262,20 +245,6 @@ public abstract class DummyUtils {
 		String format = NumberFormat.getCurrencyInstance(LOCALE_PT_BR).format(bd.doubleValue());
 		format = format.substring(3);
 		return format;
-	}
-
-	public static String toMegabytes(long size) {
-
-		double mb = size / 1024d / 1024d;
-		String mbStr = NF.format(mb);
-		return mbStr;
-	}
-
-	public static String toKilobyte(long size) {
-
-		double mb = size / 1024d;
-		String mbStr = INTEGER_NF.format(mb);
-		return mbStr;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -310,36 +279,6 @@ public abstract class DummyUtils {
 		catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public static String getServerName() {
-
-		String server = System.getProperty("gnfe.servername");
-		if(StringUtils.isNotBlank(server)) {
-			return server;
-		}
-
-		try {
-			File file = new File("/etc/hostname");
-			if(file.exists()) {
-				FileReader fr = new FileReader(file);
-				BufferedReader br = new BufferedReader(fr);
-				server = br.readLine();
-				br.close();
-			}
-		}
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if(server == null) {
-			server = "localhost";
-		}
-
-		return server;
 	}
 
 	public static String formatDateTime2(Date data) {
@@ -379,18 +318,6 @@ public abstract class DummyUtils {
 		catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public static String toFileSize(long size) {
-		double d = size / 1024d / 1024d;
-		if((int) d > 0) {
-			return toMegabytes(size) + " MB";
-		}
-		d = size / 1024d;
-		if((int) d > 0) {
-			return toKilobyte(size) + " KB";
-		}
-		return size + " B";
 	}
 
 	public static <I, O> O convertTypes(I valor, Class<O> resultType) {
@@ -466,16 +393,6 @@ public abstract class DummyUtils {
 		}
 	}
 
-	public static <T> T jsonToObject(String jsonAsString, Class<T> clazz) {
-		if (StringUtils.isNotBlank(jsonAsString)) {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			T obj = mapper.readValue(jsonAsString, clazz);
-			return obj;
-		}
-		return null;
-	}
-
 	public static File getFileDestino(File dirDestino, String fileName) {
 
 		String extensao = DummyUtils.getExtensao(fileName);
@@ -534,22 +451,6 @@ public abstract class DummyUtils {
 		html = html.replaceAll("`%`", "\n");
 		html = html.replaceAll("\n[ \t]*", "\n");
 		return html;
-	}
-
-	public static String gerarSenha() {
-		int qtdeMaximaCaracteres = 8;
-		String[] caracteres = {"0", "1", "b", "2", "4", "5", "6", "7", "8",
-				"9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-				"l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w",
-				"x", "y", "z"};
-
-		StringBuilder senha = new StringBuilder();
-
-		for (int i = 0; i < qtdeMaximaCaracteres; i++) {
-			int posicao = (int) (Math.random() * caracteres.length);
-			senha.append(caracteres[posicao]);
-		}
-		return senha.toString();
 	}
 
 	public static File getFileFromResource(String path) {
