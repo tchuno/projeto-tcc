@@ -1,5 +1,7 @@
 package net.gnfe.bin.domain.service;
 
+import br.com.swconsultoria.certificado.exception.CertificadoException;
+import br.com.swconsultoria.nfe.exception.NfeException;
 import net.gnfe.bin.domain.entity.*;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
 import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
@@ -17,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.bind.JAXBException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +36,7 @@ public class OrcamentoService {
 	@Autowired private OrcamentoRepository orcamentoRepository;
 	@Autowired private MessageService messageService;
 	@Autowired private UsuarioService usuarioService;
+	@Autowired private NotaFiscalService notaFiscalService;
 
 	public Orcamento get(Long id) {
 		return orcamentoRepository.get(id);
@@ -128,5 +133,13 @@ public class OrcamentoService {
 		File pdf = pdfCreator.toFile();
 
 		return pdf;
+	}
+
+	public void enviarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
+		notaFiscalService.enviarNotaFiscal(notaFiscal);
+	}
+
+	public void cancelarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException {
+		notaFiscalService.cancelarNotaFiscal(notaFiscal);
 	}
 }
