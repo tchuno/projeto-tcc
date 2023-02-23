@@ -6,11 +6,7 @@ import net.gnfe.util.ddd.HibernateRepository;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @SuppressWarnings("unchecked")
@@ -26,13 +22,13 @@ public class SessaoHttpRequestRepository extends HibernateRepository<SessaoHttpR
 	}
 
 	public SessaoHttpRequest findByJSessionId(String sessionId) {
-		List<Object> params = new ArrayList<Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder();
 
-		hql.append(getStartQuery());
-		hql.append(" where JSESSIONID = ? and ATIVA = true ");
-		params.add(sessionId);
-		hql.append(" order by id desc ");
+		hql.append(" select s from ").append(clazz.getName()).append(" s ");
+		hql.append(" where s.jsessionId = :jsessionId and s.ativa = true ");
+		hql.append(" order by s.id desc ");
+		params.put("jsessionId", sessionId);
 
 		Query query = createQuery(hql.toString(), params);
 		query.setFirstResult(0);

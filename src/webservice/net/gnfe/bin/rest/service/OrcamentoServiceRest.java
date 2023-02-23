@@ -45,9 +45,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         List<Orcamento> orcamentos = orcamentoService.findByFiltro(filtro);
 
         List<OrcamentoResponse> list = new ArrayList<>();
-        orcamentos.forEach(o -> {
-            list.add(new OrcamentoResponse(o));
-        });
+        orcamentos.forEach(o -> list.add(new OrcamentoResponse(o)));
 
         return new ListaOrcamentoResponse(list);
     }
@@ -128,6 +126,9 @@ public class OrcamentoServiceRest extends SuperServiceRest {
     public ArquivoPDFResponse gerarPDF(Usuario usuario, Long orcamentoId) throws IOException {
 
         Orcamento orcamento = orcamentoService.get(orcamentoId);
+        Long usuarioId = usuario.getId();
+        usuario = usuarioService.get(usuarioId);
+        orcamento.setAutor(usuario);
         File file = orcamentoService.gerarOrcamento(orcamento);
         String fileName = file.getName();
         byte[] bytes = FileUtils.readFileToByteArray(file);
