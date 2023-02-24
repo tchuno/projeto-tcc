@@ -88,8 +88,19 @@ public class MovimentacaoProdutoRepository extends HibernateRepository<Movimenta
 		List<Long> ids = filtro.getIds();
 		Long orcamentoId = filtro.getOrcamentoId();
 		Long produtoId = filtro.getProdutoId();
+		Calendar calendar = Calendar.getInstance();
 		Date dataInicio = filtro.getDataInicio();
+		calendar.setTime(dataInicio);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		dataInicio = calendar.getTime();
 		Date dataFim = filtro.getDataFim();
+		calendar.setTime(dataFim);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		dataFim = calendar.getTime();
 
 
 		Map<String, Object> params = new HashMap<>();

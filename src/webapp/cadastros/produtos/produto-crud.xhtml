@@ -79,7 +79,6 @@
 				<b:modal id="adicionar-modal-id" title="#{msg['adicionarProduto.label']}" styleClass="adicionar-modal" rendered="#{menuBean.podeEditar()}">
 					<b:row id="adicionar-modal-content-id">
 						<div class="col-sm-12">
-							<b:messages globalOnly="true" showSummary="true"/>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.cod}" placeholder="#{msg['codigo.label']}"
 											 label="#{msg['codigo.label']}" renderLabel="true" maxlength="100" styleClass="mask-number" required="true" />
@@ -189,7 +188,7 @@
 										listener="#{produtoCrudBean.carregarImagemProduto}"/>
 								<b:message/>
 							</div>
-
+							<b:messages globalOnly="true" showSummary="true"/>
 						</div>
                         <script type="text/javascript">
 							jQuery(function($) {
@@ -200,7 +199,7 @@
 
 				    <f:facet name="footer">
 				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="form-produto-list adicionar-modal-content-id" styleClass="btn"/>
+				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="form-produto-list adicionar-modal-content-id" styleClass="btn" />
 				    </f:facet>
 				</b:modal>
 			</h:form>
@@ -252,7 +251,7 @@
 							<div class="col-sm-6 col-sm-offset-6 noMarginBottom">
 								<div style="float: right;">
 									<div class="form-group" style="float: left;">
-										<b:commandButton value="#{msg['buscar.label']}" styleClass="btn btn-primary btn-md" ajax="true" update="produto-list-id"/>
+										<b:commandButton value="#{msg['buscar.label']}" styleClass="btn btn-primary btn-md" update="produto-list-id"/>
 									</div>
 								</div>
 							</div>

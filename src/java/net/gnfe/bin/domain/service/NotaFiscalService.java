@@ -114,6 +114,8 @@ public class NotaFiscalService {
 
 	public void enviarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
 
+		validarDados(notaFiscal);
+
 		try {
 			Map<String, String> customizacao = parametroService.getCustomizacao();
 
@@ -238,6 +240,16 @@ public class NotaFiscalService {
 			System.err.println();
 			System.err.println("# Erro: " + e.getMessage());
 			throw e;
+		}
+	}
+
+	private void validarDados(NotaFiscal notaFiscal) {
+		Orcamento orcamento = notaFiscal.getOrcamento();
+		Usuario cliente = orcamento.getCliente();
+		Set<OrcamentoProduto> orcamentoProdutos = orcamento.getOrcamentoProdutos();
+
+		if(cliente == null || (orcamentoProdutos == null || orcamentoProdutos.isEmpty())) {
+			throw new MessageKeyException("Orçamento não foi preenchido corretamente, favor informar cliente e produto(s) antes de enviar a nota fiscal.");
 		}
 	}
 

@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 public class Produto extends net.gnfe.util.ddd.Entity {
 
 	private Long id;
-	private String idProduto;
 	private String cod;
 	private String nome;
 	private String descricao;
@@ -42,15 +41,6 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	@Column(name="ID_PRODUTO", length=100)
-	public String getIdProduto() {
-		return idProduto;
-	}
-
-	public void setIdProduto(String idProduto) {
-		this.idProduto = idProduto;
 	}
 
 	@Column(name="COD", length=100)

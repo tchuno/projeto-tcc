@@ -50,7 +50,7 @@ public class ProdutoCrudBean extends AbstractBean {
         dataModel.setFiltro(filtro);
 
         UsuarioFiltro filtro = new UsuarioFiltro();
-        filtro.setRoleGNFE(RoleGNFE.FUNCIONARIO);
+        filtro.setRoleGNFE(RoleGNFE.FORNECEDOR);
         fornecedores = usuarioService.findByFiltro(filtro);
 
         carregarProdutos();

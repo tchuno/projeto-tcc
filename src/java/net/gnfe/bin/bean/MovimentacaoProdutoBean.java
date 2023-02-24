@@ -2,8 +2,8 @@ package net.gnfe.bin.bean;
 
 import net.gnfe.bin.bean.datamodel.MovimentacaoProdutoDataModel;
 import net.gnfe.bin.domain.entity.Usuario;
-import net.gnfe.bin.domain.service.MovimentacaoProdutoService;
 import net.gnfe.bin.domain.service.MovimentacaoProdutoExporter;
+import net.gnfe.bin.domain.service.MovimentacaoProdutoService;
 import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
 import net.gnfe.util.DummyUtils;
 import net.gnfe.util.faces.AbstractBean;

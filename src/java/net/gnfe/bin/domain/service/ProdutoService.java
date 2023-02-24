@@ -248,7 +248,6 @@ public class ProdutoService {
 
 	private void criarOuAtualizarProduto(Produto produto, Map<String, String> map) {
 
-		String idProduto = map.get(CamposProduto.ID.getNome());
 		String codigo = map.get(CamposProduto.COD.getNome());
 		codigo = codigo.replace("\"", "");
 		String nome = map.get(CamposProduto.DESC.getNome());
@@ -266,7 +265,6 @@ public class ProdutoService {
 		valorUnidade = valorUnidade.replace(",", ".");
 		String estoqueMinimo = map.get(CamposProduto.ESTOQUE_MIN.getNome());
 
-		produto.setIdProduto(idProduto);
 		produto.setCod(codigo);
 		produto.setNome(nome);
 		produto.setDescricao(descricaoCurta);
