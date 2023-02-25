@@ -22,6 +22,7 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	private Integer estoqueAtual;
 	private UnidadeMedida unidadeMedida;
 	private BigDecimal valorUnidade;
+	private BigDecimal valorCompra;
 	private Integer tempoReposicao;
 	private Integer estoqueMinimo;
 	private OrigemMercadoria origemMercadoria;
@@ -142,6 +143,15 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 
 	public void setValorUnidade(BigDecimal valorUnidade) {
 		this.valorUnidade = valorUnidade;
+	}
+
+	@Column(name="VALOR_COMPRA")
+	public BigDecimal getValorCompra() {
+		return valorCompra;
+	}
+
+	public void setValorCompra(BigDecimal valorCompra) {
+		this.valorCompra = valorCompra;
 	}
 
 	@Column(name="TEMPO_REPOSICAO")

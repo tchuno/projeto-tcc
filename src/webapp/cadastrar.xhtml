@@ -116,7 +116,7 @@
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.telefone}"
                                                                      label="#{msg['telefone.label']}" renderLabel="true"
-                                                                     maxlength="15"
+                                                                     maxlength="15" required="true"
                                                                      styleClass="mask-phone" />
                                                         <b:message/>
                                                     </div>
@@ -127,7 +127,7 @@
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.cep}"
                                                                      label="#{msg['cep.label']}" renderLabel="true"
-                                                                     maxlength="15" id="cep"
+                                                                     maxlength="15" id="cep" required="true"
                                                                      styleClass="mask-cep" />
                                                         <b:message/>
                                                     </div>
@@ -137,7 +137,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.endereco}" id="rua"
-                                                                     label="#{msg['endereco.label']}" renderLabel="true" />
+                                                                     label="#{msg['endereco.label']}" renderLabel="true" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -145,7 +145,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <b:inputText value="#{usuarioEditBean.usuario.numero}"
+                                                        <b:inputText value="#{usuarioEditBean.usuario.numero}" required="true"
                                                                      label="#{msg['numero.label']}" renderLabel="true" styleClass="mask-number"/>
                                                         <b:message/>
                                                     </div>
@@ -155,7 +155,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.bairro}" id="bairro"
-                                                                     label="#{msg['bairro.label']}" renderLabel="true" />
+                                                                     label="#{msg['bairro.label']}" renderLabel="true" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -164,7 +164,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.cidade}" id="cidade"
-                                                                     label="#{msg['cidade.label']}" renderLabel="true" />
+                                                                     label="#{msg['cidade.label']}" renderLabel="true" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -173,7 +173,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.codIbge}" id="ibge"
-                                                                     label="#{msg['codIbge.label']}" renderLabel="true"/>
+                                                                     label="#{msg['codIbge.label']}" renderLabel="true" required="true"/>
                                                         <b:message/>
                                                     </div>
                                                 </div>
@@ -182,7 +182,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <b:inputText value="#{usuarioEditBean.usuario.estado}" id="estado"
-                                                                     label="#{msg['estado.label']}" renderLabel="true" />
+                                                                     label="#{msg['estado.label']}" renderLabel="true" required="true" />
                                                         <b:message/>
                                                     </div>
                                                 </div>

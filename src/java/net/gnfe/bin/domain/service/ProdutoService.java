@@ -105,7 +105,7 @@ public class ProdutoService {
 	}
 
 	@Transactional(rollbackFor=Exception.class)
-    public void iniciarProcessamentoDoArquivo(File file, Usuario usuario, String nomeOriginalFile) throws MessageKeyException {
+    public void iniciarProcessamentoDoArquivo(File file) throws MessageKeyException {
 		try {
 			List<String> cabecalho = criarCabecalho(file);
 

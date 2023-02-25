@@ -329,11 +329,16 @@ public class MovimentacaoProdutoService {
 		BigDecimal valorUnidade = produto.getValorUnidade();
 		ew.escrever(valorUnidade != null ? "R$ " + DummyUtils.formatCurrency(valorUnidade) : null);
 
+		BigDecimal valorCompra = produto.getValorCompra();
+		ew.escrever(valorCompra != null ? "R$ " + DummyUtils.formatCurrency(valorCompra) : null);
+
 		Integer produtoEstoqueAtual = produto.getEstoqueAtual();
 		ew.escrever(produtoEstoqueAtual);
 
 		Date dataMovimentacao = mp.getData();
-		ew.escrever(DummyUtils.formatDateTime(dataMovimentacao));
+		ew.escrever(DummyUtils.formatDate(dataMovimentacao));
+
+		ew.escrever(DummyUtils.formatTime(dataMovimentacao));
 
 		MotivoMovimentacao motivoMovimentacao = mp.getMotivoMovimentacao();
 		ew.escrever(messageService.getValue("MotivoMovimentacao." + motivoMovimentacao.name() + ".label"));

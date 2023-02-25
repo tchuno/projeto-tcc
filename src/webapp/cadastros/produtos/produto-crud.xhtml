@@ -138,6 +138,11 @@
 								<b:message/>
 							</div>
 							<div class="form-group">
+								<b:inputText value="#{produtoCrudBean.produto.valorCompra}" placeholder="#{msg['valorCompra.label']}"
+											 label="#{msg['valorCompra.label']}" renderLabel="true" styleClass="mask-money" required="true" />
+								<b:message/>
+							</div>
+							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.estoqueAtual}" placeholder="#{msg['estoqueAtual.label']}"
 											 label="#{msg['estoqueAtual.label']}" renderLabel="true" styleClass="mask-number" required="true" disabled="#{produtoCrudBean.produto.id ne null}" />
 								<b:message/>

@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ActionListener;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Base64;
@@ -125,7 +124,7 @@ public class ProdutoCrudBean extends AbstractBean {
 
                 Usuario usuario = getUsuarioLogado();
 
-                service.iniciarProcessamentoDoArquivo(fileDestino, usuario, fileName);
+                service.iniciarProcessamentoDoArquivo(fileDestino);
 
                 addMessage("importacao.sucesso");
             }

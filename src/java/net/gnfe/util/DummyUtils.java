@@ -35,6 +35,7 @@ public abstract class DummyUtils {
 	private static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
 	private static final String DATE_TIME_FORMAT_2 = "dd/MM/yyyy HH:mm:ss";
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
+	private static final String TIME_FORMAT = "HH:mm";
 
 	static {
 
@@ -291,6 +292,10 @@ public abstract class DummyUtils {
 
 	public static String formatDate(Date data) {
 		return format(data, new SimpleDateFormat(DATE_FORMAT));
+	}
+
+	public static String formatTime(Date data) {
+		return format(data, new SimpleDateFormat(TIME_FORMAT));
 	}
 
 	private static String format(Date data, SimpleDateFormat dateTimeFormat) {
