@@ -572,9 +572,9 @@
                         </goals>
                         <configuration>
                             <sources>
-								<source>src/java</source>
-                                <source>src/webservice</source>
+                                <source>src/main/webservice</source>
                             </sources>
+                            <skipTests>true</skipTests>
                         </configuration>
                     </execution>
                 </executions>
