@@ -58,10 +58,4 @@ public abstract class AbstractProcessor extends SpringJob implements Runnable {
 
 		return super.getException();
 	}
-
-/*	@Override
-	@Deprecated
-	public RuntimeException getException() {
-		return super.getException();
-	}*/
 }
