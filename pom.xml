@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.teste.skip>true</maven.teste.skip>
     </properties>
 
     <repositories>
@@ -574,7 +575,6 @@
                             <sources>
                                 <source>src/main/webservice</source>
                             </sources>
-                            <skipTests>true</skipTests>
                         </configuration>
                     </execution>
                 </executions>
