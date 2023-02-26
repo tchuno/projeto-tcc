@@ -252,14 +252,15 @@
             <version>3.0.1</version>
         </dependency>
 		
-		<!-- https://mvnrepository.com/artifact/javax.xml/jaxrpc -->
+        <!-- https://mvnrepository.com/artifact/javax.xml/jaxrpc-api -->
         <dependency>
             <groupId>javax.xml</groupId>
-            <artifactId>jaxrpc</artifactId>
+            <artifactId>jaxrpc-api</artifactId>
             <version>1.1</version>
         </dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
+
+
+        <!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
@@ -399,49 +400,49 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-expression -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 
 		
@@ -464,21 +465,21 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>5.2.22.RELEASE</version>
         </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-core -->
