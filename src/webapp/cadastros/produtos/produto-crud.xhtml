@@ -187,7 +187,7 @@
 										label="Escolher Arquivo"
 										mode="advanced" auto="true"
 										multiple="false"
-										allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+										accept=".jpg,.jpeg,.png,.gif"
 										sizeLimit="10000000"
 										update="@this nome-imagem-id"
 										listener="#{produtoCrudBean.carregarImagemProduto}"/>
@@ -217,14 +217,23 @@
 								<div class="col-sm-3"></div>
 								<div class="col-sm-6">
 									<div class="form-group">
+										<h:outputLabel value="Para realizar a importação utilize o modelo exportado dos produtos e salve em formato CSV:"/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3"></div>
+								<div class="col-sm-6">
+									<div class="form-group">
 										<p:fileUpload
 												label="Escolher Arquivo"
 												mode="advanced" auto="true"
 												multiple="false"
-												accept="csv"
+												accept=".csv"
 												sizeLimit="10000000"
-												update="importar-modal-content-id mensagensGlobais"
-												fileUploadListener="#{produtoCrudBean.uploadEvent}"/>
+												update="@this importar-modal-content-id form-produto-list"
+												listener="#{produtoCrudBean.importarArquivo}"/>
+										<b:message/>
 									</div>
 								</div>
 							</div>
@@ -256,7 +265,7 @@
 							<div class="col-sm-6 col-sm-offset-6 noMarginBottom">
 								<div style="float: right;">
 									<div class="form-group" style="float: left;">
-										<b:commandButton value="#{msg['buscar.label']}" styleClass="btn btn-primary btn-md" update="produto-list-id"/>
+										<b:commandButton value="#{msg['buscar.label']}" id="buscarId" styleClass="btn btn-primary btn-md" update="produto-list-id"/>
 									</div>
 								</div>
 							</div>
@@ -273,6 +282,8 @@
 						</p:commandLink>
 						<p:commandLink value="#{msg['importar.label']}" onclick="openModal('importar-modal')"
 									   class="btn btn-primary btn-lg" style="float: right; margin-right: 10px;" update="form-importacao:importar-modal-content-id" rendered="#{menuBean.podeEditar()}"/>
+						<b:commandButton id="exportarId" value="#{msg['exportar.label']}" styleClass="btn btn-primary btn-lg"
+										 style="float: right; margin-right: 10px" onclick="exportarInicio()" type="button" />
 					</div>
 				</div>
 				<div class="row">
@@ -312,7 +323,41 @@
 						</p:dataTable>
 					</div>
 				</div>
+				<p:remoteCommand name="exportar" actionListener="#{produtoCrudBean.exportar()}" oncomplete="verificarNoBean()" />
+				<p:remoteCommand name="verificarNoBean" actionListener="#{produtoCrudBean.verificar()}" oncomplete="verificar()"/>
+				<b:commandButton id="baixarId" value="#{msg['baixar.label']}" style="display:none" action="#{produtoCrudBean.baixar}"/>
 			</h:form>
+			<script type="text/javascript">
+
+				function exportarInicio() {
+					document.getElementById('form-produto-list:buscarId').disabled = true;
+					document.getElementById('form-produto-list:exportarId').disabled = true;
+					this.disabled = true;
+					waitingDialog.show('Aguarde...');
+					exportar();
+				}
+
+				function baixar() {
+					document.getElementById('form-produto-list:baixarId').click();
+					document.getElementById('form-produto-list:buscarId').disabled = false;
+					document.getElementById('form-produto-list:exportarId').disabled = false;
+					waitingDialog.hide();
+				}
+
+				function verificar() {
+
+					var data = OmniFaces.Ajax.data;
+					var terminou = data.terminou;
+
+					if(terminou) {
+						baixar();
+					}
+					else if (terminou == false) {
+						setTimeout(verificarNoBean, 2000);
+					}
+				}
+
+			</script>
 		</ui:define>
 	</ui:composition>
 </html>

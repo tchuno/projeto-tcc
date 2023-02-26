@@ -3,25 +3,28 @@ package net.gnfe.bin.domain.service;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.CamposProduto;
+import net.gnfe.bin.domain.enumeration.OrigemMercadoria;
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
 import net.gnfe.bin.domain.repository.ProdutoRepository;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.HibernateRepository;
 import net.gnfe.util.ddd.MessageKeyException;
+import net.gnfe.util.excel.ExcelFormat;
+import net.gnfe.util.excel.ExcelWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -36,6 +39,8 @@ import static java.util.Arrays.asList;
 public class ProdutoService {
 
 	@Autowired private ProdutoRepository produtoRepository;
+	@Autowired private UsuarioService usuarioService;
+	@Autowired private SessionFactory sessionFactory;
 
 	public Produto get(Long id) {
 		return produtoRepository.get(id);
@@ -74,6 +79,14 @@ public class ProdutoService {
 		return produtoRepository.countByFiltro(filtro);
 	}
 
+	public List<Produto> findByIds(List<Long> ids) {
+		return produtoRepository.findByIds(ids);
+	}
+
+	public List<Long> findIdsByFiltro(ProdutoFiltro filtro) {
+		return produtoRepository.findIdsByFiltro(filtro);
+	}
+
 	private BufferedReader getBufferedReader(File file) throws FileNotFoundException {
 		Charset charset =  StandardCharsets.UTF_8;
 		FileInputStream fis = new FileInputStream(file);
@@ -105,18 +118,13 @@ public class ProdutoService {
 	}
 
 	@Transactional(rollbackFor=Exception.class)
-    public void iniciarProcessamentoDoArquivo(File file) throws MessageKeyException {
-		try {
-			List<String> cabecalho = criarCabecalho(file);
+    public void iniciarProcessamentoDoArquivo(File file) throws Exception {
+		List<String> cabecalho = criarCabecalho(file);
+		DummyUtils.systrace("processando arquivo: " + file.getAbsolutePath());
+		processarArquivo(file, cabecalho);
+	}
 
-			DummyUtils.systrace("processando arquivo: " + file.getAbsolutePath());
-			processarArquivo(file, cabecalho);
-		} catch (MessageKeyException e) {
-			throw e;
-		}
-    }
-
-	private void processarArquivo(File file, List<String> cabecalho) {
+	private void processarArquivo(File file, List<String> cabecalho) throws Exception {
 
 		int i = 0;
 		try {
@@ -127,11 +135,11 @@ public class ProdutoService {
 			}
 		}
 		catch (Exception e) {
-			handleException(file, e, i);
+			throw e;
 		}
 	}
 
-	private List<Map<String, String>> criarMap(File file, List<String> cabecalhos) throws IOException {
+	private List<Map<String, String>> criarMap(File file, List<String> cabecalhos) throws Exception {
 
 		BufferedReader bufferedReader = getBufferedReader(file);
 		List<Map<String, String>> listMap = new ArrayList<>();
@@ -183,63 +191,34 @@ public class ProdutoService {
 		return listMap;
 	}
 
-	private void handleException(File file, Exception e, int idx) {
-		handleException(file, e, idx, true);
-	}
+	private void criarProdutos(List<Map<String, String>> maps) throws MessageKeyException {
 
-	private void handleException(File file, Exception e, int idx, boolean moveFile) {
-
-		DummyUtils.syserr("Erro inesperado" + e);
-		String parent = file.getParent();
-		String name = file.getName();
-		String name2 = "ERRO-idx" + idx + "-" + name;
-
+		int linha = 1;
 		try {
-			File logFile = new File(parent, name2 + ".log");
-			String stackTrace = ExceptionUtils.getStackTrace(e);
-			FileUtils.writeStringToFile(logFile, stackTrace, "UTF-8");
-
-			if(moveFile) {
-				File destFile = new File(parent, "ERRO-idx" + idx + "-" + name);
-				DummyUtils.systrace("tentando copiar " + file.getAbsolutePath() + " para " + destFile.getAbsolutePath());
-				FileUtils.moveFile(file, destFile);
-			}
-		} catch (IOException ex) {
-			DummyUtils.syserr("Erro inesperado" + ex);
-			throw new RuntimeException(ex);
-		}
-	}
-
-	private void criarProdutos(List<Map<String, String>> maps) throws Exception {
-
-		try {
-			int linha = 1;
 			for (Map<String, String> map : maps) {
 				DummyUtils.systrace("Importando Produto " + linha + " de " + maps.size());
 				criaProduto(map);
 				DummyUtils.sleep(400);
 				linha++;
 			}
-		} catch (MessageKeyException e) {
-			throw e;
+		} catch (Exception e) {
+			throw new MessageKeyException("linha.error", linha);
 		}
 		DummyUtils.systrace("FIM DA IMPORTACAO DO ARQUIVO");
 	}
 
-	private void criaProduto(Map<String, String> map) throws Exception {
+	private void criaProduto(Map<String, String> map) {
 		Produto produto = isCriarNovoProduto(map);
 		criarOuAtualizarProduto(produto, map);
 	}
 
-	private Produto isCriarNovoProduto(Map<String, String> map) throws MessageKeyException {
-		ProdutoFiltro filtro = new ProdutoFiltro();
+	private Produto isCriarNovoProduto(Map<String, String> map) {
 
-		String idProduto = map.get("ID");
+		String idProduto = map.get(CamposProduto.ID.getNome());
 		if(StringUtils.isNotBlank(idProduto)) {
-			filtro.setIdProduto(idProduto);
-			List<Produto> byFiltro = findByFiltro(filtro);
-			if(!byFiltro.isEmpty()) {
-				return byFiltro.get(0);
+			Produto produto = get(Long.valueOf(idProduto));
+			if(produto != null) {
+				return produto;
 			}
 		}
 
@@ -248,34 +227,182 @@ public class ProdutoService {
 
 	private void criarOuAtualizarProduto(Produto produto, Map<String, String> map) {
 
+		Long id = produto.getId();
+		boolean isInsert = id == null;
+
 		String codigo = map.get(CamposProduto.COD.getNome());
-		codigo = codigo.replace("\"", "");
-		String nome = map.get(CamposProduto.DESC.getNome());
-		nome = nome.replace("\"", "");
-		String descricaoCurta = map.get(CamposProduto.DESC_CURTA.getNome());
+		String nome = map.get(CamposProduto.NOME.getNome());
+		String desc = map.get(CamposProduto.DESC.getNome());
 		String gtin = map.get(CamposProduto.GTIN.getNome());
 		String cnm = map.get(CamposProduto.CNM.getNome());
 		String cest = map.get(CamposProduto.CEST.getNome());
-		String estoque = map.get(CamposProduto.ESTOQUE.getNome());
-		estoque = estoque.replace(".", "");
-		estoque = estoque.replace(",", "");
-		String unidadeMedida = map.get(CamposProduto.UNIDADE_MED.getNome());
-		String valorUnidade = map.get(CamposProduto.PRECO.getNome());
-		valorUnidade = valorUnidade.replace(".", "");
-		valorUnidade = valorUnidade.replace(",", ".");
-		String estoqueMinimo = map.get(CamposProduto.ESTOQUE_MIN.getNome());
+		String cfop = map.get(CamposProduto.CFOP.getNome());
+		String fornecedor = map.get(CamposProduto.FORNECEDOR.getNome());
+		String estoqueAtual = map.get(CamposProduto.ESTOQUE_ATUAL.getNome());
+		String unidadeMedida = map.get(CamposProduto.UNIDADE_MEDIDA.getNome());
+		String valorUnidade = map.get(CamposProduto.VALOR_UNIDADE.getNome());
+		String valorCompra = map.get(CamposProduto.VALOR_COMPRA.getNome());
+		String reposicao = map.get(CamposProduto.REPOSICAO.getNome());
+		String estoqueMinimo = map.get(CamposProduto.ESTOQUE_MINIMO.getNome());
+		String origemMercadoria = map.get(CamposProduto.ORIGEM_MERCADORIA.getNome());
+		String icms = map.get(CamposProduto.ICMS.getNome());
+		String pis = map.get(CamposProduto.PIS.getNome());
+		String cofins = map.get(CamposProduto.COFINS.getNome());
 
 		produto.setCod(codigo);
 		produto.setNome(nome);
-		produto.setDescricao(descricaoCurta);
+		produto.setDescricao(desc);
 		produto.setGtin(gtin);
 		produto.setCnm(cnm);
 		produto.setCest(cest);
-		produto.setEstoqueAtual(StringUtils.isNotBlank(estoque) ? Integer.valueOf(estoque) : null);
+		produto.setCfop(cfop);
+		produto.setFornecedor(StringUtils.isNotBlank(fornecedor) ? usuarioService.get(Long.valueOf(fornecedor)) : null );
+		if(isInsert) {
+			produto.setEstoqueAtual(StringUtils.isNotBlank(estoqueAtual) ? Integer.valueOf(estoqueAtual) : null);
+		}
 		produto.setUnidadeMedida(StringUtils.isNotBlank(unidadeMedida) ? UnidadeMedida.valueOf(unidadeMedida.toUpperCase()) : null);
-		produto.setValorUnidade(new BigDecimal(valorUnidade));
+		produto.setValorUnidade(StringUtils.isNotBlank(valorUnidade) ? new BigDecimal(valorUnidade) : null);
+		produto.setValorCompra(StringUtils.isNotBlank(valorCompra) ? new BigDecimal(valorCompra) : null);
+		produto.setTempoReposicao(StringUtils.isNotBlank(reposicao) ? Integer.valueOf(reposicao) : null);
 		produto.setEstoqueMinimo(StringUtils.isNotBlank(estoqueMinimo) ? Integer.valueOf(estoqueMinimo) : null);
+		produto.setOrigemMercadoria(StringUtils.isNotBlank(origemMercadoria) ? OrigemMercadoria.valueOf(origemMercadoria) : null);
+		produto.setAliquotaICMS(StringUtils.isNotBlank(icms) ? new BigDecimal(icms) : null);
+		produto.setAliquotaPIS(StringUtils.isNotBlank(pis) ? new BigDecimal(pis) : null);
+		produto.setAliquotaCOFINS(StringUtils.isNotBlank(cofins) ? new BigDecimal(cofins) : null);
 
 		saveOrUpdate(produto);
+	}
+
+	public File render(ProdutoFiltro filtro) {
+		System.out.println("ProdutoService.render()");
+		try {
+
+			String fileOrigemNome = "produtos.xlsx";
+
+			String extensao = DummyUtils.getExtensao(fileOrigemNome);
+
+			File fileOrigem = DummyUtils.getFileFromResource("/net/gnfe/excel/" + fileOrigemNome);
+
+			File file = File.createTempFile("produtos-", "." + extensao);
+			//file.deleteOnExit();
+			FileUtils.copyFile(fileOrigem, file);
+
+			ExcelWriter ew = new ExcelWriter();
+			ew.abrirArquivo(file);
+			Workbook workbook = ew.getWorkbook();
+			ExcelFormat ef = new ExcelFormat(workbook);
+			ew.setExcelFormat(ef);
+
+			Sheet sheet = workbook.getSheet("Produtos");
+			renderRowsProdutos(sheet, ew, filtro);
+
+			file.delete();
+			File fileDestino = File.createTempFile("relatorio-geral", ".xlsx");
+			System.out.println("Criado arquivo temporario no destino: " + fileDestino.getAbsolutePath());
+			System.out.println("Temp File Name: " + fileDestino.getName());
+			//fileDestino.deleteOnExit();
+
+			FileOutputStream fos = new FileOutputStream(fileDestino);
+			workbook.write(fos);
+			workbook.close();
+
+			return fileDestino;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidFormatException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void renderRowsProdutos(Sheet sheet, ExcelWriter ew, ProdutoFiltro filtro) {
+		final List<Long> ids = findIdsByFiltro(filtro);
+
+		if(ids.isEmpty()){
+			return;
+		}
+
+		int rowNum = 1;
+		do {
+			List<Long> ids2 = new ArrayList<Long>();
+			for (int i = 0; i < 200 && !ids.isEmpty(); i++) {
+				Long id = ids.remove(0);
+				ids2.add(id);
+			}
+
+			List<Produto> list = findByIds(ids2);
+
+			for (int i = 0; i < list.size(); i++) {
+
+				Produto mp = list.get(i);
+
+				ew.criaLinha(sheet, rowNum++);
+				renderBody(ew, mp);
+
+			}
+
+			Session session = sessionFactory.getCurrentSession();
+			session.clear();
+		}
+		while (!ids.isEmpty());
+	}
+
+	private void renderBody(ExcelWriter ew, Produto mp) {
+
+		Long id = mp.getId();
+		ew.escrever(id);
+
+		String cod = mp.getCod();
+		ew.escrever(cod);
+
+		String nome = mp.getNome();
+		ew.escrever(nome);
+
+		String descricao = mp.getDescricao();
+		ew.escrever(descricao);
+
+		String gtin = mp.getGtin();
+		ew.escrever(gtin);
+
+		String cnm = mp.getCnm();
+		ew.escrever(cnm);
+
+		String cest = mp.getCest();
+		ew.escrever(cest);
+
+		String cfop = mp.getCfop();
+		ew.escrever(cfop);
+
+		Usuario fornecedor = mp.getFornecedor();
+		ew.escrever(fornecedor != null ? fornecedor.getId() : null);
+
+		Integer estoqueAtual = mp.getEstoqueAtual();
+		ew.escrever(estoqueAtual);
+
+		UnidadeMedida unidadeMedida = mp.getUnidadeMedida();
+		ew.escrever(unidadeMedida != null ? unidadeMedida.name() : null);
+
+		BigDecimal valorUnidade = mp.getValorUnidade();
+		ew.escrever(valorUnidade);
+
+		BigDecimal valorCompra = mp.getValorCompra();
+		ew.escrever(valorCompra);
+
+		Integer tempoReposicao = mp.getTempoReposicao();
+		ew.escrever(tempoReposicao);
+
+		Integer estoqueMinimo = mp.getEstoqueMinimo();
+		ew.escrever(estoqueMinimo);
+
+		OrigemMercadoria origemMercadoria = mp.getOrigemMercadoria();
+		ew.escrever(origemMercadoria != null ? origemMercadoria.name() : null);
+
+		BigDecimal aliquotaICMS = mp.getAliquotaICMS();
+		ew.escrever(aliquotaICMS);
+
+		BigDecimal aliquotaPIS = mp.getAliquotaPIS();
+		ew.escrever(aliquotaPIS);
+
+		BigDecimal aliquotaCOFINS = mp.getAliquotaCOFINS();
+		ew.escrever(aliquotaCOFINS);
 	}
 }

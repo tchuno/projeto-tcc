@@ -1,7 +1,9 @@
 package net.gnfe.bin.domain.repository;
 
+import net.gnfe.bin.domain.entity.MovimentacaoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
+import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.util.ddd.HibernateRepository;
 import org.apache.commons.lang.StringUtils;
@@ -64,6 +66,33 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		return ((Number) query.uniqueResult()).intValue();
 	}
 
+	public List<Long> findIdsByFiltro(ProdutoFiltro filtro) {
+
+		StringBuilder hql = new StringBuilder();
+		hql.append(" select u.id from ").append(clazz.getName()).append(" u ");
+		Map<String, Object> params = makeQuery(filtro, hql);
+		hql.append("order by u.id");
+
+		Query query = createQuery(hql.toString(), params);
+		query.setFetchSize(100);
+		return query.list();
+	}
+
+	public List<Produto> findByIds(List<Long> ids) {
+		StringBuilder hql = new StringBuilder();
+		Map<String, Object> params = new HashMap<>();
+		hql.append(getStartQuery());
+
+		hql.append(" where id in ( :ids ) ");
+		params.put("ids", ids);
+		hql.append(" order by id ");
+
+		Query query = createQuery(hql.toString(), params);
+		query.setFetchSize(500);
+
+		return query.list();
+	}
+
 	private void makeOrderBy(ProdutoFiltro filtro, StringBuilder hql) {
 
 		String campoOrdem = filtro.getCampoOrdem();
@@ -85,7 +114,6 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 	private Map<String, Object> makeQuery(ProdutoFiltro filtro, StringBuilder hql) {
 
 		Long id = filtro.getId();
-		String idProduto = filtro.getIdProduto();
 		List<Long> ids = filtro.getIds();
 		String cod = filtro.getCod();
 		String nome = filtro.getNome();
@@ -109,11 +137,6 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		if(id != null) {
 			hql.append(" and u.id = :id ");
 			params.put("id", id);
-		}
-
-		if(idProduto != null) {
-			hql.append(" and u.idProduto = :idProduto ");
-			params.put("idProduto", idProduto);
 		}
 
 		if(ids != null && !ids.isEmpty()) {

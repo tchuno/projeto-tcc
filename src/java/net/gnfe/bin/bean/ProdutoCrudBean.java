@@ -6,23 +6,25 @@ import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 import net.gnfe.bin.domain.enumeration.RoleGNFE;
-import net.gnfe.bin.domain.service.MovimentacaoProdutoService;
-import net.gnfe.bin.domain.service.ProdutoService;
-import net.gnfe.bin.domain.service.UsuarioService;
+import net.gnfe.bin.domain.service.*;
 import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.bin.domain.vo.filtro.UsuarioFiltro;
 import net.gnfe.util.DummyUtils;
 import net.gnfe.util.faces.AbstractBean;
 import org.apache.commons.io.FileUtils;
+import org.omnifaces.util.Ajax;
+import org.omnifaces.util.Faces;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Date;
@@ -35,7 +37,9 @@ public class ProdutoCrudBean extends AbstractBean {
     @Autowired private ProdutoService service;
     @Autowired private MovimentacaoProdutoService movimentacaoProdutoService;
     @Autowired private UsuarioService usuarioService;
+    @Autowired private ApplicationContext applicationContext;
 
+    private ProdutoExporter exporter;
     private ProdutoDataModel dataModel;
     private ProdutoFiltro filtro = new ProdutoFiltro();
     private Produto produto = new Produto();
@@ -102,7 +106,7 @@ public class ProdutoCrudBean extends AbstractBean {
         }
     }
 
-    public void uploadEvent(FileUploadEvent event) {
+    public void importarArquivo(FileUploadEvent event) {
 
         UploadedFile updateFile = event.getFile();
         if(updateFile != null) {
@@ -116,13 +120,8 @@ public class ProdutoCrudBean extends AbstractBean {
                 }
 
                 InputStream inputstream = updateFile.getInputStream();
-                String tempDirectoryPath = FileUtils.getTempDirectoryPath();
-                File dir = new File(tempDirectoryPath);
-                File fileDestino = DummyUtils.getFileDestino(dir, fileName);
+                File fileDestino = File.createTempFile("importacao", "."+ extensao);;
                 FileUtils.copyInputStreamToFile(inputstream, fileDestino);
-                fileName = fileDestino.getName();
-
-                Usuario usuario = getUsuarioLogado();
 
                 service.iniciarProcessamentoDoArquivo(fileDestino);
 
@@ -170,6 +169,61 @@ public class ProdutoCrudBean extends AbstractBean {
         movimentacaoProdutoService.movimentarProduto(movimentacaoProdutoVO);
         setRequestAttribute("fecharModal", true);
         addMessage("movimentacao.sucesso");
+    }
+
+    public void baixar() {
+
+        Usuario usuario = getUsuarioLogado();
+        String login = usuario.getLogin();
+        DummyUtils.sysout("ProdutoCrudBean.baixar() " + login + " " + DummyUtils.getLogMemoria());
+
+        Exception error = exporter.getError();
+        if(error != null) {
+            addMessageError(error);
+        }
+        else {
+            File file = exporter.getFile();
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                Faces.sendFile(fis, "produtos.xlsx", false);
+            }
+            catch (Exception e1) {
+                addMessageError(e1);
+            }
+        }
+
+        exporter = null;
+    }
+
+    public void verificar() {
+
+        Usuario usuario = getUsuarioLogado();
+        String login = usuario.getLogin();
+
+        if(exporter == null) {
+            DummyUtils.sysout("ProdutoCrudBean.verificar() " + login + " null " + DummyUtils.getLogMemoria());
+            return;
+        }
+
+        if(exporter.isFinalizado()) {
+            DummyUtils.sysout("ProdutoCrudBean.verificar() " + login + " finalizado " + DummyUtils.getLogMemoria());
+            Ajax.data("terminou", true);
+        }
+        else {
+            DummyUtils.sysout("ProdutoCrudBean.verificar() " + login + " não finalizado " + DummyUtils.getLogMemoria());
+            Ajax.data("terminou", false);
+        }
+    }
+
+    public void exportar() {
+
+        if(exporter == null) {
+            DummyUtils.sysout("ProdutoCrudBean.exportar()" + DummyUtils.getLogMemoria());
+
+            exporter = applicationContext.getBean(ProdutoExporter.class);
+            exporter.setFiltro(filtro);
+            exporter.start();
+        }
     }
 
     public ProdutoDataModel getDataModel() {

@@ -1,6 +1,6 @@
 package net.gnfe.bin.domain.service;
 
-import net.gnfe.bin.domain.vo.filtro.MovimentacaoProdutoFiltro;
+import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.util.ddd.AbstractProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -10,24 +10,24 @@ import java.io.File;
 
 @Service
 @Scope("prototype")
-public class MovimentacaoProdutoExporter extends AbstractProcessor {
+public class ProdutoExporter extends AbstractProcessor {
 
-	@Autowired private MovimentacaoProdutoService movimentacaoProdutoService;
+	@Autowired private ProdutoService produtoService;
 
 	private String fileName;
 	private File file;
 
-	private MovimentacaoProdutoFiltro filtro;
+	private ProdutoFiltro filtro;
 
 	@Override
 	protected void execute2() throws Exception {
 
-		System.out.println("MovimentacaoProdutoExporter.execute2()");
+		System.out.println("ProdutoExporter.execute2()");
 
-		file = movimentacaoProdutoService.render(filtro);
-		fileName = "relatorio-geral.xlsx";
+		file = produtoService.render(filtro);
+		fileName = "produtos.xlsx";
 
-		System.out.println("MovimentacaoProdutoExporter.execute2() end");
+		System.out.println("ProdutoExporter.execute2() end");
 	}
 
 	public String getFileName() {
@@ -38,7 +38,7 @@ public class MovimentacaoProdutoExporter extends AbstractProcessor {
 		return file;
 	}
 
-	public void setFiltro(MovimentacaoProdutoFiltro filtro) {
+	public void setFiltro(ProdutoFiltro filtro) {
 		this.filtro = filtro;
 	}
 }

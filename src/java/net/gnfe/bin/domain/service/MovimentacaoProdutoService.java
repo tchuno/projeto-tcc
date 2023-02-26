@@ -193,7 +193,7 @@ public class MovimentacaoProdutoService {
 
 	public File render(MovimentacaoProdutoFiltro filtro) {
 
-		System.out.println("RelatorioGeralService.render()");
+		System.out.println("MovimentacaoProdutoService.render()");
 		try {
 
 			String fileOrigemNome = "relatorio-geral.xlsx";

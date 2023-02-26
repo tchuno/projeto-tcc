@@ -45,7 +45,7 @@ public class MovimentacaoProdutoBean extends AbstractBean {
 
 		Usuario usuario = getUsuarioLogado();
 		String login = usuario.getLogin();
-		DummyUtils.sysout("RelatorioGeralBean.baixar() " + login + " " + DummyUtils.getLogMemoria());
+		DummyUtils.sysout("MovimentacaoProdutoBean.baixar() " + login + " " + DummyUtils.getLogMemoria());
 
 		Exception error = exporter.getError();
 		if(error != null) {
@@ -71,16 +71,16 @@ public class MovimentacaoProdutoBean extends AbstractBean {
 		String login = usuario.getLogin();
 
 		if(exporter == null) {
-			DummyUtils.sysout("RelatorioGeralBean.verificar() " + login + " null " + DummyUtils.getLogMemoria());
+			DummyUtils.sysout("MovimentacaoProdutoBean.verificar() " + login + " null " + DummyUtils.getLogMemoria());
 			return;
 		}
 
 		if(exporter.isFinalizado()) {
-			DummyUtils.sysout("RelatorioGeralBean.verificar() " + login + " finalizado " + DummyUtils.getLogMemoria());
+			DummyUtils.sysout("MovimentacaoProdutoBean.verificar() " + login + " finalizado " + DummyUtils.getLogMemoria());
 			Ajax.data("terminou", true);
 		}
 		else {
-			DummyUtils.sysout("RelatorioGeralBean.verificar() " + login + " não finalizado " + DummyUtils.getLogMemoria());
+			DummyUtils.sysout("MovimentacaoProdutoBean.verificar() " + login + " não finalizado " + DummyUtils.getLogMemoria());
 			Ajax.data("terminou", false);
 		}
 	}
@@ -93,7 +93,7 @@ public class MovimentacaoProdutoBean extends AbstractBean {
 			String dataInicioStr = DummyUtils.formatDate(dataInicio);
 			Date dataFim = filtro.getDataFim();
 			String dataFimStr = DummyUtils.formatDate(dataFim);
-			DummyUtils.sysout("RelatorioGeralPage.exportar() Data Inicio: " + dataInicioStr + ". Data de Fim: " + dataFimStr + ". " + DummyUtils.getLogMemoria());
+			DummyUtils.sysout("MovimentacaoProdutoBean.exportar() Data Inicio: " + dataInicioStr + ". Data de Fim: " + dataFimStr + ". " + DummyUtils.getLogMemoria());
 
 			exporter = applicationContext.getBean(MovimentacaoProdutoExporter.class);
 			exporter.setFiltro(filtro);
