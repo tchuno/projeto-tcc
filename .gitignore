@@ -2,3 +2,5 @@
 /.idea/
 /target/
 /arquivos/workspace-docker/cert-valido.pfx
+/arquivos/workspace-docker/deployments/
+/arquivos/workspace-docker/logs/
