@@ -1,3 +1,12 @@
+--creates para criar database e usuário
+
+CREATE DATABASE gnfe;
+CREATE ROLE gnfe WITH LOGIN SUPERUSER PASSWORD 'gnfe';
+ALTER DATABASE gnfe OWNER TO gnfe;
+GRANT ALL PRIVILEGES ON DATABASE gnfe TO gnfe;
+
+--creates para inclir na base de dados gnfe
+
 create table parametro
 (
     id    serial,

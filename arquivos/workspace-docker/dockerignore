@@ -1,0 +1,6 @@
+./logs
+./postgres-init
+./deployments
+./postgresql
+./schemas
+.cert-valido.pfx

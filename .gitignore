@@ -1,2 +1,4 @@
 /build/
 /.idea/
+/target/
+/arquivos/workspace-docker/cert-valido.pfx

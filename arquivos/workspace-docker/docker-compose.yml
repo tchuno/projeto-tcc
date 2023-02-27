@@ -1,0 +1,41 @@
+version: '3.3'
+services:
+    postgres:
+        image: postgres:9.4-alpine
+        container_name: gnfe-postgresql
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: gnfe
+            POSTGRES_USER: gnfe
+        volumes:
+            - gnfe-postgresql:/var/lib/postgresql/data
+            - ./postgres-init:/docker-entrypoint-initdb.d
+        ports:
+            - 5432:5432
+        networks:
+            - gnfe-network
+    gnfe:
+        image: gnfe/wildfly:1.0
+        container_name: gnfe
+        restart: always
+        volumes:
+            - ./logs:/opt/jboss/wildfly/standalone/log
+            - ./deployments:/opt/jboss/wildfly/standalone/deployments
+        ports:
+            - 8080:8080
+            - 9990:9990
+        depends_on:
+            - postgres
+        networks:
+            - gnfe-network
+        environment:
+            - JAVA_OPTS=-Xms512m -Xmx1g -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=1024M -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true
+            - TZ=Etc/GMT+3
+        command: >
+            bash -c "/opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0"
+networks:
+    gnfe-network:
+        driver: bridge
+volumes:
+    gnfe-postgresql:
+    gnfe:
