@@ -372,7 +372,6 @@ public class UsuarioService {
 
 	private Boolean validarSenhasAnteriores(Usuario usuario, String novaSenha) {
 
-		//todo aplicar decrypt aqui após criptografar senhas
 		String senhasAnteriores = usuario.getSenhasAnteriores();
 
 		if (StringUtils.isNotBlank(senhasAnteriores)) {

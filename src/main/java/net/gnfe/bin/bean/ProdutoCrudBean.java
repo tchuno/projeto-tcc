@@ -168,6 +168,8 @@ public class ProdutoCrudBean extends AbstractBean {
     }
 
     public void movimentarProduto() {
+        Usuario usuarioLogado = getUsuarioLogado();
+        movimentacaoProdutoVO.setAutor(usuarioLogado);
         movimentacaoProdutoService.movimentarProduto(movimentacaoProdutoVO);
         setRequestAttribute("fecharModal", true);
         addMessage("movimentacao.sucesso");

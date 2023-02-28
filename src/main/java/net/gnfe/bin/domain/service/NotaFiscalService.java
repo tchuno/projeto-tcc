@@ -34,6 +34,7 @@ import net.gnfe.bin.domain.vo.filtro.NotaFiscalFiltro;
 import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.HibernateRepository;
 import net.gnfe.util.ddd.MessageKeyException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,13 +128,9 @@ public class NotaFiscalService {
 			LocalDateTime dataEmissao = LocalDateTime.now();
 			String cnf = DummyUtils.gerarDigitosAleatorios(8);
 
-			String modelo = DocumentoEnum.NFE.getModelo();
-			//TODO VERITIFCAR SE numeroNfe para gerar numero de serie de acordo com a divisão de ID por 9999;
-			int serie = 1;
-			//TODO entender melhor o tipo de missão com danfe
-			//1 = Emissão normal (não em contingência)
-			//2 = Contingência FS-IA, com impressão do DANFE em formulário de segurança
-			String tipoEmissao = "1";
+			String modelo = DocumentoEnum.NFE.getModelo();int serie = numeroNfeInt / 10000;
+			serie += 1;
+			String tipoEmissao = "1"; //1 = Emissão normal (não em contingência)
 
 			// MontaChave a NFe
 			ChaveUtil chaveUtil = new ChaveUtil(config.getEstado(), cnpj, modelo, serie, numeroNfeInt, tipoEmissao, cnf, dataEmissao);
@@ -167,8 +164,8 @@ public class NotaFiscalService {
 			// Monta EnviNfe
 			TEnviNFe enviNFe = new TEnviNFe();
 			enviNFe.setVersao(ConstantesUtil.VERSAO.NFE);
-			enviNFe.setIdLote("1");
-			enviNFe.setIndSinc("1");
+			enviNFe.setIdLote("1"); // idLote não é enviado em lote
+			enviNFe.setIndSinc("1"); // Sincronizado 1= Sim; 0=Não
 			enviNFe.getNFe().add(nfe);
 
 			// Monta e Assina o XML
@@ -264,18 +261,18 @@ public class NotaFiscalService {
 		ide.setSerie(String.valueOf(serie));
 		ide.setNNF(String.valueOf(numeroNfeInt));
 		ide.setDhEmi(XmlNfeUtil.dataNfe(dataEmissao));
-		ide.setTpNF("1");
-		ide.setIdDest("1");
+		ide.setTpNF("1"); //0=Entrada; 1=Saída;
+		ide.setIdDest("1"); // 1=Operação interna; 2=Operação interestadual; 3=Operação com exterior.
 		ide.setCMunFG(customizacao.get(ParametroService.P.COD_MUNICIPIO.name()));
-		ide.setTpImp("1");
+		ide.setTpImp("1"); // 0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem; 3=DANFE Simplificado; 4=DANFE NFC-e;
 		ide.setTpEmis(tipoEmissao);
 		ide.setCDV(cdv);
 		ide.setTpAmb(config.getAmbiente().getCodigo());
-		ide.setFinNFe("1");
-		ide.setIndFinal("1");
-		ide.setIndPres("1");
-		ide.setProcEmi("0");
-		ide.setVerProc("1.20");
+		ide.setFinNFe("1"); //1=NF-e normal.; 2=NF-e complementar.; 3=NF-e de ajuste.; 4=Devolução de mercadoria.
+		ide.setIndFinal("1"); //0=Normal; 1=Consumidor Final
+		ide.setIndPres("1"); // 0=Não se aplica (por exemplo, para a Nota Fiscal complementar ou de ajuste); 1=Operação presencial; 2=Operação não presencial, pela Internet; 3=Operação não presencial, Teleatendimento; 4=NFC-e em operação com entrega em domicílio; 9=Operação não presencial, outros.
+		ide.setProcEmi("0"); // 0=Emissão de NF-e com aplicativo do contribuinte; 1=Emissão de NF-e avulsa pelo Fisco; 2=Emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco; 3=Emissão NF-e pelo contribuinte com aplicativo
+		ide.setVerProc("1.20"); // versão do aplicativo emissor de NF-e.
 		infNFe.setIde(ide);
 	}
 
@@ -285,7 +282,7 @@ public class NotaFiscalService {
 		emit.setCNPJ(cnpj);
 		emit.setXNome(customizacao.get(ParametroService.P.NOME.name()));
 		emit.setIE(customizacao.get(ParametroService.P.INSCRICAO_ESTADUAL.name()));
-		emit.setCRT("3");
+		emit.setCRT("3"); // 1=Simples Nacional; 2=Simples Nacional, excesso sublimite de receita bruta; 3=Regime Normal. (v2.0).
 
 		TEnderEmi enderEmit = new TEnderEmi();
 		enderEmit.setXLgr(customizacao.get(ParametroService.P.LOGRADOURO.name()));
@@ -314,7 +311,7 @@ public class NotaFiscalService {
 		dest.setCPF(cpfCnpj);
 		dest.setXNome(nome);
 		dest.setEmail(email);
-		dest.setIndIEDest("9");
+		dest.setIndIEDest("9"); // 1=Contribuinte ICMS (informar a IE do destinatário); 2=Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS; 9=Não Contribuinte, que pode ou não possuir Inscrição Estadual no Cadastro de Contribuintes do ICMS
 
 		String endereco = cliente.getEndereco();
 		Integer numero = cliente.getNumero();
@@ -333,8 +330,8 @@ public class NotaFiscalService {
 		enderDest.setXMun(cidade);
 		enderDest.setUF(TUf.valueOf(estado));
 		enderDest.setCEP(DummyUtils.removerTracosPontosEspacoParentesesAspas(cep));
-		enderDest.setCPais("1058");
-		enderDest.setXPais("Brasil");
+		enderDest.setCPais("1058"); // Padrão CPais Brasil
+		enderDest.setXPais("Brasil"); // Padrão XPAIS Brasil
 		enderDest.setFone(DummyUtils.removerTracosPontosEspacoParentesesAspas(telefone));
 		dest.setEnderDest(enderDest);
 
@@ -357,7 +354,7 @@ public class NotaFiscalService {
 			Produto produto = op.getProduto();
 			TNFe.InfNFe.Det.Prod prod = new TNFe.InfNFe.Det.Prod();
 			prod.setCProd(produto.getCod());
-			prod.setCEAN("SEM GTIN");
+			prod.setCEAN(StringUtils.isBlank(produto.getGtin()) ? "SEM GTIN" : produto.getGtin());
 			prod.setXProd(produto.getNome());
 			prod.setNCM(DummyUtils.removerTracosPontosEspacoParentesesAspas(produto.getCnm()));
 			prod.setCEST(DummyUtils.removerTracosPontosEspacoParentesesAspas(produto.getCest()));
@@ -374,13 +371,12 @@ public class NotaFiscalService {
 			totalNotaFiscalVO.setValorTotal(totalVProd);
 
 			prod.setVProd(DummyUtils.formatarNumero(vProd, GNFEConstants.DECIMAL_FORMAT));
-			prod.setCEANTrib("SEM GTIN");
+			prod.setCEANTrib(StringUtils.isBlank(produto.getGtin()) ? "SEM GTIN" : produto.getGtin());
 			prod.setUTrib(produto.getUnidadeMedida().name());
 			prod.setQTrib(DummyUtils.formatarNumero(quantidade, GNFEConstants.DECIMAL_FORMAT_2));
 			prod.setVUnTrib(DummyUtils.formatarNumero(produto.getValorUnidade(), GNFEConstants.DECIMAL_FORMAT_2));
-			prod.setIndTot("1");
+			prod.setIndTot("1"); //0=Valor do item (vProd) não compõe o valor total da NF-e; 1=Valor do item (vProd) compõe o valor total da NF-e
 			det.setProd(prod);
-
 
 			//Preenche dados do Imposto
 			TNFe.InfNFe.Det.Imposto imposto = new TNFe.InfNFe.Det.Imposto();
@@ -389,8 +385,8 @@ public class NotaFiscalService {
 
 			TNFe.InfNFe.Det.Imposto.ICMS.ICMS00 icms00 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS00();
 			icms00.setOrig(produto.getOrigemMercadoria().getTipo());
-			icms00.setCST("00");
-			icms00.setModBC("0");
+			icms00.setCST("00"); // 00=Tributada integralmente
+			icms00.setModBC("0"); // 0=Margem Valor Agregado (%); 1=Pauta (Valor); 2=Preço Tabelado Máx. (valor); 3=Valor da operação.
 			icms00.setVBC(DummyUtils.formatarNumero(vProd, GNFEConstants.DECIMAL_FORMAT));
 			icms00.setPICMS(DummyUtils.formatarNumero(produto.getAliquotaICMS(), GNFEConstants.DECIMAL_FORMAT));
 
@@ -407,7 +403,8 @@ public class NotaFiscalService {
 
 			TNFe.InfNFe.Det.Imposto.PIS pis = new TNFe.InfNFe.Det.Imposto.PIS();
 			TNFe.InfNFe.Det.Imposto.PIS.PISAliq pisAliq = new TNFe.InfNFe.Det.Imposto.PIS.PISAliq();
-			pisAliq.setCST("01");
+			pisAliq.setCST("01"); // 01=Operação Tributável (base de cálculo = valor da operação alíquota normal (cumulativo/não cumulativo));
+
 			pisAliq.setVBC(DummyUtils.formatarNumero(vProd, GNFEConstants.DECIMAL_FORMAT));
 			pisAliq.setPPIS(DummyUtils.formatarNumero(produto.getAliquotaPIS(), GNFEConstants.DECIMAL_FORMAT));
 
@@ -424,7 +421,8 @@ public class NotaFiscalService {
 
 			TNFe.InfNFe.Det.Imposto.COFINS cofins = new TNFe.InfNFe.Det.Imposto.COFINS();
 			TNFe.InfNFe.Det.Imposto.COFINS.COFINSAliq cofinsAliq = new TNFe.InfNFe.Det.Imposto.COFINS.COFINSAliq();
-			cofinsAliq.setCST("01");
+			cofinsAliq.setCST("01"); //01=Operação Tributável (base de cálculo = valor da operação alíquota normal (cumulativo/não cumulativo));
+
 			cofinsAliq.setVBC(DummyUtils.formatarNumero(vProd, GNFEConstants.DECIMAL_FORMAT));
 			cofinsAliq.setPCOFINS(DummyUtils.formatarNumero(produto.getAliquotaCOFINS(), GNFEConstants.DECIMAL_FORMAT));
 
@@ -458,22 +456,22 @@ public class NotaFiscalService {
 		TNFe.InfNFe.Total.ICMSTot icmstot = new TNFe.InfNFe.Total.ICMSTot();
 		icmstot.setVBC(DummyUtils.formatarNumero(totalNotaFiscalVO.getValorTotal(), GNFEConstants.DECIMAL_FORMAT));
 		icmstot.setVICMS(DummyUtils.formatarNumero(totalNotaFiscalVO.getvICMS(), GNFEConstants.DECIMAL_FORMAT));
-		icmstot.setVICMSDeson("0.00");
-		icmstot.setVFCP("0.00");
-		icmstot.setVFCPST("0.00");
-		icmstot.setVFCPSTRet("0.00");
-		icmstot.setVBCST("0.00");
-		icmstot.setVST("0.00");
+		icmstot.setVICMSDeson("0.00"); // Valor Total do ICMS desonerado
+		icmstot.setVFCP("0.00"); // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)
+		icmstot.setVFCPST("0.00"); // Valor do Fundo de Combate à Pobreza retido por Substituição Tributária
+		icmstot.setVFCPSTRet("0.00");// Valor efetivo do ICMS relativo ao Fundo de Combate à Pobreza (FCP)
+		icmstot.setVBCST("0.00"); // Base de Cálculo do ICMS ST
+		icmstot.setVST("0.00"); // Valor Total do ICMS ST
 		icmstot.setVProd(DummyUtils.formatarNumero(totalNotaFiscalVO.getValorTotal(), GNFEConstants.DECIMAL_FORMAT));
-		icmstot.setVFrete("0.00");
-		icmstot.setVSeg("0.00");
-		icmstot.setVDesc("0.00");
-		icmstot.setVII("0.00");
-		icmstot.setVIPI("0.00");
-		icmstot.setVIPIDevol("0.00");
+		icmstot.setVFrete("0.00"); // Valor Total do Frete
+		icmstot.setVSeg("0.00"); // Valor Total do Seguro
+		icmstot.setVDesc("0.00"); // Valor Total do Desconto
+		icmstot.setVII("0.00"); // Valor Imposto de Importação
+		icmstot.setVIPI("0.00"); // Valor Total do IPI
+		icmstot.setVIPIDevol("0.00"); // Valor do IPI devolvido
 		icmstot.setVPIS(DummyUtils.formatarNumero(totalNotaFiscalVO.getvPIS(), GNFEConstants.DECIMAL_FORMAT));
 		icmstot.setVCOFINS(DummyUtils.formatarNumero(totalNotaFiscalVO.getvCOFINS(), GNFEConstants.DECIMAL_FORMAT));
-		icmstot.setVOutro("0.00");
+		icmstot.setVOutro("0.00"); // Outras despesas acessórias
 		icmstot.setVNF(DummyUtils.formatarNumero(totalNotaFiscalVO.getValorTotal(), GNFEConstants.DECIMAL_FORMAT));
 		total.setICMSTot(icmstot);
 		infNFe.setTotal(total);
@@ -482,7 +480,7 @@ public class NotaFiscalService {
 	private void preencheFrete(TNFe.InfNFe infNFe) {
 		//Preenche os dados de Transporte
 		TNFe.InfNFe.Transp transp = new TNFe.InfNFe.Transp();
-		transp.setModFrete("9");
+		transp.setModFrete("9"); // 0=Por conta do emitente; 1=Por conta do destinatário/remetente; 2=Por conta de terceiros; 9=Sem frete. (V2.0)
 		infNFe.setTransp(transp);
 	}
 
