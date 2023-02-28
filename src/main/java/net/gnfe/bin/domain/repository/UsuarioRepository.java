@@ -218,14 +218,16 @@ public class UsuarioRepository extends HibernateRepository<Usuario> {
 		StringBuilder hql = new StringBuilder();
 		Map<String, Object> params = new HashMap<>();
 
-		hql.append( "select u from ").append(clazz.getName());
-		hql.append(" u ");
+		hql.append( "select u from ").append(clazz.getName()).append(" u ");
 		hql.append(" where 1=1 ");
-		hql.append(" and upper(u.nome) like :nome or u.cpfCnpj like :cpfCnpj ");
-		hql.append("order by u.nome");
+		hql.append(" and (upper(u.nome) like :nome or u.cpfCnpj like :cpfCnpj) ");
+		hql.append(" and (select count(*) from ").append(Role.class.getName()).append(" r ");
+		hql.append(" where r.usuario.id = u.id and r.nome = :roleCliente ) > 0 ");
+		hql.append(" order by u.nome");
 
 		params.put("nome", "%" + search.toUpperCase().trim() + "%");
 		params.put("cpfCnpj", "%" + DummyUtils.getCpfCnpjDesformatado(search.trim()) + "%");
+		params.put("roleCliente", RoleGNFE.CLIENTE.name());
 
 		Query query = createQuery(hql.toString(), params);
 		query.setMaxResults(10);
