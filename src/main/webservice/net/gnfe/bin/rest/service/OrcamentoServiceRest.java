@@ -74,8 +74,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
     }
 
     private Orcamento saveOrUpdate(Usuario usuario, RequestCadastrarOrcamento requestCadastrarOrcamento, Orcamento orcamentoNovo) {
-        Usuario cliente = usuarioService.get(requestCadastrarOrcamento.getClienteId());
-
+            Usuario cliente = usuarioService.get(requestCadastrarOrcamento.getClienteId());
         orcamentoNovo.setDataCriacao(new Date());
         orcamentoNovo.setCliente(cliente);
         orcamentoNovo.setFormaPagamento(requestCadastrarOrcamento.getFormaPagamento());
