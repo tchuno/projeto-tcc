@@ -4,20 +4,11 @@ import java.math.BigDecimal;
 
 public class TotalNotaFiscalVO {
 
-    private BigDecimal vbcICMS = new BigDecimal(0);
     private BigDecimal vICMS = new BigDecimal(0);
     private BigDecimal vProd = new BigDecimal(0) ;
     private BigDecimal vPIS = new BigDecimal(0);
     private BigDecimal vCOFINS = new BigDecimal(0);
     private BigDecimal valorTotal = new BigDecimal(0);
-
-    public BigDecimal getVbcICMS() {
-        return vbcICMS;
-    }
-
-    public void setVbcICMS(BigDecimal vbcICMS) {
-        this.vbcICMS = vbcICMS;
-    }
 
     public BigDecimal getvICMS() {
         return vICMS;

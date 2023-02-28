@@ -400,6 +400,10 @@ public class NotaFiscalService {
 			icms00.setVICMS(DummyUtils.formatarNumero(valorICMS, GNFEConstants.DECIMAL_FORMAT));
 			icms.setICMS00(icms00);
 
+			BigDecimal valorICMSTotal = totalNotaFiscalVO.getvICMS();
+			BigDecimal addICMS = valorICMSTotal.add(valorICMS);
+			totalNotaFiscalVO.setvICMS(addICMS);
+
 			TNFe.InfNFe.Det.Imposto.PIS pis = new TNFe.InfNFe.Det.Imposto.PIS();
 			TNFe.InfNFe.Det.Imposto.PIS.PISAliq pisAliq = new TNFe.InfNFe.Det.Imposto.PIS.PISAliq();
 			pisAliq.setCST("01");
@@ -452,11 +456,7 @@ public class NotaFiscalService {
 		TNFe.InfNFe.Total total = new TNFe.InfNFe.Total();
 		TNFe.InfNFe.Total.ICMSTot icmstot = new TNFe.InfNFe.Total.ICMSTot();
 		icmstot.setVBC(DummyUtils.formatarNumero(totalNotaFiscalVO.getValorTotal(), GNFEConstants.DECIMAL_FORMAT));
-
-		BigDecimal aliquotaICMS = new BigDecimal(BigInteger.ZERO);
-		BigDecimal valorICMS = totalNotaFiscalVO.getValorTotal().multiply(aliquotaICMS).divide(new BigDecimal(100));
-
-		icmstot.setVICMS(DummyUtils.formatarNumero(valorICMS, GNFEConstants.DECIMAL_FORMAT));
+		icmstot.setVICMS(DummyUtils.formatarNumero(totalNotaFiscalVO.getvICMS(), GNFEConstants.DECIMAL_FORMAT));
 		icmstot.setVICMSDeson("0.00");
 		icmstot.setVFCP("0.00");
 		icmstot.setVFCPST("0.00");
