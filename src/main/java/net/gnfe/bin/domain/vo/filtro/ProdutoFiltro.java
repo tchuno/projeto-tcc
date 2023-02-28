@@ -27,6 +27,7 @@ public class ProdutoFiltro implements Cloneable {
 	private Integer estoqueMinimo;
 	private String campoOrdem;
 	private SortOrder ordem;
+	private Boolean isTemEmEstoque;
 
 	public Long getId() {
 		return id;
@@ -183,5 +184,13 @@ public class ProdutoFiltro implements Cloneable {
 
 	public void setOrdem(SortOrder ordem) {
 		this.ordem = ordem;
+	}
+
+	public Boolean isTemEmEstoque() {
+		return isTemEmEstoque;
+	}
+
+	public void setTemEmEstoque(Boolean temEmEstoque) {
+		isTemEmEstoque = temEmEstoque;
 	}
 }

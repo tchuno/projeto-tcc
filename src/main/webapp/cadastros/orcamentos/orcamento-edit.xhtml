@@ -17,7 +17,6 @@
 			<b:modal id="adicionar-usuario-modal-id" title="#{msg['adicionarUsuario.label']}" styleClass="adicionar-usuario-modal" rendered="#{menuBean.podeEditar()}">
 				<b:row id="adicionar-usuario-modal-content-id">
 					<div class="col-sm-12">
-						<b:messages globalOnly="true" showSummary="true"/>
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="row">
@@ -59,7 +58,7 @@
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.telefone}"
 														 label="#{msg['telefone.label']}" renderLabel="true"
-														 maxlength="15"
+														 maxlength="15" required="true"
 														 styleClass="mask-phone" />
 											<b:message/>
 										</div>
@@ -70,7 +69,7 @@
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.cep}"
 														 label="#{msg['cep.label']}" renderLabel="true"
-														 maxlength="15" id="cep"
+														 maxlength="15" id="cep" required="true"
 														 styleClass="mask-cep" />
 											<b:message/>
 										</div>
@@ -80,7 +79,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.endereco}" id="rua"
-														 label="#{msg['endereco.label']}" renderLabel="true"/>
+														 label="#{msg['endereco.label']}" renderLabel="true" required="true"/>
 											<b:message/>
 										</div>
 									</div>
@@ -88,7 +87,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<div class="form-group">
-											<b:inputText value="#{orcamentoEditBean.usuarioNovo.numero}"
+											<b:inputText value="#{orcamentoEditBean.usuarioNovo.numero}" required="true"
 														 label="#{msg['numero.label']}" renderLabel="true" styleClass="mask-number"/>
 											<b:message/>
 										</div>
@@ -98,7 +97,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.bairro}" id="bairro"
-														 label="#{msg['bairro.label']}" renderLabel="true" />
+														 label="#{msg['bairro.label']}" renderLabel="true" required="true"/>
 											<b:message/>
 										</div>
 									</div>
@@ -107,7 +106,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.cidade}" id="cidade"
-														 label="#{msg['cidade.label']}" renderLabel="true" />
+														 label="#{msg['cidade.label']}" renderLabel="true" required="true"/>
 											<b:message/>
 										</div>
 									</div>
@@ -116,7 +115,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.codIbge}" id="ibge"
-														 label="#{msg['codIbge.label']}" renderLabel="true" />
+														 label="#{msg['codIbge.label']}" renderLabel="true" required="true" />
 											<b:message/>
 										</div>
 									</div>
@@ -125,13 +124,14 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<b:inputText value="#{orcamentoEditBean.usuarioNovo.estado}" id="estado"
-														 label="#{msg['estado.label']}" renderLabel="true" />
+														 label="#{msg['estado.label']}" renderLabel="true"  required="true"/>
 											<b:message/>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<b:messages globalOnly="true" showSummary="true"/>
 					</div>
 					<script type="text/javascript">
 						jQuery(function($) {
@@ -142,9 +142,9 @@
 				</b:row>
 
 				<f:facet name="footer">
-					<b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
+					<b:button value="#{msg['fechar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
 					<p:commandButton value="#{msg['cadastrar.label']}" actionListener="#{orcamentoEditBean.cadastrarUsuarioNovo()}"
-									 update="form-orcamento:cliente-id" styleClass="btn" onsuccess="closeModal('adicionar-usuario-modal')"/>
+									 update="form-orcamento:cliente-id adicionar-usuario-modal-content-id" styleClass="btn"/>
 				</f:facet>
 			</b:modal>
 		</h:form>
@@ -201,7 +201,7 @@
 					<div class="col-sm-11">
 						<div class="form-group">
 							<h:outputLabel value="#{msg['cliente.label']}" for="cliente-id"/>
-							<p:autoComplete id="cliente-id" multiple="false" converter="entity"
+							<p:autoComplete id="cliente-id" multiple="false" converter="entity" required="true" disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
 											value="#{orcamentoEditBean.orcamento.cliente}" var="usuario" label="#{msg['cliente.label']}"
 											styleClass="form-control bf-no-message has-success" style="height: 40px; width: auto;" emptyMessage="#{msg['emptyMessage.label']}"
 											itemLabel="#{utilBean.getCpfCnpj(usuario.cpfCnpj)} #{usuario.nome}" itemValue="#{usuario}" effect="fade"
@@ -217,6 +217,7 @@
 					<div class="col-sm-1">
 						<div class="form-group">
 							<p:commandButton icon="fa fa-plus" onclick="openModal('adicionar-usuario-modal')"
+											 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
 											 actionListener="#{orcamentoEditBean.setUsuarioNovo(null)}" update="form-usuario:adicionar-usuario-modal-content-id"
 											 class="btn" style="margin-top: 20px"/>
 						</div>
@@ -226,18 +227,18 @@
 				<div class="form-group">
 					<p:toolbar>
 						<p:toolbarGroup>
-							<p:commandButton value="#{msg['adicionarProduto.label']}" icon="fa fa-plus" onclick="openModal('adicionar-modal')"
+							<p:commandButton value="#{msg['adicionarProduto.label']}" icon="fa fa-plus" onclick="openModal('adicionar-modal')" disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
 											 actionListener="#{orcamentoEditBean.setOrcamentoProduto(null)}" update="form-produto:adicionar-modal-content-id"
 											 class="btn" style="margin-right: 5px">
 							</p:commandButton>
 							<p:commandButton id="delete-products-button" value="#{orcamentoEditBean.deleteButtonMessage}"
 											 icon="fa fa-trash" actionListener="#{orcamentoEditBean.deleteSelectedProducts}"
-											 class="btn" disabled="#{!orcamentoEditBean.hasSelectedProducts()}" update="@this form-orcamento:dt-products">
+											 class="btn" disabled="#{!orcamentoEditBean.hasSelectedProducts() or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}" update="@this form-orcamento:dt-products">
 							</p:commandButton>
 						</p:toolbarGroup>
 					</p:toolbar>
 
-					<p:dataTable id="dt-products" var="product" value="#{orcamentoEditBean.orcamento.orcamentoProdutos}"
+					<p:dataTable id="dt-products" var="product" value="#{orcamentoEditBean.orcamento.orcamentoProdutos}"  disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
 								 reflow="true" selection="#{orcamentoEditBean.produtosSelecionados}" emptyMessage="#{msg['emptyMessage.label']}"
 								 rowKey="#{product.produto.id}" paginator="false" rowSelectMode="add">
 						<f:facet name="header">
@@ -267,19 +268,22 @@
 						</p:column>
 						<p:column headerText="#{msg['quantidade.label']}:" style="width: 80px; text-align: center">
 							<div class="form-group">
-								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, 1))}">
+								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, 1))}"
+											   disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
 									<i class="fa fa-arrow-up" style="color: white"></i>
 								</p:commandLink>
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{product.quantidade}" placeholder="#{msg['quantidade.label']}"
+											 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
 											 label="#{msg['quantidade.label']}" renderLabel="false" styleClass="mask-number" required="false">
 									<f:ajax event="blur" render="form-orcamento:dt-products form-orcamento:delete-products-button"/>
 								</b:inputText>
 								<b:message/>
 							</div>
 							<div class="form-group">
-								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, -1))}">
+								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, -1))}"
+											   disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
 									<i class="fa fa-arrow-down" style="color: white"></i>
 								</p:commandLink>
 							</div>
@@ -290,7 +294,8 @@
 							</h:outputText>
 						</p:column>
 						<p:column style="width: 80px;">
-							<p:commandLink class="btn btn-danger" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{orcamentoEditBean.deleteProduct(product)}">
+							<p:commandLink class="btn btn-danger" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{orcamentoEditBean.deleteProduct(product)}"
+										   disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
 								<i class="fa fa-trash" style="color: white"></i>
 							</p:commandLink>
 						</p:column>
@@ -299,7 +304,7 @@
 									<span style="font-weight: bold">#{msg['total.label']} :
 										<h:outputText
 												value="#{utilBean.totalGeral(orcamentoEditBean.orcamento.orcamentoProdutos)}"
-												style="font-weight: 700">
+												style="font-weight: 700" >
 											<f:convertNumber locale="pt-BR" currencySymbol="R$" type="currency"/>
 										</h:outputText>
 									</span>
@@ -310,7 +315,8 @@
 
 				<div class="form-group">
 					<h:outputLabel value="#{msg['formaPagamento.label']} *" styleClass="bf-no-message"/>
-					<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoEditBean.orcamento.formaPagamento}" label="#{msg['formaPagamento.label']}" required="true">
+					<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoEditBean.orcamento.formaPagamento}" label="#{msg['formaPagamento.label']}" required="true"
+									 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
 						<f:selectItems value="#{utilBean.getValues('FormaPagamento')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['FormaPagamento.'.concat(fp).concat('.label')]}"/>
 						<f:ajax event="change" execute="form-bandeira-id" render="form-bandeira-id"/>
 					</h:selectOneMenu>
@@ -320,7 +326,9 @@
 				<h:panelGroup id="form-bandeira-id">
 					<div class="form-group">
 						<h:outputLabel value="#{msg['bandeira.label']}" styleClass="bf-no-message" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}"/>
-						<h:selectOneMenu styleClass="form-control bf-no-message" id="bandeira-id" value="#{orcamentoEditBean.orcamento.bandeira}" label="#{msg['bandeira.label']}" required="false" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}">
+						<h:selectOneMenu styleClass="form-control bf-no-message" id="bandeira-id" value="#{orcamentoEditBean.orcamento.bandeira}"
+										 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+										 label="#{msg['bandeira.label']}" required="false" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}">
 							<f:selectItem itemValue="" itemLabel=""/>
 							<f:selectItems value="#{utilBean.getValues('Bandeira')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['Bandeira.'.concat(fp).concat('.label')]}"/>
 						</h:selectOneMenu>

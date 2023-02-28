@@ -6,10 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import net.gnfe.bin.domain.entity.Orcamento;
 import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
+import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.Bandeira;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +21,9 @@ public class OrcamentoResponse {
 
     @ApiModelProperty(notes = "ID.")
     private Long id;
+
+    @ApiModelProperty(notes = "Data de Criação.")
+    private Date dataCriacao;
 
     @ApiModelProperty(notes = "Autor.")
     private FiltroUsuarioResponse autor;
@@ -38,9 +43,10 @@ public class OrcamentoResponse {
     @ApiModelProperty(notes = "Nota fiscal.")
     private FiltroNotaFiscalResponse notaFiscal;
 
-    public OrcamentoResponse(Orcamento orcamento) {
+    public OrcamentoResponse(Orcamento orcamento, Usuario usuario) {
         this.id = orcamento.getId();
-        this.autor = new FiltroUsuarioResponse(orcamento.getAutor());
+        this.dataCriacao = new Date();
+        this.autor = new FiltroUsuarioResponse(usuario);
         this.cliente = new FiltroUsuarioResponse(orcamento.getCliente());
         this.formadePagamento = orcamento.getFormaPagamento();
         this.bandeira = orcamento.getBandeira();
@@ -62,6 +68,14 @@ public class OrcamentoResponse {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 
     public FiltroUsuarioResponse getAutor() {

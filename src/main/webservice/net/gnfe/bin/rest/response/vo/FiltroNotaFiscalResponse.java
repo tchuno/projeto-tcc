@@ -15,9 +15,6 @@ public class FiltroNotaFiscalResponse {
     @ApiModelProperty(notes = "ID.")
     private Long id;
 
-    @ApiModelProperty(notes = "Data de Criação.")
-    private Date dataCriacao;
-
     @ApiModelProperty(notes = "Data de Envio.")
     private Date dataEnvio;
 
@@ -47,7 +44,6 @@ public class FiltroNotaFiscalResponse {
 
     public FiltroNotaFiscalResponse(NotaFiscal notaFiscal) {
         this.id = notaFiscal.getId();
-        this.dataCriacao = notaFiscal.getDataCriacao();
         this.dataEnvio = notaFiscal.getDataEnvio();
         this.statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
         this.chaveAcesso = notaFiscal.getChaveAcesso();
@@ -60,10 +56,6 @@ public class FiltroNotaFiscalResponse {
 
     public Long getId() {
         return id;
-    }
-
-    public Date getDataCriacao() {
-        return dataCriacao;
     }
 
     public Date getDataEnvio() {

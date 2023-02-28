@@ -29,6 +29,7 @@ public class ProdutoServiceRest extends SuperServiceRest {
         ProdutoFiltro filtro = new ProdutoFiltro();
         filtro.setCod(cod);
         filtro.setNome(nome);
+        filtro.setTemEmEstoque(true);
 
         List<Produto> produtos = produtoService.findByFiltro(filtro, 0 , 10);
 

@@ -1,21 +1,26 @@
 package net.gnfe.bin.domain.vo;
 
 import net.gnfe.bin.domain.entity.Orcamento;
+import net.gnfe.bin.domain.entity.OrcamentoProduto;
 import net.gnfe.bin.domain.entity.Produto;
+import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MovimentacaoProdutoVO {
 
     private Date data;
     private Orcamento orcamento;
+    private OrcamentoProduto orcamentoProduto;
     private Produto produto;
     private boolean isEntrada;
     private MotivoMovimentacao motivoMovimentacao;
-    private BigDecimal valorTotal;
+    private TotalNotaFiscalVO totalNotaFiscalVO;
     private Integer quantidade;
+    private Usuario fornecedor;
+    private Integer qtdEstoque;
+    private Usuario autor;
 
     public Date getData() {
         return data;
@@ -33,6 +38,14 @@ public class MovimentacaoProdutoVO {
         this.orcamento = orcamento;
     }
 
+    public OrcamentoProduto getOrcamentoProduto() {
+        return orcamentoProduto;
+    }
+
+    public void setOrcamentoProduto(OrcamentoProduto orcamentoProduto) {
+        this.orcamentoProduto = orcamentoProduto;
+    }
+
     public Produto getProduto() {
         return produto;
     }
@@ -46,6 +59,9 @@ public class MovimentacaoProdutoVO {
     }
 
     public void setEntrada(boolean isEntrada) {
+        if(!isEntrada) {
+            this.fornecedor = null;
+        }
         this.isEntrada = isEntrada;
     }
 
@@ -57,12 +73,12 @@ public class MovimentacaoProdutoVO {
         this.motivoMovimentacao = motivoMovimentacao;
     }
 
-    public BigDecimal getValorTotal() {
-        return valorTotal;
+    public TotalNotaFiscalVO getTotalNotaFiscalVO() {
+        return totalNotaFiscalVO;
     }
 
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
+    public void setTotalNotaFiscalVO(TotalNotaFiscalVO totalNotaFiscalVO) {
+        this.totalNotaFiscalVO = totalNotaFiscalVO;
     }
 
     public Integer getQuantidade() {
@@ -71,5 +87,29 @@ public class MovimentacaoProdutoVO {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public Usuario getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Usuario fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    public Integer getQtdEstoque() {
+        return qtdEstoque;
+    }
+
+    public void setQtdEstoque(Integer qtdEstoque) {
+        this.qtdEstoque = qtdEstoque;
+    }
+
+    public Usuario getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Usuario autor) {
+        this.autor = autor;
     }
 }

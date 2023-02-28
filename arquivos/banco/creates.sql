@@ -7,173 +7,144 @@ GRANT ALL PRIVILEGES ON DATABASE gnfe TO gnfe;
 
 --creates para inclir na base de dados gnfe
 
-create table parametro
-(
-    id    serial,
-    chave varchar(50)   not null,
-    valor varchar(6000) not null,
-    constraint parametro_pk
-        primary key (id)
+CREATE TABLE public.parametro (
+                                  id serial NOT NULL,
+                                  chave varchar(50) NOT NULL,
+                                  valor varchar(6000) NOT NULL,
+                                  CONSTRAINT parametro_pk PRIMARY KEY (id)
 );
 
-create table sessao_http_request
-(
-    id         serial,
-    usuario_id integer,
-    jsessionid varchar(100),
-    data       timestamp not null,
-    ativa      boolean   not null
+CREATE TABLE public.produto (
+                                id serial NOT NULL,
+                                cod varchar(100) DEFAULT NULL,
+                                nome varchar(300) DEFAULT NULL,
+                                descricao varchar(500) DEFAULT NULL,
+                                gtin varchar(100) DEFAULT NULL,
+                                cnm varchar(100) DEFAULT NULL,
+                                cest varchar(100) DEFAULT NULL,
+                                cfop varchar(100) DEFAULT NULL,
+                                estoque_atual integer DEFAULT NULL,
+                                estoque_minimo integer DEFAULT NULL,
+                                tempo_reposicao integer DEFAULT NULL,
+                                valor_compra numeric(15, 2) DEFAULT NULL,
+                                valor_unidade numeric(15, 2) DEFAULT NULL,
+                                unidade_medida varchar(10) DEFAULT NULL,
+                                origem_mercadoria varchar(10) DEFAULT NULL,
+                                aliquota_icms bigint DEFAULT NULL,
+                                aliquota_pis bigint DEFAULT NULL,
+                                aliquota_cofins bigint DEFAULT NULL,
+                                nome_imagem varchar(300) DEFAULT NULL,
+                                imagem_base64 text DEFAULT NULL,
+                                CONSTRAINT produto_pk PRIMARY KEY (id)
 );
 
-create table usuario
-(
-    id                            serial,
-    nome                          varchar(100) not null,
-    senha                         varchar(200) not null,
-    login                         varchar(20)  not null,
-    email                         varchar(100) not null,
-    telefone                      varchar(15),
-    cpf_cnpj                      varchar(14),
-    rg                            varchar(15),
-    endereco                      varchar(250),
-    numero                        integer,
-    bairro                        varchar(150),
-    cep                           varchar(9),
-    cidade                        varchar(150),
-    estado                        varchar(150),
-    status                        varchar(20)  not null,
-    data_expiracao_senha          timestamp    not null,
-    senhas_anteriores             varchar(200),
-    data_ultimo_acesso            timestamp,
-    data_cadastro                 timestamp    not null,
-    data_bloqueio                 timestamp,
-    motivo_bloqueio               varchar(20),
-    motivo_desativacao            varchar(20),
-    data_expiracao_bloqueio       timestamp,
-    data_atualizacao              timestamp    not null,
-    usuario_ultima_atualizacao_id integer,
-    cod_ibge                      varchar(10),
-    primary key (id),
-    constraint usuario_uk
-        unique (login),
-    constraint usuario_fk1
-        foreign key (usuario_ultima_atualizacao_id) references usuario
-            on delete set null
+CREATE TABLE public.sessao_http_request (
+                                            id serial NOT NULL,
+                                            usuario_id integer DEFAULT NULL,
+                                            jsessionid varchar(100) DEFAULT NULL,
+                                            data timestamp NOT NULL,
+                                            ativa bool NOT NULL,
+                                            PRIMARY KEY (id)
 );
 
-create table orcamento
-(
-    id              serial,
-    autor_id        integer,
-    cliente_id      integer,
-    forma_pagamento varchar(50),
-    bandeira        varchar(50),
-    constraint orcamento_pk
-        primary key (id),
-    constraint orcamento_fk1
-        foreign key (autor_id) references usuario,
-    constraint orcamento_fk2
-        foreign key (cliente_id) references usuario
+CREATE TABLE public.usuario (
+                                id serial NOT NULL,
+                                login varchar(20) NOT NULL,
+                                nome varchar(100) NOT NULL,
+                                senha varchar(200) NOT NULL,
+                                email varchar(100) NOT NULL,
+                                telefone varchar(15) DEFAULT NULL,
+                                cpf_cnpj varchar(14) DEFAULT NULL,
+                                rg varchar(15) DEFAULT NULL,
+                                endereco varchar(250) DEFAULT NULL,
+                                numero integer DEFAULT NULL,
+                                bairro varchar(150) DEFAULT NULL,
+                                cep varchar(9) DEFAULT NULL,
+                                cidade varchar(150) DEFAULT NULL,
+                                cod_ibge varchar(10) DEFAULT NULL,
+                                estado varchar(150) DEFAULT NULL,
+                                status varchar(20) NOT NULL,
+                                data_expiracao_senha timestamp NOT NULL,
+                                senhas_anteriores varchar(200) DEFAULT NULL,
+                                data_ultimo_acesso timestamp DEFAULT NULL,
+                                data_cadastro timestamp NOT NULL,
+                                data_bloqueio timestamp DEFAULT NULL,
+                                motivo_bloqueio varchar(20) DEFAULT NULL,
+                                motivo_desativacao varchar(20) DEFAULT NULL,
+                                data_expiracao_bloqueio timestamp DEFAULT NULL,
+                                data_atualizacao timestamp NOT NULL,
+                                usuario_ultima_atualizacao_id integer DEFAULT NULL,
+                                CONSTRAINT usuario_pkey PRIMARY KEY (id),
+                                CONSTRAINT usuario_fk1 FOREIGN KEY (usuario_ultima_atualizacao_id) REFERENCES usuario (id) ON DELETE
+                                    SET
+                                    NULL
+);
+CREATE UNIQUE INDEX usuario_uk ON public.usuario (login);
+
+CREATE TABLE public.orcamento (
+                                  id serial NOT NULL,
+                                  cliente_id integer NOT NULL,
+                                  data_criacao timestamp DEFAULT NULL,
+                                  forma_pagamento varchar(50) DEFAULT NULL,
+                                  bandeira varchar(50) DEFAULT NULL,
+                                  CONSTRAINT orcamento_pk PRIMARY KEY (id),
+                                  CONSTRAINT orcamento_fk2 FOREIGN KEY (cliente_id) REFERENCES usuario (id)
 );
 
-create table nota_fiscal
-(
-    id                     serial,
-    orcamento_id           integer,
-    data_criacao           timestamp,
-    chave_acesso           varchar(44),
-    xml                    text,
-    status_nota_fiscal     varchar(15),
-    data_envio             timestamp,
-    protocolo              varchar(30),
-    xml_cancelamento       text,
-    protocolo_cancelamento varchar(30),
-    data_cancelamento      timestamp,
-    constraint nota_fiscal_pk
-        primary key (id),
-    constraint nota_fiscal_pk2
-        unique (orcamento_id),
-    constraint nota_fiscal_fk1
-        foreign key (orcamento_id) references orcamento
-            on delete cascade
+CREATE TABLE public.role (
+                             id serial NOT NULL,
+                             usuario_id integer NOT NULL,
+                             nome varchar(30) NOT NULL,
+                             login varchar(20) NOT NULL,
+                             CONSTRAINT role_pkey PRIMARY KEY (id),
+                             CONSTRAINT role_fk1 FOREIGN KEY (usuario_id) REFERENCES usuario (id) ON DELETE CASCADE
+);
+CREATE UNIQUE INDEX role_uk ON public.role (usuario_id, nome);
+
+CREATE TABLE public.nota_fiscal (
+                                    id serial NOT NULL,
+                                    orcamento_id integer NOT NULL,
+                                    status_nota_fiscal varchar(15) DEFAULT NULL,
+                                    data_envio timestamp DEFAULT NULL,
+                                    protocolo varchar(30) DEFAULT NULL,
+                                    chave_acesso varchar(44) DEFAULT NULL,
+                                    xml text DEFAULT NULL,
+                                    data_cancelamento timestamp DEFAULT NULL,
+                                    protocolo_cancelamento varchar(30) DEFAULT NULL,
+                                    xml_cancelamento text DEFAULT NULL,
+                                    CONSTRAINT nota_fiscal_pk PRIMARY KEY (id),
+                                    CONSTRAINT nota_fiscal_fk1 FOREIGN KEY (orcamento_id) REFERENCES orcamento (id) ON DELETE CASCADE
+);
+CREATE UNIQUE INDEX nota_fiscal_pk2 ON public.nota_fiscal (orcamento_id);
+
+CREATE TABLE public.orcamento_produto (
+                                          id serial NOT NULL,
+                                          orcamento_id integer NOT NULL,
+                                          produto_id integer NOT NULL,
+                                          quantidade integer DEFAULT 1 NOT NULL,
+                                          CONSTRAINT orcamento_produto_pk PRIMARY KEY (id),
+                                          CONSTRAINT orcamento_produto_fk1 FOREIGN KEY (orcamento_id) REFERENCES orcamento (id) ON DELETE CASCADE,
+                                          CONSTRAINT orcamento_produto_fk2 FOREIGN KEY (produto_id) REFERENCES produto (id)
 );
 
-create table produto
-(
-    id                serial,
-    cod               varchar(100),
-    descricao         varchar(500),
-    gtin              varchar(100),
-    cnm               varchar(100),
-    cest              varchar(100),
-    fornecedor_id     integer,
-    estoque_minimo    integer,
-    estoque           integer,
-    nome              varchar(300),
-    tempo_reposicao   integer,
-    unidade_medida    varchar(10),
-    valor_unidade     numeric(15, 2),
-    nome_imagem       varchar(300),
-    imagem_base64     text,
-    estoque_atual     integer,
-    cfop              varchar(100),
-    origem_mercadoria varchar(10),
-    aliquota_icms     bigint,
-    aliquota_pis      bigint,
-    aliquota_cofins   bigint,
-    constraint produto_pk
-        primary key (id),
-    constraint produto_fk1
-        foreign key (fornecedor_id) references usuario
-            on delete set null
-);
-
-create table orcamento_produto
-(
-    id           serial,
-    orcamento_id integer,
-    produto_id   integer,
-    quantidade   integer default 1 not null,
-    constraint orcamento_produto_pk
-        primary key (id),
-    constraint orcamento_produto_fk1
-        foreign key (orcamento_id) references orcamento
-            on delete cascade,
-    constraint orcamento_produto_fk2
-        foreign key (produto_id) references produto
-);
-
-create table role
-(
-    id         serial,
-    usuario_id integer,
-    nome       varchar(30) not null,
-    login      varchar(20) not null,
-    primary key (id),
-    constraint role_uk
-        unique (usuario_id, nome),
-    constraint role_fk1
-        foreign key (usuario_id) references usuario
-            on delete cascade
-);
-
-create table movimentacao_produto
-(
-    id                  serial,
-    data                timestamp,
-    orcamento_id        integer,
-    produto_id          integer,
-    quantidade          integer,
-    is_entrada          boolean not null,
-    motivo_movimentacao varchar(50),
-    estoque_atual       integer,
-    valor_total         numeric(15, 2),
-    constraint movimentacao_produto_pk
-        primary key (id),
-    constraint movimentacao_produto_fk1
-        foreign key (orcamento_id) references orcamento,
-    constraint movimentacao_produto_fk2
-        foreign key (produto_id) references produto
+CREATE TABLE public.movimentacao_produto (
+                                             id serial NOT NULL,
+                                             orcamento_produto_id integer DEFAULT NULL,
+                                             fornecedor_id integer DEFAULT NULL,
+                                             quantidade integer DEFAULT NULL,
+                                             qtd_estoque integer DEFAULT NULL,
+                                             valor_total numeric(15, 2) DEFAULT NULL,
+                                             data timestamp NOT NULL,
+                                             autor_id integer NOT NULL,
+                                             is_entrada bool NOT NULL,
+                                             motivo_movimentacao varchar(50) NOT NULL,
+                                             valor_icms numeric(15, 2) NULL,
+                                             valor_pis numeric(15, 2) NULL,
+                                             valor_cofins numeric(15, 2) NULL,
+                                             CONSTRAINT movimentacao_produto_pk PRIMARY KEY (id),
+                                             CONSTRAINT movimentacao_produto_fk1 FOREIGN KEY (orcamento_produto_id) REFERENCES orcamento_produto (id),
+                                             CONSTRAINT movimentacao_produto_fk2 FOREIGN KEY (fornecedor_id) REFERENCES usuario (id),
+                                             CONSTRAINT movimentacao_produto_fk3 FOREIGN KEY (autor_id) REFERENCES usuario (id)
 );
 
 insert into parametro (chave, valor) values ('COR_BARRA','e60008'), ('COR_FONTE_TITULO_BARRA','6b6b6b'), ('COR_MENU','ffffff'), ('COR_FONTE_MENU','ffffff'), ('COR_FONTE_MENU_SELECIONADO','000000'), ('TITULO','EGY');

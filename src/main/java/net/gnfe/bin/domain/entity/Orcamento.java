@@ -4,18 +4,15 @@ import net.gnfe.bin.domain.enumeration.Bandeira;
 import net.gnfe.bin.domain.enumeration.FormaPagamento;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity(name = "ORCAMENTO")
 public class Orcamento extends net.gnfe.util.ddd.Entity {
 
 	private Long id;
-	private Usuario autor;
 	private Usuario cliente;
+	private Date dataCriacao;
 	private FormaPagamento formaPagamento;
 	private Bandeira bandeira;
 	private NotaFiscal notaFiscal;
@@ -33,14 +30,14 @@ public class Orcamento extends net.gnfe.util.ddd.Entity {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="AUTOR_ID")
-	public Usuario getAutor() {
-		return autor;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="DATA_CRIACAO")
+	public Date getDataCriacao() {
+		return dataCriacao;
 	}
 
-	public void setAutor(Usuario autor) {
-		this.autor = autor;
+	public void setDataCriacao(Date dataCriacao) {
+		this.dataCriacao = dataCriacao;
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY)

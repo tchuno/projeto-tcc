@@ -1,11 +1,14 @@
 package net.gnfe.bin.domain.service;
 
+import net.gnfe.bin.domain.entity.MovimentacaoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.CamposProduto;
+import net.gnfe.bin.domain.enumeration.MotivoMovimentacao;
 import net.gnfe.bin.domain.enumeration.OrigemMercadoria;
 import net.gnfe.bin.domain.enumeration.UnidadeMedida;
 import net.gnfe.bin.domain.repository.ProdutoRepository;
+import net.gnfe.bin.domain.vo.MovimentacaoProdutoVO;
 import net.gnfe.bin.domain.vo.filtro.ProdutoFiltro;
 import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.HibernateRepository;
@@ -14,7 +17,6 @@ import net.gnfe.util.excel.ExcelFormat;
 import net.gnfe.util.excel.ExcelWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,10 +30,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -39,7 +38,7 @@ import static java.util.Arrays.asList;
 public class ProdutoService {
 
 	@Autowired private ProdutoRepository produtoRepository;
-	@Autowired private UsuarioService usuarioService;
+	@Autowired private MovimentacaoProdutoService movimentacaoProdutoService;
 	@Autowired private SessionFactory sessionFactory;
 
 	public Produto get(Long id) {
@@ -118,20 +117,20 @@ public class ProdutoService {
 	}
 
 	@Transactional(rollbackFor=Exception.class)
-    public void iniciarProcessamentoDoArquivo(File file) throws Exception {
+    public void iniciarProcessamentoDoArquivo(File file, Usuario usuario) throws Exception {
 		List<String> cabecalho = criarCabecalho(file);
 		DummyUtils.systrace("processando arquivo: " + file.getAbsolutePath());
-		processarArquivo(file, cabecalho);
+		processarArquivo(file, cabecalho, usuario);
 	}
 
-	private void processarArquivo(File file, List<String> cabecalho) throws Exception {
+	private void processarArquivo(File file, List<String> cabecalho, Usuario usuario) throws Exception {
 
 		int i = 0;
 		try {
 			List<Map<String, String>> mapList = criarMap(file, cabecalho);
 
 			if(!mapList.isEmpty()) {
-				criarProdutos(mapList);
+				criarProdutos(mapList, usuario);
 			}
 		}
 		catch (Exception e) {
@@ -191,13 +190,13 @@ public class ProdutoService {
 		return listMap;
 	}
 
-	private void criarProdutos(List<Map<String, String>> maps) throws MessageKeyException {
+	private void criarProdutos(List<Map<String, String>> maps, Usuario usuario) throws MessageKeyException {
 
 		int linha = 1;
 		try {
 			for (Map<String, String> map : maps) {
 				DummyUtils.systrace("Importando Produto " + linha + " de " + maps.size());
-				criaProduto(map);
+				criaProduto(map, usuario);
 				DummyUtils.sleep(400);
 				linha++;
 			}
@@ -207,9 +206,9 @@ public class ProdutoService {
 		DummyUtils.systrace("FIM DA IMPORTACAO DO ARQUIVO");
 	}
 
-	private void criaProduto(Map<String, String> map) {
+	private void criaProduto(Map<String, String> map, Usuario usuario) {
 		Produto produto = isCriarNovoProduto(map);
-		criarOuAtualizarProduto(produto, map);
+		criarOuAtualizarProduto(produto, map, usuario);
 	}
 
 	private Produto isCriarNovoProduto(Map<String, String> map) {
@@ -225,7 +224,7 @@ public class ProdutoService {
 		return new Produto();
 	}
 
-	private void criarOuAtualizarProduto(Produto produto, Map<String, String> map) {
+	private void criarOuAtualizarProduto(Produto produto, Map<String, String> map, Usuario usuario) {
 
 		Long id = produto.getId();
 		boolean isInsert = id == null;
@@ -237,7 +236,6 @@ public class ProdutoService {
 		String cnm = map.get(CamposProduto.CNM.getNome());
 		String cest = map.get(CamposProduto.CEST.getNome());
 		String cfop = map.get(CamposProduto.CFOP.getNome());
-		String fornecedor = map.get(CamposProduto.FORNECEDOR.getNome());
 		String estoqueAtual = map.get(CamposProduto.ESTOQUE_ATUAL.getNome());
 		String unidadeMedida = map.get(CamposProduto.UNIDADE_MEDIDA.getNome());
 		String valorUnidade = map.get(CamposProduto.VALOR_UNIDADE.getNome());
@@ -256,7 +254,6 @@ public class ProdutoService {
 		produto.setCnm(cnm);
 		produto.setCest(cest);
 		produto.setCfop(cfop);
-		produto.setFornecedor(StringUtils.isNotBlank(fornecedor) ? usuarioService.get(Long.valueOf(fornecedor)) : null );
 		if(isInsert) {
 			produto.setEstoqueAtual(StringUtils.isNotBlank(estoqueAtual) ? Integer.valueOf(estoqueAtual) : null);
 		}
@@ -271,6 +268,17 @@ public class ProdutoService {
 		produto.setAliquotaCOFINS(StringUtils.isNotBlank(cofins) ? new BigDecimal(cofins) : null);
 
 		saveOrUpdate(produto);
+
+		if(isInsert) {
+			MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
+			vo.setData(new Date());
+			vo.setMotivoMovimentacao(MotivoMovimentacao.CRIACAO_PRODUTO);
+			vo.setAutor(usuario);
+			vo.setEntrada(true);
+			vo.setProduto(produto);
+			vo.setQuantidade(produto.getEstoqueAtual());
+			movimentacaoProdutoService.movimentarProduto(vo);
+		}
 	}
 
 	public File render(ProdutoFiltro filtro) {
@@ -371,9 +379,6 @@ public class ProdutoService {
 
 		String cfop = mp.getCfop();
 		ew.escrever(cfop);
-
-		Usuario fornecedor = mp.getFornecedor();
-		ew.escrever(fornecedor != null ? fornecedor.getId() : null);
 
 		Integer estoqueAtual = mp.getEstoqueAtual();
 		ew.escrever(estoqueAtual);

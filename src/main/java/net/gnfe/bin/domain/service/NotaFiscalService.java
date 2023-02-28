@@ -112,7 +112,7 @@ public class NotaFiscalService {
 		return ConfiguracoesNfe.criarConfiguracoes(EstadosEnum.PR, ambienteEnum, certificado, caminhoSchemas);
 	}
 
-	public void enviarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
+	public void enviarNotaFiscal(NotaFiscal notaFiscal, Usuario usuario) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
 
 		validarDados(notaFiscal);
 
@@ -229,8 +229,9 @@ public class NotaFiscalService {
 			MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
 			vo.setData(convertedDatetime);
 			vo.setOrcamento(orcamento);
+			vo.setAutor(usuario);
 			vo.setMotivoMovimentacao(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA);
-			vo.setValorTotal(totalNotaFiscalVO.getValorTotal());
+			vo.setTotalNotaFiscalVO(totalNotaFiscalVO);
 			vo.setEntrada(false);
 			movimentacaoProdutoService.movimentarProduto(vo);
 
@@ -395,14 +396,14 @@ public class NotaFiscalService {
 
 			BigDecimal aliquotaICMS = produto.getAliquotaICMS();
 			aliquotaICMS = aliquotaICMS == null ? new BigDecimal(BigInteger.ZERO) : aliquotaICMS;
-			BigDecimal valorICMS = vProd.multiply(aliquotaICMS).divide(new BigDecimal(100));
-
-			icms00.setVICMS(DummyUtils.formatarNumero(valorICMS, GNFEConstants.DECIMAL_FORMAT));
-			icms.setICMS00(icms00);
+			BigDecimal valorICMS = vProd.multiply(aliquotaICMS.divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_UP);
 
 			BigDecimal valorICMSTotal = totalNotaFiscalVO.getvICMS();
 			BigDecimal addICMS = valorICMSTotal.add(valorICMS);
 			totalNotaFiscalVO.setvICMS(addICMS);
+
+			icms00.setVICMS(DummyUtils.formatarNumero(valorICMS, GNFEConstants.DECIMAL_FORMAT));
+			icms.setICMS00(icms00);
 
 			TNFe.InfNFe.Det.Imposto.PIS pis = new TNFe.InfNFe.Det.Imposto.PIS();
 			TNFe.InfNFe.Det.Imposto.PIS.PISAliq pisAliq = new TNFe.InfNFe.Det.Imposto.PIS.PISAliq();
@@ -412,7 +413,7 @@ public class NotaFiscalService {
 
 			BigDecimal aliquotaPIS = produto.getAliquotaPIS();
 			aliquotaPIS = aliquotaPIS == null ? new BigDecimal(BigInteger.ZERO) : aliquotaPIS;
-			BigDecimal valorPIS = vProd.multiply(aliquotaPIS).divide(new BigDecimal(100));
+			BigDecimal valorPIS = vProd.multiply(aliquotaPIS).divide(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_UP);;
 
 			pisAliq.setVPIS(DummyUtils.formatarNumero(valorPIS, GNFEConstants.DECIMAL_FORMAT));
 			pis.setPISAliq(pisAliq);
@@ -429,7 +430,7 @@ public class NotaFiscalService {
 
 			BigDecimal aliquotaCOFINS = produto.getAliquotaCOFINS();
 			aliquotaCOFINS = aliquotaCOFINS == null ? new BigDecimal(BigInteger.ZERO) : aliquotaCOFINS;
-			BigDecimal valorCOFINS = vProd.multiply(aliquotaCOFINS).divide(new BigDecimal(100));
+			BigDecimal valorCOFINS = vProd.multiply(aliquotaCOFINS).divide(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_UP);;
 
 			cofinsAliq.setVCOFINS(DummyUtils.formatarNumero(valorCOFINS, GNFEConstants.DECIMAL_FORMAT));
 			cofins.setCOFINSAliq(cofinsAliq);
@@ -505,7 +506,7 @@ public class NotaFiscalService {
 		infNFe.setInfRespTec(infRespTec);
 	}
 
-	public void cancelarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException {
+	public void cancelarNotaFiscal(NotaFiscal notaFiscal, Usuario usuario) throws JAXBException, FileNotFoundException, NfeException, CertificadoException {
 
 		try {
 
@@ -563,6 +564,7 @@ public class NotaFiscalService {
 
 			vo.setData(dataTypeDate);
 			vo.setOrcamento(orcamento);
+			vo.setAutor(usuario);
 			vo.setMotivoMovimentacao(MotivoMovimentacao.NOTA_FISCAL_CANCELADA);
 			vo.setEntrada(true);
 			movimentacaoProdutoService.movimentarProduto(vo);

@@ -75,11 +75,10 @@ public class OrcamentoService {
 		return orcamentoRepository.countByFiltro(filtro);
 	}
 
-	public File gerarOrcamento(Orcamento orcamento) {
+	public File gerarOrcamento(Orcamento orcamento, Usuario autor) {
 		Map<String, Object> model = new HashMap<>();
 
 		Date date = new Date();
-		Usuario autor = orcamento.getAutor();
 		Long autorId = autor.getId();
 		autor = usuarioService.get(autorId);
 		Usuario cliente = orcamento.getCliente();
@@ -135,11 +134,11 @@ public class OrcamentoService {
 		return pdf;
 	}
 
-	public void enviarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
-		notaFiscalService.enviarNotaFiscal(notaFiscal);
+	public void enviarNotaFiscal(NotaFiscal notaFiscal, Usuario usuario) throws JAXBException, FileNotFoundException, NfeException, CertificadoException, InterruptedException {
+		notaFiscalService.enviarNotaFiscal(notaFiscal, usuario);
 	}
 
-	public void cancelarNotaFiscal(NotaFiscal notaFiscal) throws JAXBException, FileNotFoundException, NfeException, CertificadoException {
-		notaFiscalService.cancelarNotaFiscal(notaFiscal);
+	public void cancelarNotaFiscal(NotaFiscal notaFiscal, Usuario usuario) throws JAXBException, FileNotFoundException, NfeException, CertificadoException {
+		notaFiscalService.cancelarNotaFiscal(notaFiscal, usuario);
 	}
 }

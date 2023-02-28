@@ -13,32 +13,48 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 
 	private Long id;
 	private Date data;
-	private Orcamento orcamento;
-	private Produto produto;
+	private OrcamentoProduto orcamentoProduto;
+	private Usuario fornecedor;
 	private Integer quantidade;
+	private Integer qtdEstoque;
+	private BigDecimal valorTotal;
+	private Usuario autor;
 	private boolean isEntrada;
 	private MotivoMovimentacao motivoMovimentacao;
-	private Integer estoqueAtual;
-	private BigDecimal valorTotal;
+	private BigDecimal valorIcms;
+	private BigDecimal valorPis;
+	private BigDecimal valorCofins;
 
 	public MovimentacaoProduto(MovimentacaoProdutoVO vo) {
 		this.data = vo.getData();
-		this.orcamento = vo.getOrcamento();
-		this.produto = vo.getProduto();
+		this.orcamentoProduto = vo.getOrcamentoProduto();
+		this.fornecedor = vo.getFornecedor();
 		this.quantidade = vo.getQuantidade();
+		this.qtdEstoque = vo.getQtdEstoque();
+		this.autor = vo.getAutor();
 		this.motivoMovimentacao = vo.getMotivoMovimentacao();
 		this.isEntrada = vo.isEntrada();
-		this.valorTotal = vo.getValorTotal();
+		if(vo.getTotalNotaFiscalVO() != null) {
+			this.valorTotal = vo.getTotalNotaFiscalVO().getValorTotal();
+			this.valorIcms = vo.getTotalNotaFiscalVO().getvICMS();
+			this.valorPis = vo.getTotalNotaFiscalVO().getvPIS();
+			this.valorCofins = vo.getTotalNotaFiscalVO().getvCOFINS();
+		}
 	}
 
 	public MovimentacaoProduto(MovimentacaoProduto movimentacaoProduto) {
 		this.data = movimentacaoProduto.getData();
-		this.orcamento = movimentacaoProduto.getOrcamento();
-		this.produto = movimentacaoProduto.getProduto();
+		this.orcamentoProduto = movimentacaoProduto.getOrcamentoProduto();
+		this.fornecedor = movimentacaoProduto.getFornecedor();
 		this.quantidade = movimentacaoProduto.getQuantidade();
-		this.motivoMovimentacao = movimentacaoProduto.getMotivoMovimentacao();
-		this.isEntrada = movimentacaoProduto.isEntrada();
+		this.qtdEstoque = movimentacaoProduto.getQtdEstoque();
 		this.valorTotal = movimentacaoProduto.getValorTotal();
+		this.autor = movimentacaoProduto.getAutor();
+		this.isEntrada = movimentacaoProduto.isEntrada();
+		this.motivoMovimentacao = movimentacaoProduto.getMotivoMovimentacao();
+		this.valorIcms = movimentacaoProduto.getValorIcms();
+		this.valorPis = movimentacaoProduto.getValorPis();
+		this.valorCofins = movimentacaoProduto.getValorCofins();
 	}
 
 	public MovimentacaoProduto() {
@@ -67,23 +83,33 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 	}
 
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="ORCAMENTO_ID")
-	public Orcamento getOrcamento() {
-		return orcamento;
+	@JoinColumn(name="ORCAMENTO_PRODUTO_ID")
+	public OrcamentoProduto getOrcamentoProduto() {
+		return orcamentoProduto;
 	}
 
-	public void setOrcamento(Orcamento orcamento) {
-		this.orcamento = orcamento;
+	public void setOrcamentoProduto(OrcamentoProduto orcamento) {
+		this.orcamentoProduto = orcamento;
 	}
 
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="PRODUTO_ID")
-	public Produto getProduto() {
-		return produto;
+	@JoinColumn(name="FORNECEDOR_ID")
+	public Usuario getFornecedor() {
+		return fornecedor;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
+	public void setFornecedor(Usuario fornecedor) {
+		this.fornecedor = fornecedor;
+	}
+
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="AUTOR_ID")
+	public Usuario getAutor() {
+		return autor;
+	}
+
+	public void setAutor(Usuario autor) {
+		this.autor = autor;
 	}
 
 	@Column(name="QUANTIDADE")
@@ -114,13 +140,13 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 		this.isEntrada = entrada;
 	}
 
-	@Column(name="ESTOQUE_ATUAL")
-	public Integer getEstoqueAtual() {
-		return estoqueAtual;
+	@Column(name="QTD_ESTOQUE")
+	public Integer getQtdEstoque() {
+		return qtdEstoque;
 	}
 
-	public void setEstoqueAtual(Integer estoqueAtual) {
-		this.estoqueAtual = estoqueAtual;
+	public void setQtdEstoque(Integer estoqueAtual) {
+		this.qtdEstoque = estoqueAtual;
 	}
 
 	@Column(name="VALOR_TOTAL")
@@ -130,5 +156,32 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+
+	@Column(name="VALOR_ICMS")
+	public BigDecimal getValorIcms() {
+		return valorIcms;
+	}
+
+	public void setValorIcms(BigDecimal valorIcms) {
+		this.valorIcms = valorIcms;
+	}
+
+	@Column(name="VALOR_PIS")
+	public BigDecimal getValorPis() {
+		return valorPis;
+	}
+
+	public void setValorPis(BigDecimal valorPis) {
+		this.valorPis = valorPis;
+	}
+
+	@Column(name="VALOR_COFINS")
+	public BigDecimal getValorCofins() {
+		return valorCofins;
+	}
+
+	public void setValorCofins(BigDecimal valorCofins) {
+		this.valorCofins = valorCofins;
 	}
 }

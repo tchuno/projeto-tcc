@@ -45,7 +45,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         List<Orcamento> orcamentos = orcamentoService.findByFiltro(filtro);
 
         List<OrcamentoResponse> list = new ArrayList<>();
-        orcamentos.forEach(o -> list.add(new OrcamentoResponse(o)));
+        orcamentos.forEach(o -> list.add(new OrcamentoResponse(o, usuario)));
 
         return new ListaOrcamentoResponse(list);
     }
@@ -59,7 +59,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
 
         if(orcamentos != null && !orcamentos.isEmpty()) {
             Orcamento orcamento = orcamentos.iterator().next();
-            return new OrcamentoResponse(orcamento);
+            return new OrcamentoResponse(orcamento, usuario);
         }
 
         return null;
@@ -70,13 +70,13 @@ public class OrcamentoServiceRest extends SuperServiceRest {
 
         Orcamento orcamentoNovo = new Orcamento();
         orcamentoNovo = saveOrUpdate(usuario, requestCadastrarOrcamento, orcamentoNovo);
-        return new OrcamentoResponse(orcamentoNovo);
+        return new OrcamentoResponse(orcamentoNovo, usuario);
     }
 
     private Orcamento saveOrUpdate(Usuario usuario, RequestCadastrarOrcamento requestCadastrarOrcamento, Orcamento orcamentoNovo) {
         Usuario cliente = usuarioService.get(requestCadastrarOrcamento.getClienteId());
 
-        orcamentoNovo.setAutor(usuario);
+        orcamentoNovo.setDataCriacao(new Date());
         orcamentoNovo.setCliente(cliente);
         orcamentoNovo.setFormaPagamento(requestCadastrarOrcamento.getFormaPagamento());
         orcamentoNovo.setBandeira(requestCadastrarOrcamento.getBandeira());
@@ -97,7 +97,6 @@ public class OrcamentoServiceRest extends SuperServiceRest {
 
         NotaFiscal notaFiscal = new NotaFiscal();
         notaFiscal.setOrcamento(orcamentoNovo);
-        notaFiscal.setDataCriacao(new Date());
         notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.PENDENTE);
         orcamentoNovo.setNotaFiscal(notaFiscal);
 
@@ -109,7 +108,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
 
         Orcamento orcamento = orcamentoService.get(orcamentoId);
         NotaFiscal notaFiscal = orcamento.getNotaFiscal();
-        notaFiscalService.enviarNotaFiscal(notaFiscal);
+        notaFiscalService.enviarNotaFiscal(notaFiscal, usuario);
 
         return new FiltroNotaFiscalResponse(notaFiscal);
     }
@@ -118,7 +117,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
 
         Orcamento orcamento = orcamentoService.get(orcamentoId);
         NotaFiscal notaFiscal = orcamento.getNotaFiscal();
-        notaFiscalService.cancelarNotaFiscal(notaFiscal);
+        notaFiscalService.cancelarNotaFiscal(notaFiscal, usuario);
 
         return new FiltroNotaFiscalResponse(notaFiscal);
     }
@@ -128,8 +127,7 @@ public class OrcamentoServiceRest extends SuperServiceRest {
         Orcamento orcamento = orcamentoService.get(orcamentoId);
         Long usuarioId = usuario.getId();
         usuario = usuarioService.get(usuarioId);
-        orcamento.setAutor(usuario);
-        File file = orcamentoService.gerarOrcamento(orcamento);
+        File file = orcamentoService.gerarOrcamento(orcamento, usuario);
         String fileName = file.getName();
         byte[] bytes = FileUtils.readFileToByteArray(file);
 

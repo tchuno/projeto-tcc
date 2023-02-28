@@ -129,6 +129,7 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 		BigDecimal valorUnidade = filtro.getValorUnidade();
 		Integer tempoReposicao = filtro.getTempoReposicao();
 		Integer estoqueMinimo = filtro.getEstoqueMinimo();
+		Boolean temEmEstoque = filtro.isTemEmEstoque();
 
 		Map<String, Object> params = new HashMap<>();
 
@@ -214,6 +215,9 @@ public class ProdutoRepository extends HibernateRepository<Produto> {
 			params.put("estoqueMinimo", estoqueMinimo);
 		}
 
+		if(temEmEstoque != null && temEmEstoque) {
+			hql.append(" and u.estoqueAtual > 0 ");
+		}
 
 		return params;
 	}

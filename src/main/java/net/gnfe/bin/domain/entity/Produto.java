@@ -18,13 +18,12 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 	private String cnm;
 	private String cest;
 	private String cfop;
-	private Usuario fornecedor;
 	private Integer estoqueAtual;
-	private UnidadeMedida unidadeMedida;
-	private BigDecimal valorUnidade;
-	private BigDecimal valorCompra;
-	private Integer tempoReposicao;
 	private Integer estoqueMinimo;
+	private Integer tempoReposicao;
+	private BigDecimal valorCompra;
+	private BigDecimal valorUnidade;
+	private UnidadeMedida unidadeMedida;
 	private OrigemMercadoria origemMercadoria;
 	private BigDecimal aliquotaICMS;
 	private BigDecimal aliquotaPIS;
@@ -105,16 +104,6 @@ public class Produto extends net.gnfe.util.ddd.Entity {
 
 	public void setCfop(String cfop) {
 		this.cfop = cfop;
-	}
-
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="FORNECEDOR_ID")
-	public Usuario getFornecedor() {
-		return fornecedor;
-	}
-
-	public void setFornecedor(Usuario fornecedor) {
-		this.fornecedor = fornecedor;
 	}
 
 	@Column(name="ESTOQUE_ATUAL")

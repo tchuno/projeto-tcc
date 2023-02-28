@@ -27,10 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class MovimentacaoProdutoService {
@@ -92,14 +89,15 @@ public class MovimentacaoProdutoService {
 		MotivoMovimentacao motivoMovimentacao = vo.getMotivoMovimentacao();
 		if(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA.equals(motivoMovimentacao)) {
 
-			saveOrUpdate(movimentacaoProduto);
-
 			Orcamento orcamento = vo.getOrcamento();
 			Set<OrcamentoProduto> orcamentoProdutos = orcamento.getOrcamentoProdutos();
 			for (OrcamentoProduto orcamentoProduto : orcamentoProdutos) {
 				movimentarProduto(movimentacaoProduto, orcamentoProduto);
 			}
 
+			OrcamentoProduto next = orcamento.getOrcamentoProdutos().iterator().next();
+			vo.setOrcamentoProduto(next);
+			saveOrUpdate(movimentacaoProduto);
 
 		} else if (MotivoMovimentacao.NOTA_FISCAL_CANCELADA.equals(motivoMovimentacao)) {
 
@@ -128,12 +126,12 @@ public class MovimentacaoProdutoService {
 			if(isEntrada) {
 				Integer estoqueAtual = emEstoque + quantidade;
 				produto.setEstoqueAtual(estoqueAtual);
-				movimentacaoProduto.setEstoqueAtual(estoqueAtual);
+				movimentacaoProduto.setQtdEstoque(estoqueAtual);
 				produtoService.saveOrUpdate(produto);
 			} else {
 				Integer estoqueAtual = emEstoque - quantidade;
 				produto.setEstoqueAtual(estoqueAtual);
-				movimentacaoProduto.setEstoqueAtual(estoqueAtual);
+				movimentacaoProduto.setQtdEstoque(estoqueAtual);
 				produtoService.saveOrUpdate(produto);
 			}
 
@@ -162,8 +160,8 @@ public class MovimentacaoProdutoService {
 		movimentacao.setValorTotal(vProd);
 		movimentacao.setQuantidade(quantidade);
 		movimentacao.setMotivoMovimentacao(MotivoMovimentacao.MOVIMENTACAO_ESTOQUE);
-		movimentacao.setEstoqueAtual(estoqueAtual);
-		movimentacao.setProduto(produto);
+		movimentacao.setQtdEstoque(estoqueAtual);
+		movimentacao.setOrcamentoProduto(orcamentoProduto);
 		saveOrUpdate(movimentacao);
 	}
 
@@ -271,8 +269,8 @@ public class MovimentacaoProdutoService {
 		Long id = mp.getId();
 		ew.escrever(id);
 
-		Orcamento orcamento = mp.getOrcamento();
-		orcamento = orcamento == null ? new Orcamento() : orcamento;
+		OrcamentoProduto orcamentoProduto = mp.getOrcamentoProduto();
+		Orcamento orcamento = orcamentoProduto == null ? new Orcamento() : orcamentoProduto.getOrcamento();
 		Long orcamentoId = orcamento.getId();
 		ew.escrever(orcamentoId);
 
@@ -281,12 +279,14 @@ public class MovimentacaoProdutoService {
 		Long notaFiscalId = notaFiscal.getId();
 		ew.escrever(notaFiscalId);
 
-		Produto produto = mp.getProduto();
+		Produto produto = Arrays.asList(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA,
+				MotivoMovimentacao.NOTA_FISCAL_CANCELADA).contains(mp.getMotivoMovimentacao()) ||
+				orcamentoProduto == null ? new Produto() : orcamentoProduto.getProduto();
 		produto = produto == null ? new Produto() : produto;
 		Long produtoId = produto.getId();
 		ew.escrever(produtoId);
 
-		Usuario autor = orcamento.getAutor();
+		Usuario autor = mp.getAutor();
 		autor = autor == null ? new Usuario() : autor;
 		String nomeAutor = autor.getNome();
 		ew.escrever(nomeAutor);
@@ -296,13 +296,18 @@ public class MovimentacaoProdutoService {
 		String clienteNome = cliente.getNome();
 		ew.escrever(clienteNome);
 
+		Usuario fornecedor = mp.getFornecedor();
+		fornecedor = fornecedor == null ? new Usuario() : fornecedor;
+		String fornecedorNome = fornecedor.getNome();
+		ew.escrever(fornecedorNome);
+
 		FormaPagamento formaPagamento = orcamento.getFormaPagamento();
 		ew.escrever(messageService.getValue("FormaPagamento." + (formaPagamento != null ? formaPagamento.name() : null) + ".label"));
 
 		Bandeira bandeira = orcamento.getBandeira();
 		ew.escrever(bandeira != null ? bandeira.name() : null);
 
-		Date dataCriacao = notaFiscal.getDataCriacao();
+		Date dataCriacao = orcamento.getDataCriacao();
 		ew.escrever(DummyUtils.formatDateTime(dataCriacao));
 
 		StatusNotaFiscal statusNotaFiscal = notaFiscal.getStatusNotaFiscal();
@@ -346,11 +351,23 @@ public class MovimentacaoProdutoService {
 		boolean entrada = mp.isEntrada();
 		ew.escrever(entrada ? messageService.getValue("entrada.label") : messageService.getValue("saida.label"));
 
-		Integer estoqueAtual = mp.getEstoqueAtual();
+		Integer quantidade = mp.getQuantidade();
+		ew.escrever(quantidade);
+
+		Integer estoqueAtual = mp.getQtdEstoque();
 		ew.escrever(estoqueAtual);
 
 		BigDecimal valorTotal = mp.getValorTotal();
-		ew.escrever(valorTotal != null ? "R$ " + DummyUtils.formatCurrency(valorTotal) : null);
+		ew.escrever(valorTotal != null && MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA.equals(mp.getMotivoMovimentacao()) ? "R$ " + DummyUtils.formatCurrency(valorTotal) : null);
+
+		BigDecimal valorIcms = mp.getValorIcms();
+		ew.escrever(valorIcms != null && MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA.equals(mp.getMotivoMovimentacao()) ? "R$ " + DummyUtils.formatCurrency(valorIcms) : null);
+
+		BigDecimal valorPis = mp.getValorPis();
+		ew.escrever(valorPis != null && MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA.equals(mp.getMotivoMovimentacao()) ? "R$ " + DummyUtils.formatCurrency(valorPis) : null);
+
+		BigDecimal valorCofins = mp.getValorCofins();
+		ew.escrever(valorCofins != null && MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA.equals(mp.getMotivoMovimentacao()) ? "R$ " + DummyUtils.formatCurrency(valorCofins) : null);
 	}
 
 }

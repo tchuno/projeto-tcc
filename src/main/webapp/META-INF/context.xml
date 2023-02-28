@@ -6,7 +6,7 @@
 		userTable="usuario" userNameCol="login" userCredCol="senha" 
 		userRoleTable="role" roleNameCol="nome" 
 
-		connectionURL="jdbc:postgresql://127.0.0.1:5432/gnfe"
+		connectionURL="jdbc:postgresql://127.0.0.1:5432/gnfe2"
 		connectionName="gnfe" connectionPassword="gnfe"
 		/>
 		
@@ -16,7 +16,7 @@
 		type="javax.sql.DataSource"
 		driverClassName="org.postgresql.Driver"
 
-		url="jdbc:postgresql://127.0.0.1:5432/gnfe"
+		url="jdbc:postgresql://127.0.0.1:5432/gnfe2"
 		username="gnfe" password="gnfe"
 		
 	/>

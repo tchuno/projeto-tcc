@@ -123,7 +123,9 @@ public class ProdutoCrudBean extends AbstractBean {
                 File fileDestino = File.createTempFile("importacao", "."+ extensao);;
                 FileUtils.copyInputStreamToFile(inputstream, fileDestino);
 
-                service.iniciarProcessamentoDoArquivo(fileDestino);
+                Usuario usuarioLogado = getUsuarioLogado();
+
+                service.iniciarProcessamentoDoArquivo(fileDestino, usuarioLogado);
 
                 addMessage("importacao.sucesso");
             }

@@ -12,11 +12,10 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 
 	private Long id;
 	private Orcamento orcamento;
-	private Date dataCriacao;
-	private Date dataEnvio;
 	private StatusNotaFiscal statusNotaFiscal;
-	private String chaveAcesso;
+	private Date dataEnvio;
 	private String protocolo;
+	private String chaveAcesso;
 	private String xml;
 	private Date dataCancelamento;
 	private String protocoloCancelamento;
@@ -42,16 +41,6 @@ public class NotaFiscal extends net.gnfe.util.ddd.Entity {
 
 	public void setOrcamento(Orcamento orcamento) {
 		this.orcamento = orcamento;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="DATA_CRIACAO")
-	public Date getDataCriacao() {
-		return dataCriacao;
-	}
-
-	public void setDataCriacao(Date dataCriacao) {
-		this.dataCriacao = dataCriacao;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

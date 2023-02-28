@@ -1,6 +1,9 @@
 package net.gnfe.bin.domain.entity;
 
+import net.gnfe.bin.domain.enumeration.StatusNotaFiscal;
+
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Entity(name = "ORCAMENTO_PRODUTO")
 public class OrcamentoProduto extends net.gnfe.util.ddd.Entity {
@@ -53,7 +56,7 @@ public class OrcamentoProduto extends net.gnfe.util.ddd.Entity {
 			quantidade = 1;
 		}
 
-		if(produto != null) {
+		if(produto != null && (!Arrays.asList(StatusNotaFiscal.CONCLUIDO, StatusNotaFiscal.CANCELADO).contains(orcamento.getNotaFiscal().getStatusNotaFiscal()))) {
 			Integer estoqueAtual = produto.getEstoqueAtual();
 			if (estoqueAtual != null && quantidade > estoqueAtual) {
 				quantidade = estoqueAtual;

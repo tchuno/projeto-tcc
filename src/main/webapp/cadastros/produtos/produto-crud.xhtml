@@ -53,7 +53,19 @@
 												  styleClass="radio-default" requiredMessage="true">
 									<f:selectItem itemValue="#{true}" itemLabel="#{msg['entrada.label']}"/>
 									<f:selectItem itemValue="#{false}" itemLabel="#{msg['saida.label']}"/>
+									<f:ajax render="form-movimentacao-produto:fornecedor-panel-id"/>
 								</h:selectOneRadio>
+							</div>
+							<div class="form-group">
+								<h:panelGroup id="fornecedor-panel-id">
+									<h:outputLabel value="#{msg['fornecedores.label']}" styleClass="bf-no-message" for="fornecedor-id" rendered="#{produtoCrudBean.movimentacaoProdutoVO.entrada eq true}"/>
+									<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{produtoCrudBean.movimentacaoProdutoVO.fornecedor}" label="#{msg['fornecedores.label']}"
+													 converter="entity" required="false" rendered="#{produtoCrudBean.movimentacaoProdutoVO.entrada eq true}">
+										<f:selectItem itemValue="" itemLabel=""/>
+										<f:selectItems value="#{produtoCrudBean.fornecedores}" var="usu" itemValue="#{usu}" itemLabel="#{usu.nome}"/>
+									</h:selectOneMenu>
+									<b:message/>
+								</h:panelGroup>
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.movimentacaoProdutoVO.quantidade}" placeholder="#{msg['quantidade.label']}"
@@ -112,15 +124,6 @@
 							<div class="form-group">
 								<b:inputText value="#{produtoCrudBean.produto.cfop}" placeholder="#{msg['cfop.label']}"
 											 label="#{msg['cfop.label']}" renderLabel="true" maxlength="10" styleClass="mask-number" required="true" />
-								<b:message/>
-							</div>
-							<div class="form-group">
-								<h:outputLabel value="#{msg['fornecedores.label']}" styleClass="bf-no-message"/>
-								<h:selectOneMenu styleClass="form-control bf-no-message" id="fornecedor-id" value="#{produtoCrudBean.produto.fornecedor}" label="#{msg['fornecedores.label']}"
-												 converter="entity" required="false">
-									<f:selectItem itemValue="" itemLabel=""/>
-									<f:selectItems value="#{produtoCrudBean.fornecedores}" var="usu" itemValue="#{usu}" itemLabel="#{usu.nome}"/>
-								</h:selectOneMenu>
 								<b:message/>
 							</div>
 							<div class="form-group">

@@ -46,9 +46,9 @@ public class OrcamentoEditBean extends AbstractBean {
             this.orcamento = service.get(id);
         } else {
             this.orcamento = new Orcamento();
+            orcamento.setDataCriacao(new Date());
             NotaFiscal notaFiscal = new NotaFiscal();
             notaFiscal.setOrcamento(orcamento);
-            notaFiscal.setDataCriacao(new Date());
             notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.PENDENTE);
             orcamento.setNotaFiscal(notaFiscal);
         }
@@ -57,6 +57,7 @@ public class OrcamentoEditBean extends AbstractBean {
 
         ProdutoFiltro produtoFiltro = new ProdutoFiltro();
         produtoFiltro.setOrdenar("produto.nome", SortOrder.ASCENDING);
+        produtoFiltro.setTemEmEstoque(true);
         produtos = produtoService.findByFiltro(produtoFiltro);
 
     }
@@ -65,10 +66,6 @@ public class OrcamentoEditBean extends AbstractBean {
 
         try {
             boolean insert = isInsert(orcamento);
-
-            Usuario usuarioLogado = getUsuarioLogado();
-            orcamento.setAutor(usuarioLogado);
-
             service.saveOrUpdate(orcamento);
 
             addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
@@ -110,6 +107,10 @@ public class OrcamentoEditBean extends AbstractBean {
         usuarioNovo.setRoleGNFE(RoleGNFE.CLIENTE);
         usuarioService.saveOrUpdate(usuarioNovo, usuarioLogado);
 
+        boolean insert = isInsert(usuarioNovo);
+
+        addMessage(insert ? "registroCadastrado.sucesso" : "registroAlterado.sucesso");
+
         orcamento.setCliente(usuarioNovo);
     }
 
@@ -121,9 +122,9 @@ public class OrcamentoEditBean extends AbstractBean {
 
         if(orcamento == null) {
             orcamento = new Orcamento();
+            orcamento.setDataCriacao(new Date());
             NotaFiscal notaFiscal = new NotaFiscal();
             notaFiscal.setOrcamento(orcamento);
-            notaFiscal.setDataCriacao(new Date());
             notaFiscal.setStatusNotaFiscal(StatusNotaFiscal.PENDENTE);
             this.orcamento.setNotaFiscal(notaFiscal);
         }
@@ -165,7 +166,8 @@ public class OrcamentoEditBean extends AbstractBean {
 
     public void gerarOrcamento() {
 
-        File file = service.gerarOrcamento(orcamento);
+        Usuario usuarioLogado = getUsuarioLogado();
+        File file = service.gerarOrcamento(orcamento, usuarioLogado);
         try {
             FileInputStream fis = new FileInputStream(file);
             Faces.sendFile(fis, "orcamento.pdf", false);
@@ -184,8 +186,10 @@ public class OrcamentoEditBean extends AbstractBean {
                 return;
             }
 
+            Usuario usuarioLogado = getUsuarioLogado();
+
             NotaFiscal notaFiscal = orcamento.getNotaFiscal();
-            service.enviarNotaFiscal(notaFiscal);
+            service.enviarNotaFiscal(notaFiscal, usuarioLogado);
 
             addMessage("notaEmitida.sucesso");
         }
@@ -200,7 +204,8 @@ public class OrcamentoEditBean extends AbstractBean {
         try {
 
             NotaFiscal notaFiscal = orcamento.getNotaFiscal();
-            service.cancelarNotaFiscal(notaFiscal);
+            Usuario usuarioLogado = getUsuarioLogado();
+            service.cancelarNotaFiscal(notaFiscal, usuarioLogado);
 
             addMessage("notaCancelada.sucesso");
         }
