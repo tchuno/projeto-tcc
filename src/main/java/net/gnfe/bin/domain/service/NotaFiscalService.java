@@ -128,7 +128,8 @@ public class NotaFiscalService {
 			LocalDateTime dataEmissao = LocalDateTime.now();
 			String cnf = DummyUtils.gerarDigitosAleatorios(8);
 
-			String modelo = DocumentoEnum.NFE.getModelo();int serie = numeroNfeInt / 10000;
+			String modelo = DocumentoEnum.NFE.getModelo();
+			int serie = numeroNfeInt / 10000;
 			serie += 1;
 			String tipoEmissao = "1"; //1 = Emissão normal (não em contingência)
 
