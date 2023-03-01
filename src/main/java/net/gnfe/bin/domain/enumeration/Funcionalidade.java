@@ -20,11 +20,11 @@ public enum Funcionalidade {
 			new P(RoleGNFE.CLIENTE, false, false, false, false)),
 	USUARIOS(
 			new P(RoleGNFE.ADMIN, true, true, true, true),
-			new P(RoleGNFE.FUNCIONARIO, false, false, false, false),
+			new P(RoleGNFE.FUNCIONARIO, true, false, false, false),
 			new P(RoleGNFE.CLIENTE, false, false, false, false)),
 	USUARIOS_EDIT(
 			new P(RoleGNFE.ADMIN, true, true, true, true),
-			new P(RoleGNFE.FUNCIONARIO, false, false, false, false),
+			new P(RoleGNFE.FUNCIONARIO, true, false, false, false),
 			new P(RoleGNFE.CLIENTE, false, false, false, false)),
 	CUSTOMIZACAO(
 			new P(RoleGNFE.ADMIN, true, true, true, true),

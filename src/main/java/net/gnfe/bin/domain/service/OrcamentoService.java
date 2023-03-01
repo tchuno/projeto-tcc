@@ -120,8 +120,6 @@ public class OrcamentoService {
 		model.put("clienteEstado", StringEscapeUtils.escapeHtml4(cliente.getEstado()));
 		model.put("clienteCep", cliente.getCep());
 		model.put("produtos", vos);
-		model.put("validade", DummyUtils.formatDate(DateUtils.addDays(date, 10)));
-		model.put("garantia", DummyUtils.formatDate(DateUtils.addDays(date, 3)));
 		model.put("formaPagamento", StringEscapeUtils.escapeHtml4(messageService.getValue("FormaPagamento." + formaPagamento.name() + ".label")));
 		model.put("totalGeral", "R$ "+ DummyUtils.formatCurrency(DummyUtils.totalGeral(orcamentoProdutos)));
 		model.put("statusNotaFiscal", StringEscapeUtils.escapeHtml4(messageService.getValue("StatusNotaFiscal." + statusNotaFiscal.name() + ".label")));

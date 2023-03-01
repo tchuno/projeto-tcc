@@ -236,6 +236,10 @@
 	</security-role>
 
 	<security-role>
+		<role-name>FUNCIONARIO</role-name>
+	</security-role>
+
+	<security-role>
 		<role-name>FORNECEDOR</role-name>
 	</security-role>
 
