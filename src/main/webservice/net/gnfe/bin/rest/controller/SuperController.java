@@ -2,6 +2,7 @@ package net.gnfe.bin.rest.controller;
 
 
 import net.gnfe.bin.domain.entity.SessaoHttpRequest;
+import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.rest.exception.HTTP401Exception;
 import net.gnfe.bin.rest.service.SessaoHttpRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,10 @@ public abstract class SuperController {
 			throw new HTTP401Exception("http401.exception");
 		}
 		return sessaoHttpRequest;
+	}
+
+	protected void mataSessao(SessaoHttpRequest request) {
+		Usuario usuario = request.getUsuario();
+		sessaoHttpRequestService.invalidaSessoesAnteriores(usuario);
 	}
 }

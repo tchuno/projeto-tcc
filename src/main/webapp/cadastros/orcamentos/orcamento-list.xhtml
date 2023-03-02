@@ -36,7 +36,7 @@
 								<div class="form-group">
 									<h:outputLabel value="#{msg['cliente.label']}" styleClass="bf-no-message"/>
 									<h:selectOneMenu styleClass="form-control bf-no-message" id="cliente-id" value="#{orcamentoListBean.filtro.clienteId}"
-													 label="#{msg['cliente.label']}" required="false" disabled="#{menuBean.podeEditar()}">
+													 label="#{msg['cliente.label']}" required="false">
 										<f:selectItem itemValue="" itemLabel=""/>
 										<f:selectItems value="#{orcamentoListBean.clientes}" var="cli" itemValue="#{cli.id}" itemLabel="#{cli.nome}"/>
 									</h:selectOneMenu>

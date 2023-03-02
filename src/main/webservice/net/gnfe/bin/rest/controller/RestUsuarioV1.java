@@ -75,6 +75,7 @@ public class RestUsuarioV1 extends SuperController {
     )
     public ResponseEntity logoff(HttpServletRequest request) throws Exception {
 		SessaoHttpRequest sessaoHttpRequest = getSessaoHttpRequest(request);
+        mataSessao(sessaoHttpRequest);
         request.getSession().invalidate();
         return new ResponseEntity(HttpStatus.OK);
     }

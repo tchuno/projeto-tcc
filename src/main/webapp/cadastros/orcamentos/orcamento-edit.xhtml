@@ -270,7 +270,7 @@
 						<p:column headerText="#{msg['quantidade.label']}:" style="width: 80px; text-align: center">
 							<div class="form-group">
 								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, 1))}"
-											   rendered="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
+											   disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 									<i class="fa fa-arrow-up" style="color: white"></i>
 								</p:commandLink>
 							</div>
@@ -284,7 +284,7 @@
 							</div>
 							<div class="form-group">
 								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, -1))}"
-											   rendered="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
+											   disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 									<i class="fa fa-arrow-down" style="color: white"></i>
 								</p:commandLink>
 							</div>
@@ -296,7 +296,7 @@
 						</p:column>
 						<p:column style="width: 80px;">
 							<p:commandLink class="btn btn-danger" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{orcamentoEditBean.deleteProduct(product)}"
-										   rendered	="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
+										   disabled	="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 								<i class="fa fa-trash" style="color: white"></i>
 							</p:commandLink>
 						</p:column>
