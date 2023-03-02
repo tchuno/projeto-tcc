@@ -14,6 +14,7 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 	private Long id;
 	private Date data;
 	private OrcamentoProduto orcamentoProduto;
+	private Produto produto;
 	private Usuario fornecedor;
 	private Integer quantidade;
 	private Integer qtdEstoque;
@@ -28,6 +29,7 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 	public MovimentacaoProduto(MovimentacaoProdutoVO vo) {
 		this.data = vo.getData();
 		this.orcamentoProduto = vo.getOrcamentoProduto();
+		this.produto = vo.getProduto();
 		this.fornecedor = vo.getFornecedor();
 		this.quantidade = vo.getQuantidade();
 		this.qtdEstoque = vo.getQtdEstoque();
@@ -45,6 +47,7 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 	public MovimentacaoProduto(MovimentacaoProduto movimentacaoProduto) {
 		this.data = movimentacaoProduto.getData();
 		this.orcamentoProduto = movimentacaoProduto.getOrcamentoProduto();
+		this.produto = movimentacaoProduto.getProduto();
 		this.fornecedor = movimentacaoProduto.getFornecedor();
 		this.quantidade = movimentacaoProduto.getQuantidade();
 		this.qtdEstoque = movimentacaoProduto.getQtdEstoque();
@@ -91,6 +94,17 @@ public class MovimentacaoProduto extends net.gnfe.util.ddd.Entity {
 	public void setOrcamentoProduto(OrcamentoProduto orcamento) {
 		this.orcamentoProduto = orcamento;
 	}
+
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="PRODUTO_ID")
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
 
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="FORNECEDOR_ID")

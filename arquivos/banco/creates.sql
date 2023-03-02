@@ -88,7 +88,7 @@ CREATE TABLE public.orcamento (
                                   forma_pagamento varchar(50) DEFAULT NULL,
                                   bandeira varchar(50) DEFAULT NULL,
                                   CONSTRAINT orcamento_pk PRIMARY KEY (id),
-                                  CONSTRAINT orcamento_fk2 FOREIGN KEY (cliente_id) REFERENCES usuario (id)
+                                  CONSTRAINT orcamento_fk1 FOREIGN KEY (cliente_id) REFERENCES usuario (id)
 );
 
 CREATE TABLE public.role (
@@ -130,6 +130,7 @@ CREATE TABLE public.orcamento_produto (
 CREATE TABLE public.movimentacao_produto (
                                              id serial NOT NULL,
                                              orcamento_produto_id integer DEFAULT NULL,
+                                             produto_id integer DEFAULT NULL,
                                              fornecedor_id integer DEFAULT NULL,
                                              quantidade integer DEFAULT NULL,
                                              qtd_estoque integer DEFAULT NULL,
@@ -138,13 +139,14 @@ CREATE TABLE public.movimentacao_produto (
                                              autor_id integer NOT NULL,
                                              is_entrada bool NOT NULL,
                                              motivo_movimentacao varchar(50) NOT NULL,
-                                             valor_icms numeric(15, 2) NULL,
-                                             valor_pis numeric(15, 2) NULL,
-                                             valor_cofins numeric(15, 2) NULL,
+                                             valor_icms numeric(15, 2) DEFAULT NULL,
+                                             valor_pis numeric(15, 2) DEFAULT NULL,
+                                             valor_cofins numeric(15, 2) DEFAULT NULL,
                                              CONSTRAINT movimentacao_produto_pk PRIMARY KEY (id),
                                              CONSTRAINT movimentacao_produto_fk1 FOREIGN KEY (orcamento_produto_id) REFERENCES orcamento_produto (id),
                                              CONSTRAINT movimentacao_produto_fk2 FOREIGN KEY (fornecedor_id) REFERENCES usuario (id),
-                                             CONSTRAINT movimentacao_produto_fk3 FOREIGN KEY (autor_id) REFERENCES usuario (id)
+                                             CONSTRAINT movimentacao_produto_fk3 FOREIGN KEY (autor_id) REFERENCES usuario (id),
+                                             CONSTRAINT movimentacao_produto_fk4 FOREIGN KEY (produto_id) REFERENCES produto (id)
 );
 
 insert into parametro (chave, valor) values ('COR_BARRA','e60008'), ('COR_FONTE_TITULO_BARRA','6b6b6b'), ('COR_MENU','ffffff'), ('COR_FONTE_MENU','ffffff'), ('COR_FONTE_MENU_SELECIONADO','000000'), ('TITULO','EGY');

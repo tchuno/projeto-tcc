@@ -207,7 +207,7 @@
 
 				    <f:facet name="footer">
 				        <b:button value="#{msg['cancelar.label']}" look="primary" dismiss="modal" onclick="return false;"/>
-				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="form-produto-list adicionar-modal-content-id" styleClass="btn" />
+				        <p:commandButton value="#{msg['salvar.label']}" actionListener="#{produtoCrudBean.salvar()}" update="form-produto-list adicionar-modal-content-id form-movimentacao-produto:movimentacao-modal-content-id" styleClass="btn" />
 				    </f:facet>
 				</b:modal>
 			</h:form>

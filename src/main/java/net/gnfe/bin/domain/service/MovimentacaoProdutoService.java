@@ -279,10 +279,10 @@ public class MovimentacaoProdutoService {
 		Long notaFiscalId = notaFiscal.getId();
 		ew.escrever(notaFiscalId);
 
-		Produto produto = Arrays.asList(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA,
+		Produto produto = (Arrays.asList(MotivoMovimentacao.NOTA_FISCAL_CONCLUIDA,
 				MotivoMovimentacao.NOTA_FISCAL_CANCELADA).contains(mp.getMotivoMovimentacao()) ||
-				orcamentoProduto == null ? new Produto() : orcamentoProduto.getProduto();
-		produto = produto == null ? new Produto() : produto;
+				orcamentoProduto == null) ? null : orcamentoProduto.getProduto();
+		produto = produto == null ? (mp.getProduto() != null ? mp.getProduto() : new Produto()) : produto;
 		Long produtoId = produto.getId();
 		ew.escrever(produtoId);
 

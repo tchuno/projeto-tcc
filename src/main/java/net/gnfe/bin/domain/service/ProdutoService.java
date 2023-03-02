@@ -1,6 +1,5 @@
 package net.gnfe.bin.domain.service;
 
-import net.gnfe.bin.domain.entity.MovimentacaoProduto;
 import net.gnfe.bin.domain.entity.Produto;
 import net.gnfe.bin.domain.entity.Usuario;
 import net.gnfe.bin.domain.enumeration.CamposProduto;

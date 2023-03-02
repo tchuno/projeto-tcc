@@ -72,10 +72,14 @@ public class ProdutoCrudBean extends AbstractBean {
             service.saveOrUpdate(produto);
 
             if(insert) {
+
+                Usuario usuarioLogado = getUsuarioLogado();
+
                 MovimentacaoProdutoVO vo = new MovimentacaoProdutoVO();
                 vo.setData(new Date());
                 vo.setMotivoMovimentacao(MotivoMovimentacao.CRIACAO_PRODUTO);
                 vo.setEntrada(true);
+                vo.setAutor(usuarioLogado);
                 vo.setProduto(produto);
                 vo.setQuantidade(produto.getEstoqueAtual());
                 movimentacaoProdutoService.movimentarProduto(vo);
