@@ -35,7 +35,8 @@
 							<div class="col-sm-6 noMarginBottom" >
 								<div class="form-group">
 									<h:outputLabel value="#{msg['cliente.label']}" styleClass="bf-no-message"/>
-									<h:selectOneMenu styleClass="form-control bf-no-message" id="cliente-id" value="#{orcamentoListBean.filtro.clienteId}" label="#{msg['cliente.label']}" required="false">
+									<h:selectOneMenu styleClass="form-control bf-no-message" id="cliente-id" value="#{orcamentoListBean.filtro.clienteId}"
+													 label="#{msg['cliente.label']}" required="false" disabled="#{menuBean.podeEditar()}">
 										<f:selectItem itemValue="" itemLabel=""/>
 										<f:selectItems value="#{orcamentoListBean.clientes}" var="cli" itemValue="#{cli.id}" itemLabel="#{cli.nome}"/>
 									</h:selectOneMenu>
@@ -94,7 +95,10 @@
 							<p:column headerText="#{msg['statusNotaFiscal.label']}" style="text-align: center;">
 								<h:outputText value="#{msg['StatusNotaFiscal.'.concat(orcamento.notaFiscal.statusNotaFiscal).concat('.label')]}" />
 							</p:column>
-							<p:column style="width: 120px; text-align: center" sortable="false" rendered="#{menuBean.podeEditar()}">
+							<p:column style="width: 120px; text-align: center" sortable="false">
+								<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}" style="float: right;" styleClass="btn btn-warning btn-editar" rendered="#{menuBean.podeVisualizar() and !menuBean.podeEditar()}">
+									<h:outputText value="#{msg['visualizar.label']}"/>
+								</h:link>
 								<h:link outcome="/cadastros/orcamentos/orcamento-edit.xhtml?id=#{orcamento.id}"
 										styleClass="btn btn-warning btn-editar"
 										rendered="#{menuBean.podeEditar()}">

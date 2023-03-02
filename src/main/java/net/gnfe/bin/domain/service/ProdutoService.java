@@ -161,10 +161,11 @@ public class ProdutoService {
 					if(!cabecalhos.isEmpty() && !isCabecalho) {
 						String key = cabecalhos.get(idx);
 						String value = DummyUtils.substituirCaracteresEspeciais(valorLinha);
+						value = value.replace("\"", "");
 						value = DummyUtils.htmlToString(value);
 						map.put(key, value);
-						idx++;
 					}
+					idx++;
 				}
 
 				if(!map.isEmpty()) {
@@ -232,7 +233,7 @@ public class ProdutoService {
 		String nome = map.get(CamposProduto.NOME.getNome());
 		String desc = map.get(CamposProduto.DESC.getNome());
 		String gtin = map.get(CamposProduto.GTIN.getNome());
-		String cnm = map.get(CamposProduto.CNM.getNome());
+		String ncm = map.get(CamposProduto.NCM.getNome());
 		String cest = map.get(CamposProduto.CEST.getNome());
 		String cfop = map.get(CamposProduto.CFOP.getNome());
 		String estoqueAtual = map.get(CamposProduto.ESTOQUE_ATUAL.getNome());
@@ -250,7 +251,7 @@ public class ProdutoService {
 		produto.setNome(nome);
 		produto.setDescricao(desc);
 		produto.setGtin(gtin);
-		produto.setCnm(cnm);
+		produto.setCnm(ncm);
 		produto.setCest(cest);
 		produto.setCfop(cfop);
 		if(isInsert) {

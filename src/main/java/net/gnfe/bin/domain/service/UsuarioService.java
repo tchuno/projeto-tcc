@@ -67,10 +67,8 @@ public class UsuarioService {
 		}
 
 		String senha = usuario.getSenha();
-		if(StringUtils.isEmpty(senha)) {
+		if(isNew || StringUtils.isEmpty(senha)) {
 			usuario.setSenha(login);
-			usuario.setDataExpiracaoSenha(agora);
-		} else if (isNew) {
 			usuario.setDataExpiracaoSenha(agora);
 		}
 

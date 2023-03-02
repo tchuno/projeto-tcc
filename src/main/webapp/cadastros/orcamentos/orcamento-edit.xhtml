@@ -201,11 +201,11 @@
 					<div class="col-sm-11">
 						<div class="form-group">
 							<h:outputLabel value="#{msg['cliente.label']}" for="cliente-id"/>
-							<p:autoComplete id="cliente-id" multiple="false" converter="entity" required="true" disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+							<p:autoComplete id="cliente-id" multiple="false" converter="entity" required="true" disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}"
 											value="#{orcamentoEditBean.orcamento.cliente}" var="usuario" label="#{msg['cliente.label']}"
 											styleClass="form-control bf-no-message has-success" style="height: 40px; width: auto;" emptyMessage="#{msg['emptyMessage.label']}"
 											itemLabel="#{utilBean.getCpfCnpj(usuario.cpfCnpj)} #{usuario.nome}" itemValue="#{usuario}" effect="fade"
-											dropdown="true" scrollHeight="300" completeMethod="#{orcamentoEditBean.findClienteAutoComplete}" maxResults="10"
+												dropdown="#{menuBean.podeEditar()}" scrollHeight="300" completeMethod="#{orcamentoEditBean.findClienteAutoComplete}" maxResults="10"
 											minQueryLength="2" >
 								<p:column>
 									<h:outputText value="#{usuario.cpfCnpj} - #{usuario.nome}" />
@@ -217,7 +217,7 @@
 					<div class="col-sm-1">
 						<div class="form-group">
 							<p:commandButton icon="fa fa-plus" onclick="openModal('adicionar-usuario-modal')"
-											 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+											 disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}"
 											 actionListener="#{orcamentoEditBean.setUsuarioNovo(null)}" update="form-usuario:adicionar-usuario-modal-content-id"
 											 class="btn" style="margin-top: 20px"/>
 						</div>
@@ -227,18 +227,19 @@
 				<div class="form-group">
 					<p:toolbar>
 						<p:toolbarGroup>
-							<p:commandButton value="#{msg['adicionarProduto.label']}" icon="fa fa-plus" onclick="openModal('adicionar-modal')" disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+							<p:commandButton value="#{msg['adicionarProduto.label']}" icon="fa fa-plus" onclick="openModal('adicionar-modal')" disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}"
 											 actionListener="#{orcamentoEditBean.setOrcamentoProduto(null)}" update="form-produto:adicionar-modal-content-id"
 											 class="btn" style="margin-right: 5px">
 							</p:commandButton>
 							<p:commandButton id="delete-products-button" value="#{orcamentoEditBean.deleteButtonMessage}"
 											 icon="fa fa-trash" actionListener="#{orcamentoEditBean.deleteSelectedProducts}"
-											 class="btn" disabled="#{!orcamentoEditBean.hasSelectedProducts() or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}" update="@this form-orcamento:dt-products">
+											 class="btn" rendered="#{menuBean.podeEditar()}"
+											 disabled="#{!orcamentoEditBean.hasSelectedProducts() or (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}" update="@this form-orcamento:dt-products">
 							</p:commandButton>
 						</p:toolbarGroup>
 					</p:toolbar>
 
-					<p:dataTable id="dt-products" var="product" value="#{orcamentoEditBean.orcamento.orcamentoProdutos}"  disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+					<p:dataTable id="dt-products" var="product" value="#{orcamentoEditBean.orcamento.orcamentoProdutos}"  disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}"
 								 reflow="true" selection="#{orcamentoEditBean.produtosSelecionados}" emptyMessage="#{msg['emptyMessage.label']}"
 								 rowKey="#{product.produto.id}" paginator="false" rowSelectMode="add">
 						<f:facet name="header">
@@ -253,7 +254,7 @@
 						<p:ajax event="rowUnselectCheckbox" update=":form-orcamento:delete-products-button" />
 						<p:ajax event="toggleSelect" update=":form-orcamento:delete-products-button" />
 
-						<p:column selectionMode="multiple" style="width: 30px; text-align: center;"/>
+						<p:column selectionMode="multiple" style="width: 30px; text-align: center;" rendered="#{menuBean.podeEditar()}"/>
 
 						<p:column headerText="#{msg['codigo.label']}" style="text-align: center;" filterBy="#{product.produto.cod}">
 							<h:outputText value="#{product.produto.cod}" />
@@ -269,13 +270,13 @@
 						<p:column headerText="#{msg['quantidade.label']}:" style="width: 80px; text-align: center">
 							<div class="form-group">
 								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, 1))}"
-											   disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
+											   rendered="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 									<i class="fa fa-arrow-up" style="color: white"></i>
 								</p:commandLink>
 							</div>
 							<div class="form-group">
 								<b:inputText value="#{product.quantidade}" placeholder="#{msg['quantidade.label']}"
-											 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+											 disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}"
 											 label="#{msg['quantidade.label']}" renderLabel="false" styleClass="mask-number" required="false">
 									<f:ajax event="blur" render="form-orcamento:dt-products form-orcamento:delete-products-button"/>
 								</b:inputText>
@@ -283,7 +284,7 @@
 							</div>
 							<div class="form-group">
 								<p:commandLink class="btn btn-warning" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{product.setQuantidade(product.quantidade.sum(product.quantidade, -1))}"
-											   disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
+											   rendered="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 									<i class="fa fa-arrow-down" style="color: white"></i>
 								</p:commandLink>
 							</div>
@@ -295,7 +296,7 @@
 						</p:column>
 						<p:column style="width: 80px;">
 							<p:commandLink class="btn btn-danger" update="form-orcamento:dt-products form-orcamento:delete-products-button" actionListener="#{orcamentoEditBean.deleteProduct(product)}"
-										   disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
+										   rendered	="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 								<i class="fa fa-trash" style="color: white"></i>
 							</p:commandLink>
 						</p:column>
@@ -316,7 +317,7 @@
 				<div class="form-group">
 					<h:outputLabel value="#{msg['formaPagamento.label']} *" styleClass="bf-no-message"/>
 					<h:selectOneMenu styleClass="form-control bf-no-message" id="forma-pagamento-id" value="#{orcamentoEditBean.orcamento.formaPagamento}" label="#{msg['formaPagamento.label']}" required="true"
-									 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}">
+									 disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}">
 						<f:selectItems value="#{utilBean.getValues('FormaPagamento')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['FormaPagamento.'.concat(fp).concat('.label')]}"/>
 						<f:ajax event="change" execute="form-bandeira-id" render="form-bandeira-id"/>
 					</h:selectOneMenu>
@@ -327,7 +328,7 @@
 					<div class="form-group">
 						<h:outputLabel value="#{msg['bandeira.label']}" styleClass="bf-no-message" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}"/>
 						<h:selectOneMenu styleClass="form-control bf-no-message" id="bandeira-id" value="#{orcamentoEditBean.orcamento.bandeira}"
-										 disabled="#{orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO'}"
+										 disabled="#{menuBean.podeEditar() and (orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CONCLUIDO' or orcamentoEditBean.orcamento.notaFiscal.statusNotaFiscal.name() eq 'CANCELADO')}"
 										 label="#{msg['bandeira.label']}" required="false" rendered="#{orcamentoEditBean.orcamento.formaPagamento.name() eq 'CARTAO_CREDITO' or orcamentoEditBean.orcamento.formaPagamento.name() eq'CARTAO_DEBITO'}">
 							<f:selectItem itemValue="" itemLabel=""/>
 							<f:selectItems value="#{utilBean.getValues('Bandeira')}" var="fp" itemValue="#{fp}" itemLabel="#{msg['Bandeira.'.concat(fp).concat('.label')]}"/>

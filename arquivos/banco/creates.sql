@@ -150,3 +150,5 @@ CREATE TABLE public.movimentacao_produto (
 );
 
 insert into parametro (chave, valor) values ('COR_BARRA','e60008'), ('COR_FONTE_TITULO_BARRA','6b6b6b'), ('COR_MENU','ffffff'), ('COR_FONTE_MENU','ffffff'), ('COR_FONTE_MENU_SELECIONADO','000000'), ('TITULO','EGY');
+
+--alter sequence nota_fiscal_id_seq INCREMENT 250;

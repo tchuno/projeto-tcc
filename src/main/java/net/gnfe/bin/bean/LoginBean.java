@@ -1,6 +1,7 @@
 package net.gnfe.bin.bean;
 
 import net.gnfe.bin.domain.entity.Usuario;
+import net.gnfe.bin.domain.enumeration.RoleGNFE;
 import net.gnfe.bin.domain.service.UsuarioService;
 import net.gnfe.util.DummyUtils;
 import net.gnfe.util.ddd.MessageKeyException;
@@ -106,7 +107,14 @@ public class LoginBean extends AbstractBean {
 			LoginJwtUtils.criarCookie(usuarioLogado, getResponse());
 
 			ExternalContext externalContext = getExternalContext();
-			externalContext.redirect(getContextPath() + "/cadastros/usuarios/");
+
+			RoleGNFE roleGNFE = usuarioLogado.getRoleGNFE();
+			if(RoleGNFE.CLIENTE.equals(roleGNFE)){
+				externalContext.redirect(getContextPath() + "/cadastros/orcamentos/");
+
+			} else {
+				externalContext.redirect(getContextPath() + "/cadastros/usuarios/");
+			}
 		}
 		catch (Exception e) {
 

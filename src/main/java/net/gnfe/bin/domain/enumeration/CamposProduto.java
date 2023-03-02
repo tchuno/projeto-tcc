@@ -7,7 +7,7 @@ public enum CamposProduto {
 	NOME("NOME"),
 	DESC("DESCRICAO"),
 	GTIN("GTIN"),
-	CNM("CNM"),
+	NCM("NCM"),
 	CEST("CEST"),
 	CFOP("CFOP"),
 	FORNECEDOR("FORNECEDOR ID"),
